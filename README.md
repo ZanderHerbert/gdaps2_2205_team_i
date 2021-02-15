@@ -1,10 +1,10 @@
-# Team ><Roboquatic>
+# Team **YOUR_TEAM_NAME**
 ## IGME-106-SECTION Spring 2021
 
 _This README contains basic information about the project and its artifacts. If kept up to date, it will act as a primary dashboard for the project._
 
 ## Team Members
-- MEMBER1
+- Gia Lopez
 - MEMBER2
 - MEMBER3
 - MEMBER4
