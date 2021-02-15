@@ -6,7 +6,6 @@ _This README contains basic information about the project and its artifacts. If 
 ## Team Members
 - Gia Lopez
 - Matthew Wilt
-- MEMBER2
 - MEMBER3
 - MEMBER4
 - MEMBER5
