@@ -7,9 +7,7 @@ _This README contains basic information about the project and its artifacts. If 
 - Gia Lopez
 - Matthew Wilt
 - Zander Herbert
-- MEMBER2
-- MEMBER3
-- MEMBER4
+- Quinn Schneider
 - MEMBER5
 
 ## Repo Organization
