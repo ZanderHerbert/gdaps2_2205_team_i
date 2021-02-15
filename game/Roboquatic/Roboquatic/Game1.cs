@@ -6,6 +6,7 @@ namespace Roboquatic
 {
     public class Game1 : Game
     {
+        //Declaring fields
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private Player player;
@@ -19,7 +20,7 @@ namespace Roboquatic
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            // Initializing variables
             player = new Player(1, new Rectangle(0, 0, 5, 5));
 
             base.Initialize();
@@ -29,7 +30,7 @@ namespace Roboquatic
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            //Loading in (Placeholder) player sprite
             player.Sprite = Content.Load<Texture2D>("PlayerPlaceholder");
         }
 
@@ -38,7 +39,8 @@ namespace Roboquatic
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            // Moves a player down if the S key is pressed, up if the W key is pressed, left if the A key is pressed
+            // and right if the D key is pressed
             if (Keyboard.GetState().IsKeyDown(Keys.S))
             {
                 player.MoveDown();
@@ -63,7 +65,7 @@ namespace Roboquatic
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            // Draws the player to the window
             _spriteBatch.Begin();
             _spriteBatch.Draw(player.Sprite, player.Position, Color.White);
             _spriteBatch.End();
