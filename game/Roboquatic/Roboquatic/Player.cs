@@ -81,15 +81,18 @@ namespace Roboquatic
             //The second if is so that there are no divide by zero errors, and the code in there makes the player
             //object change it's position to basically the closest position to the mouse within a radius of "speed"
             //pixels(I believe it measures it in pixels)
-            if(Math.Sqrt((deltaX * deltaX + deltaY * deltaY)) <= speed)
+            //
+            //NOTE: The speed needs to be balanced between keyboard and mouse controls still if we plan on
+            //      implementing both.
+            if(Math.Sqrt((deltaX * deltaX + deltaY * deltaY)) <= speed * 10)
             {
                 position.X = x - position.Width/2;
                 position.Y = y - position.Height/2;
             }
             else if ((deltaX) + (deltaY) != 0)
             {
-                position.X -= (int)(((deltaX) * speed) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
-                position.Y -= (int)(((deltaY) * speed) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
+                position.X -= (int)(((deltaX) * speed * 10) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
+                position.Y -= (int)(((deltaY) * speed * 10) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
             }
         }
     }

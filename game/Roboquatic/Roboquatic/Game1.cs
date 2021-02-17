@@ -24,7 +24,7 @@ namespace Roboquatic
         protected override void Initialize()
         {
             // Initializing variables
-            player = new Player(30, new Rectangle(0, 0, 20, 20));
+            player = new Player(2, new Rectangle(0, 0, 20, 20));
             keyboardControls = false;
 
             base.Initialize();
