@@ -10,6 +10,8 @@ namespace Roboquatic
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private Player player;
+        private int mouseX;
+        private int mouseY;
 
         public Game1()
         {
@@ -21,7 +23,7 @@ namespace Roboquatic
         protected override void Initialize()
         {
             // Initializing variables
-            player = new Player(1, new Rectangle(0, 0, 5, 5));
+            player = new Player(30, new Rectangle(0, 0, 20, 20));
 
             base.Initialize();
         }
@@ -41,6 +43,7 @@ namespace Roboquatic
 
             // Moves a player down if the S key is pressed, up if the W key is pressed, left if the A key is pressed
             // and right if the D key is pressed
+            /*
             if (Keyboard.GetState().IsKeyDown(Keys.S))
             {
                 player.MoveDown();
@@ -57,8 +60,21 @@ namespace Roboquatic
             {
                 player.MoveRight();
             }
+            */
+
+            //Gets the position of the mouse, and causes the player object to move towards that position
+            UpdateMouse();
+            player.Move(mouseX, mouseY);
 
             base.Update(gameTime);
+        }
+        
+        //Finds the current mouse position and stores the values in variables mouseX and mouseY
+        protected void UpdateMouse()
+        {
+            MouseState currentMouse = Mouse.GetState();
+            mouseX = currentMouse.X;
+            mouseY = currentMouse.Y;
         }
 
         protected override void Draw(GameTime gameTime)

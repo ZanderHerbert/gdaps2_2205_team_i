@@ -42,6 +42,7 @@ namespace Roboquatic
             this.position = position;
         }
 
+        /*
         //Moves the player up
         public void MoveUp()
         {
@@ -64,6 +65,34 @@ namespace Roboquatic
         public void MoveRight()
         {
             position.X = position.X + speed * 2;
+        }
+        */
+
+        //Moves the player in the direction of the mouse
+        public void Move(int x, int y)
+        {
+            //Variables which hold the difference in position between the midpoint of the player and the mouse
+            double deltaX = (position.X + position.Width/2) - x;
+            double deltaY = (position.Y + position.Height/2) - y;
+
+            //Moves the player a set distance in the direction of the mouse.
+            //
+            //The first if is if the player is within a "speed" radius of the mouse, in which case it will go directly
+            //to the mouse, otherwise the player would flicker back and forth on either side of the mouse.
+            //
+            //The second if is so that there are no divide by zero errors, and the code in there makes the player
+            //object change it's position to basically the closest position to the mouse within a radius of "speed"
+            //pixels(I believe it measures it in pixels)
+            if(Math.Sqrt((deltaX * deltaX + deltaY * deltaY)) <= speed)
+            {
+                position.X = x - position.Width/2;
+                position.Y = y - position.Height/2;
+            }
+            else if ((deltaX) + (deltaY) != 0)
+            {
+                position.X -= (int)(((deltaX) * speed) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
+                position.Y -= (int)(((deltaY) * speed) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
+            }
         }
     }
 }
