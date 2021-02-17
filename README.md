@@ -1,4 +1,4 @@
-# Team **YOUR_TEAM_NAME**
+# Team **Underwater w/ Fish**
 ## IGME-106-SECTION Spring 2021
 
 _This README contains basic information about the project and its artifacts. If kept up to date, it will act as a primary dashboard for the project._
@@ -6,9 +6,10 @@ _This README contains basic information about the project and its artifacts. If 
 ## Team Members
 - Gia Lopez
 - Matthew Wilt
-- MEMBER3
-- MEMBER4
-- MEMBER5
+- Zander Herbert
+- Quinn Schneider
+- Peter Dong
+
 
 ## Repo Organization
 - [game/](game/) - Contains the main MonoGame project. Notes about how to run the game are in [game/README.md](game/README.md).
