@@ -31,7 +31,7 @@ namespace Roboquatic
         protected override void Initialize()
         {
             // Initializing variables
-            player = new Player(2, new Rectangle(0, 0, 20, 20));
+            player = new Player(2, new Rectangle(0, 0, 32, 32));
             keyboardControls = false;
             viewportWidth = this.GraphicsDevice.Viewport.Width;
             viewportHeight = this.GraphicsDevice.Viewport.Height;
@@ -47,7 +47,7 @@ namespace Roboquatic
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             //Loading in (Placeholder) textures
-            player.Sprite = Content.Load<Texture2D>("PlayerPlaceholder");
+            player.Sprite = Content.Load<Texture2D>("PlayerFishSprite");
             backdrop = Content.Load<Texture2D>("PlaceholderBackdrop");
             backdropSwap = Content.Load<Texture2D>("PlaceholderBackdropSwap");
         }
