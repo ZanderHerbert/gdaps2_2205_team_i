@@ -42,7 +42,6 @@ namespace Roboquatic
             this.position = position;
         }
 
-        /*
         //Moves the player up
         public void MoveUp()
         {
@@ -66,7 +65,6 @@ namespace Roboquatic
         {
             position.X = position.X + speed * 2;
         }
-        */
 
         //Moves the player in the direction of the mouse
         public void Move(int x, int y)

@@ -12,6 +12,7 @@ namespace Roboquatic
         private Player player;
         private int mouseX;
         private int mouseY;
+        private bool keyboardControls;
 
         public Game1()
         {
@@ -24,6 +25,7 @@ namespace Roboquatic
         {
             // Initializing variables
             player = new Player(30, new Rectangle(0, 0, 20, 20));
+            keyboardControls = false;
 
             base.Initialize();
         }
@@ -43,29 +45,32 @@ namespace Roboquatic
 
             // Moves a player down if the S key is pressed, up if the W key is pressed, left if the A key is pressed
             // and right if the D key is pressed
-            /*
-            if (Keyboard.GetState().IsKeyDown(Keys.S))
+            if (keyboardControls)
             {
-                player.MoveDown();
+                if (Keyboard.GetState().IsKeyDown(Keys.S))
+                {
+                    player.MoveDown();
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.W))
+                {
+                    player.MoveUp();
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.A))
+                {
+                    player.MoveLeft();
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.D))
+                {
+                    player.MoveRight();
+                }
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.W))
+            else
             {
-                player.MoveUp();
+                //Gets the position of the mouse, and causes the player object to move towards that position
+                UpdateMouse();
+                player.Move(mouseX, mouseY);
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.A))
-            {
-                player.MoveLeft();
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.D))
-            {
-                player.MoveRight();
-            }
-            */
-
-            //Gets the position of the mouse, and causes the player object to move towards that position
-            UpdateMouse();
-            player.Move(mouseX, mouseY);
-
+            
             base.Update(gameTime);
         }
         
