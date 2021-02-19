@@ -134,6 +134,9 @@ namespace Roboquatic
                 position.Y -= (int)(((deltaY) * speed * 10) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
             }
         }
+
+        //Reduces the health of the player based on damage, as long as the player isn't invincible,
+        //and if the player is damaged, makes the invincible for 1 second
         public void TakeDamage(int damage)
         {
             if(iFrameTimer == 0)

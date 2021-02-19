@@ -60,7 +60,7 @@ namespace Roboquatic
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            //Loading in (Placeholder) textures
+            //Loading in textures
             player.Sprite = Content.Load<Texture2D>("PlayerFishSprite");
             backdrop = Content.Load<Texture2D>("PlaceholderBackdrop");
             backdropSwap = Content.Load<Texture2D>("PlaceholderBackdropSwap");
@@ -73,8 +73,12 @@ namespace Roboquatic
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            //Only does the play screen interactions if the player is there.
             if(player != null)
             {
+                // Checks if an enemy projectile has hit the player, or if a player projectile has hit an enemy
+                // Deals damage to that object if it was hit by the projectile, and removes the projectile
+                // if it hit an object.
                 for (int i = 0; i < projectiles.Count; i++)
                 {
                     if (projectiles[i] is EnemyProjectile)
@@ -101,12 +105,15 @@ namespace Roboquatic
                         }
                     }
                 }
+
                 //Moves all projectiles on screen
                 for (int i = 0; i < projectiles.Count; i++)
                 {
                     projectiles[i].Move();
                 }
 
+                // Moves all the enemies, increases the timer that controls if they can shoot, checks if they can
+                // shoot, and then has the enemy shoot if they can.
                 for (int i = 0; i < enemies.Count; i++)
                 {
                     enemies[i].Move(this);
@@ -182,7 +189,9 @@ namespace Roboquatic
                     backdropSwapPos.X = viewportWidth;
                 }
 
-
+                // Randomly creates enemies based on a timer at random positions
+                //
+                // Will need to be changed, only here for testing purposes
                 if (timer % 120 == rng.Next(0, 121))
                 {
                     enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 2, 120, baseEnemyProjectileSprite));
@@ -198,6 +207,7 @@ namespace Roboquatic
                     player.IFrameTimer -= 1;
                 }
 
+                //Gets rid of player if the player dies
                 if (player.Health <= 0)
                 {
                     player = null;
