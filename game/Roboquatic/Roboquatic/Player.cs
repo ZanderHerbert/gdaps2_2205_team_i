@@ -14,6 +14,40 @@ namespace Roboquatic
         private int speed;
         private Rectangle position;
         private Texture2D sprite;
+        private int projectileDamage;
+        private int framesToFire;
+        private int projectileSpeed;
+        private int health;
+        private int iFrameTimer;
+
+        public int IFrameTimer
+        {
+            get { return iFrameTimer; }
+            set { iFrameTimer = value; }
+        }
+        public int Health
+        {
+            get { return health; }
+            set { health = value; }
+        }
+        public int ProjectileDamage
+        {
+            get { return projectileDamage; }
+            set { projectileDamage = value; }
+        }
+
+        // Get and set property for projectileSpeed
+        public int ProjectileSpeed
+        {
+            get { return projectileSpeed; }
+            set { projectileSpeed = value; }
+        }
+
+        // Get property for framesToFire
+        public int FramesToFire
+        {
+            get { return framesToFire; }
+        }
 
         //Get and set properties for speed (as speed may change due to upgrades)
         public int Speed
@@ -36,10 +70,15 @@ namespace Roboquatic
         }
 
         //Player Constructor
-        public Player(int speed, Rectangle position)
+        public Player(int speed, int framesToFire, int projectileSpeed, Rectangle position, int health, int projectileDamage)
         {
             this.speed = speed;
+            this.framesToFire = framesToFire;
+            this.projectileSpeed = projectileSpeed;
             this.position = position;
+            this.health = health;
+            this.projectileDamage = projectileDamage;
+            iFrameTimer = 0;
         }
 
         //Moves the player up
@@ -93,6 +132,17 @@ namespace Roboquatic
             {
                 position.X -= (int)(((deltaX) * speed * 10) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
                 position.Y -= (int)(((deltaY) * speed * 10) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
+            }
+        }
+
+        //Reduces the health of the player based on damage, as long as the player isn't invincible,
+        //and if the player is damaged, makes the invincible for 1 second
+        public void TakeDamage(int damage)
+        {
+            if(iFrameTimer == 0)
+            {
+                health -= damage;
+                iFrameTimer = 60;
             }
         }
     }
