@@ -73,3 +73,10 @@
 /processorParam:TextureFormat=Color
 /build:PlayerFishSprite.png
 
+#begin text.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:text.spritefont
+
