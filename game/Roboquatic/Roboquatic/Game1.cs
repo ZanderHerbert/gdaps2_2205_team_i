@@ -73,7 +73,7 @@ namespace Roboquatic
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            //Loading in (Placeholder) textures
+            //Loading in textures
             player.Sprite = Content.Load<Texture2D>("PlayerFishSprite");
             backdrop = Content.Load<Texture2D>("PlaceholderBackdrop");
             backdropSwap = Content.Load<Texture2D>("PlaceholderBackdropSwap");
@@ -150,6 +150,8 @@ namespace Roboquatic
                             projectiles[i].Move();
                         }
 
+                        // Moves all the enemies, increases the timer that controls if they can shoot, checks if they can
+                        // shoot, and then has the enemy shoot if they can.
                         for (int i = 0; i < enemies.Count; i++)
                         {
                             enemies[i].Move(this);
@@ -225,7 +227,9 @@ namespace Roboquatic
                             backdropSwapPos.X = viewportWidth;
                         }
 
-
+                        // Randomly creates enemies based on a timer at random positions
+                        //
+                        // Will need to be changed, only here for testing purposes
                         if (timer % 120 == rng.Next(0, 121))
                         {
                             enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 2, 120, baseEnemyProjectileSprite));

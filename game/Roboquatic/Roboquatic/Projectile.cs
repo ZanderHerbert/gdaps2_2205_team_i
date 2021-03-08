@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Roboquatic
 {
+    //Basic class which contains the basic information and methods a projectile needs
     class Projectile
     {
         // Declaring fields
@@ -15,6 +16,7 @@ namespace Roboquatic
         protected Rectangle position;
         protected int damage;
 
+        //Get property for damage
         public int Damage
         {
             get { return damage; }
@@ -45,10 +47,14 @@ namespace Roboquatic
         {
             position.X += speed;
         }
+
+        //Virtual method to be overriden by an enemy projectile
         public virtual bool PlayerContact(Player player)
         {
             return false;
         }
+
+        //Virtual method to be overriden by a player projectile
         public virtual Enemy EnemyContact(List<Enemy> enemies)
         {
             return null;
