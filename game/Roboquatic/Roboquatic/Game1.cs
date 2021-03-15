@@ -3,20 +3,22 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Text;
+
 
 namespace Roboquatic
 {
+    enum GameState
+    {
+        Menu,
+        Game,
+        Pause,
+        GameOver,
+        Settings
+    }
+
     public class Game1 : Game
     {
-        enum GameState
-        {
-            Menu,
-            Game,
-            Pause,
-            GameOver,
-            Settings
-        }
+        
 
         //Declaring fields
         private GraphicsDeviceManager _graphics;
@@ -41,7 +43,10 @@ namespace Roboquatic
         private Enemy hitEnemy;
         private GameState currentState;
         private KeyboardState previousKbState;
-        private SpriteFont text;
+        private SpriteFont font;
+
+        // Buttons' fields
+        private List<Button> buttons = new List<Button>();
 
         public Game1()
         {
@@ -79,7 +84,39 @@ namespace Roboquatic
             backdropSwap = Content.Load<Texture2D>("PlaceholderBackdropSwap");
             baseEnemySprite = Content.Load<Texture2D>("EnemyPlaceholder");
             baseEnemyProjectileSprite = Content.Load<Texture2D>("PlaceholderPlayerProjectile");
-            text = Content.Load<SpriteFont>("text");
+            font = Content.Load<SpriteFont>("text");
+
+            // Load buttons
+            buttons.Add(new Button(
+                _graphics.GraphicsDevice,
+                new Rectangle(_graphics.GraphicsDevice.Viewport.Width/2-50, _graphics.GraphicsDevice.Viewport.Height/2, 100, 50),
+                "Start",
+                font));
+
+            buttons.Add(new Button(
+                _graphics.GraphicsDevice,
+                new Rectangle(_graphics.GraphicsDevice.Viewport.Width/2-50, _graphics.GraphicsDevice.Viewport.Height/2+100, 100, 50),
+                "Settings",
+                font));
+
+            buttons.Add(new Button(
+                _graphics.GraphicsDevice,
+                new Rectangle(_graphics.GraphicsDevice.Viewport.Width/2-50-100, _graphics.GraphicsDevice.Viewport.Height/2, 100, 50),
+                "Mouse",
+                font));
+
+            buttons.Add(new Button(
+                _graphics.GraphicsDevice,
+                new Rectangle(_graphics.GraphicsDevice.Viewport.Width/2-50+100, _graphics.GraphicsDevice.Viewport.Height/2, 100, 50),
+                "Keyboard",
+                font));
+
+            buttons[0].OnLeftButtonClick += this.StartButton;
+            buttons[1].OnLeftButtonClick += this.SettingsButton;
+            buttons[2].OnLeftButtonClick += this.MouseControlButton;
+            buttons[3].OnLeftButtonClick += this.KeyboardControlButton;
+
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -93,24 +130,31 @@ namespace Roboquatic
             switch (currentState)
             {
                 case GameState.Menu:
-                    if (SingleKeyPress(Keys.S, kbState))
-                    {
-                        currentState = GameState.Settings;
-                    }
-                    if (SingleKeyPress(Keys.Enter, kbState))
-                    {
-                        currentState = GameState.Game;
-                    }
+                    //if (SingleKeyPress(Keys.S, kbState))
+                    //{
+                    //    currentState = GameState.Settings;
+                    //}
+                    //if (SingleKeyPress(Keys.Enter, kbState))
+                    //{
+                    //    currentState = GameState.Game;
+                    //}
+                    buttons[0].Update();
+                    buttons[1].Update();
+                    IsMouseVisible = true;
                     break;
 
                 case GameState.Settings:
-                    if (SingleKeyPress(Keys.M, kbState))
-                    {
-                        currentState = GameState.Menu;
-                    }
+                    IsMouseVisible = true;
+                    //if (SingleKeyPress(Keys.M, kbState))
+                    //{
+                    //    currentState = GameState.Menu;
+                    //}
+                    buttons[2].Update();
+                    buttons[3].Update();
                     break;
 
                 case GameState.Game:
+                    IsMouseVisible = false;
                     if (SingleKeyPress(Keys.Escape, kbState))
                     {
                         currentState = GameState.Pause;
@@ -276,14 +320,6 @@ namespace Roboquatic
 
             base.Update(gameTime);
         }
-        
-        //Finds the current mouse position and stores the values in variables mouseX and mouseY
-        protected void UpdateMouse()
-        {
-            MouseState currentMouse = Mouse.GetState();
-            mouseX = currentMouse.X;
-            mouseY = currentMouse.Y;
-        }
 
         protected override void Draw(GameTime gameTime)
         {
@@ -295,11 +331,15 @@ namespace Roboquatic
             switch (currentState)
             {
                 case GameState.Menu:
-                    _spriteBatch.DrawString(text, "Menu", new Vector2(0, 0), Color.White);
+                    _spriteBatch.DrawString(font, "Menu", new Vector2(0, 0), Color.White);
+                    buttons[0].Draw(_spriteBatch);
+                    buttons[1].Draw(_spriteBatch);
                     break;
 
                 case GameState.Settings:
-                    _spriteBatch.DrawString(text, "Settings", new Vector2(0, 0), Color.White);
+                    _spriteBatch.DrawString(font, "Settings", new Vector2(0, 0), Color.White);
+                    buttons[2].Draw(_spriteBatch);
+                    buttons[3].Draw(_spriteBatch);
                     break;
 
                 case GameState.Game:
@@ -320,24 +360,56 @@ namespace Roboquatic
                     break;
 
                 case GameState.Pause:
-                    _spriteBatch.DrawString(text, "Pause", new Vector2(0, 0), Color.White);
+                    _spriteBatch.DrawString(font, "Pause", new Vector2(0, 0), Color.White);
                     break;
 
                 case GameState.GameOver:
-                    _spriteBatch.DrawString(text, "GameOver", new Vector2(0, 0), Color.White);
+                    _spriteBatch.DrawString(font, "GameOver", new Vector2(0, 0), Color.White);
                     break;
             }
-            
 
             _spriteBatch.End();
 
             base.Draw(gameTime);
         }
 
+        //Finds the current mouse position and stores the values in variables mouseX and mouseY
+        protected void UpdateMouse()
+        {
+            MouseState currentMouse = Mouse.GetState();
+            mouseX = currentMouse.X;
+            mouseY = currentMouse.Y;
+        }
+
         // Check for a single key press
         private bool SingleKeyPress(Keys key, KeyboardState kbState)
         {
             return previousKbState.IsKeyDown(key) && kbState.IsKeyUp(key);
+        }
+
+        // Buttons' methods, change state
+        public void StartButton()
+        {
+            currentState = GameState.Game;
+        }
+
+        public void SettingsButton()
+        {
+            currentState = GameState.Settings;
+        }
+
+        public void MouseControlButton()
+        {
+            keyboardControls = false;
+            buttons[2].ChangeColor = Color.Red;
+            buttons[3].ChangeColor = Color.DeepSkyBlue;
+        }
+
+        public void KeyboardControlButton()
+        {
+            keyboardControls = true;
+            buttons[3].ChangeColor = Color.Red;
+            buttons[2].ChangeColor = Color.DeepSkyBlue;
         }
     }
 }
