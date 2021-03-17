@@ -21,6 +21,13 @@ namespace Roboquatic
         private int iFrameTimer;
         private int shootingTimer;
         private Texture2D projectileSprite;
+        private bool isAlive;
+
+        public bool IsAlive
+        {
+            get { return isAlive; }
+            set { isAlive = value; }
+        }
 
         //Get set property for iFrameTimer
         public int IFrameTimer
@@ -74,6 +81,7 @@ namespace Roboquatic
         public Rectangle Position
         {
             get { return position; }
+            set { position = value; }
         }
 
         //Get set property for projectileSprite
