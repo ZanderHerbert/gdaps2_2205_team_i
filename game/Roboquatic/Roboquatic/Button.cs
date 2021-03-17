@@ -11,47 +11,38 @@ namespace Roboquatic
     public class Button
     {
         // Fields
-        private SpriteFont font;
-        private string text;
         private Rectangle buttonLocation;
-        private Vector2 textLocation;
-        private Texture2D buttonImage;
-        private Color textColor;
+        private Texture2D onButtonImage;
+        private Texture2D offButtonImage;
         private MouseState preMState;
-        private Color buttonColor = Color.DeepSkyBlue;
+        private Color buttonColor;
+
 
         // Events
         public event OnButtonClickDelegate OnLeftButtonClick;
 
-        // Properties 
-        public Color ChangeColor
+        // Properties
+        public Color SetButtonColor
         {
             get { return buttonColor; }
             set { buttonColor = value; }
         }
 
+        public Rectangle SetLocation
+        {
+            get { return buttonLocation; }
+            set { buttonLocation = value; }
+        }
+
         // Constructor 
-        public Button(GraphicsDevice device, Rectangle position, string text, SpriteFont font)
+        public Button(GraphicsDevice device, Rectangle position, Texture2D buttonImage, Texture2D OffButtonImage)
         {
             // Assign parameters to fields 
-            this.font = font;
             this.buttonLocation = position;
-            this.text = text;
+            this.onButtonImage = buttonImage;
+            this.offButtonImage = OffButtonImage;
 
-            // Button's location
-            Vector2 textSize = font.MeasureString(text);
-            textLocation = new Vector2(
-                (buttonLocation.X + buttonLocation.Width / 2) - textSize.X / 2,
-                (buttonLocation.Y + buttonLocation.Height / 2) - textSize.Y / 2);
-
-            // Text's default color
-            textColor = Color.Black;
-
-            // Button's texture
-            buttonImage = new Texture2D(device, buttonLocation.Width, buttonLocation.Height, false, SurfaceFormat.Color);
-            int[] colorData = new int[buttonImage.Width * buttonImage.Height];
-            Array.Fill<int>(colorData, (int)buttonColor.PackedValue);
-            buttonImage.SetData<Int32>(colorData, 0, colorData.Length);
+            buttonColor = Color.White;
         }
 
         //Update the game based on the clicked button's feature
@@ -73,13 +64,17 @@ namespace Roboquatic
         // Draw 
         public void Draw(SpriteBatch spriteBatch)
         {
+            MouseState mState = Mouse.GetState();
+
             // Draw the button
-            spriteBatch.Draw(buttonImage, buttonLocation, Color.White);
-
-            // Draw the button's text
-            spriteBatch.DrawString(font, text, textLocation, textColor);
-
-
+            if (buttonLocation.Contains(mState.Position))
+            {
+                spriteBatch.Draw(offButtonImage, buttonLocation, Color.DeepSkyBlue);
+            }
+            else
+            {
+                spriteBatch.Draw(onButtonImage, buttonLocation, buttonColor);
+            }
         }
     }
 }

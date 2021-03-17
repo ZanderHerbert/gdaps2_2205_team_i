@@ -19,6 +19,13 @@ namespace Roboquatic
         private int projectileSpeed;
         private int health;
         private int iFrameTimer;
+        private bool isAlive;
+
+        public bool IsAlive
+        {
+            get { return isAlive; }
+            set { isAlive = value; }
+        }
 
         public int IFrameTimer
         {
@@ -67,6 +74,7 @@ namespace Roboquatic
         public Rectangle Position
         {
             get { return position; }
+            set { position = value; }
         }
 
         //Player Constructor
