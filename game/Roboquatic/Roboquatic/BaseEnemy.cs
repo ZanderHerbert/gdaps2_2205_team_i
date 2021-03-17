@@ -8,17 +8,23 @@ using Microsoft.Xna.Framework.Input;
 namespace Roboquatic
 {
     //The most basic enemy which moves left to right and shoots
-    class BaseEnemy : Enemy
+    public class BaseEnemy : Enemy
     {
         //Declaring fields
         private int framesToFire;
         private int projectileSpeed;
         private Texture2D projectileSprite;
+        private int shootingTimer;
 
         //Get property for framesToFire
         public int FramesToFire
         {
             get { return framesToFire; }
+        }
+
+        public int ShootingTimer
+        {
+            get { return shootingTimer; }
         }
 
         //BaseEnemy Constructor, uses Enemy constructor
@@ -29,24 +35,11 @@ namespace Roboquatic
             this.projectileSprite = projectileSprite;
             projectileSpeed = -8;
             health = 2;
-        }
-
-        //Moves the enemy back and forth from left to right
-        public override void Move(Game1 game)
-        {
-            position.X -= speed;
-            if (position.X <= game.GraphicsDevice.Viewport.Width/2)
-            {
-                speed = -1;
-            }
-            if(position.X >= game.GraphicsDevice.Viewport.Width*3/4 && speed < 0)
-            {
-                speed = 1;
-            }
+            shootingTimer = 0;
         }
 
         //Checks if the enemy's shooting timer is great enough for it to be able to shoot
-        public override bool CanShoot()
+        public bool CanShoot()
         {
             if (shootingTimer >= framesToFire)
             {
@@ -56,9 +49,32 @@ namespace Roboquatic
         }
 
         //Creates an enemy projectile and returns it
-        public override EnemyProjectile Shoot()
+        public EnemyProjectile Shoot()
         {
             return new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - position.Width, position.Y, 32, 32));
+        }
+
+        //Updates the enemy
+        //
+        //Moves the enemy, then checks the enemy position to see if it needs to change the speed of the enemy,
+        //increments the shooting timer, checks if the enemy can shoot, and shoots a projectile if it can.
+        public override void Update(GameTime gameTime, Game1 game)
+        {
+            position.X -= speed;
+            if (position.X <= game.GraphicsDevice.Viewport.Width / 2)
+            {
+                speed = -1;
+            }
+            if (position.X >= game.GraphicsDevice.Viewport.Width * 3 / 4 && speed < 0)
+            {
+                speed = 1;
+            }
+            shootingTimer++;
+            if (CanShoot())
+            {
+                shootingTimer = 0;
+                game.Projectiles.Add(Shoot());
+            }
         }
     }
 }

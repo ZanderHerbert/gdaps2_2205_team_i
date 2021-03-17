@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 namespace Roboquatic
 {
     //The player class is the class that is used to create and control the player object
-    class Player
+    public class Player
     {
         //Declaring Fields
         private int speed;
@@ -19,17 +19,24 @@ namespace Roboquatic
         private int projectileSpeed;
         private int health;
         private int iFrameTimer;
+        private int shootingTimer;
+        private Texture2D projectileSprite;
 
+        //Get set property for iFrameTimer
         public int IFrameTimer
         {
             get { return iFrameTimer; }
             set { iFrameTimer = value; }
         }
+
+        //Get set property for health
         public int Health
         {
             get { return health; }
             set { health = value; }
         }
+
+        //Get set property for projectileDamage
         public int ProjectileDamage
         {
             get { return projectileDamage; }
@@ -69,8 +76,15 @@ namespace Roboquatic
             get { return position; }
         }
 
+        //Get set property for projectileSprite
+        public Texture2D ProjectileSprite
+        {
+            get { return projectileSprite; }
+            set { projectileSprite = value; }
+        }
+
         //Player Constructor
-        public Player(int speed, int framesToFire, int projectileSpeed, Rectangle position, int health, int projectileDamage)
+        public Player(int speed, int framesToFire, int projectileSpeed, Rectangle position, int health, int projectileDamage, Texture2D projectileSprite)
         {
             this.speed = speed;
             this.framesToFire = framesToFire;
@@ -78,36 +92,51 @@ namespace Roboquatic
             this.position = position;
             this.health = health;
             this.projectileDamage = projectileDamage;
+            this.projectileSprite = projectileSprite;
             iFrameTimer = 0;
+            shootingTimer = framesToFire;
         }
 
-        //Moves the player up
-        public void MoveUp()
+        //Processes player input under keyboard controls
+        public void ProcessInputKeyboard(KeyboardState kbState, Game1 game)
         {
-            position.Y = position.Y - speed * 2;
+            //Moves the player based on WASD input
+            if (kbState.IsKeyDown(Keys.S))
+            {
+                position.Y = position.Y + speed * 2;
+            }
+            if (kbState.IsKeyDown(Keys.W))
+            {
+                position.Y = position.Y - speed * 2;
+            }
+            if (kbState.IsKeyDown(Keys.A))
+            {
+                position.X = position.X - speed * 2;
+            }
+            if (kbState.IsKeyDown(Keys.D))
+            {
+                position.X = position.X + speed * 2;
+            }
+            // Checks if the player pressed space and if the player can shoot and then adds a new player projectile 
+            // to the list of projectiles and resets the shooting timer
+            if (kbState.IsKeyDown(Keys.Space))
+            {
+                if (shootingTimer >= FramesToFire)
+                {
+                    game.Projectiles.Add(new PlayerProjectile(projectileSprite, ProjectileSpeed, new Rectangle(Position.X + Position.Width, Position.Y, 32, 32), this));
+                    shootingTimer = 0;
+                }
+            }
+            
         }
 
-        //Moves the player down
-        public void MoveDown()
+        //Processes player input under mouse controls
+        public void ProcessInputMouse(MouseState mouseState, Game1 game)
         {
-            position.Y = position.Y + speed * 2;
-        }
+            //Declares and initializes two variables to hold the mouses x and y position
+            int x = mouseState.X;
+            int y = mouseState.Y;
 
-        //Moves the player left
-        public void MoveLeft()
-        {
-            position.X = position.X - speed * 2;
-        }
-
-        //Moves the player right
-        public void MoveRight()
-        {
-            position.X = position.X + speed * 2;
-        }
-
-        //Moves the player in the direction of the mouse
-        public void Move(int x, int y)
-        {
             //Variables which hold the difference in position between the midpoint of the player and the mouse
             double deltaX = (position.X + position.Width/2) - x;
             double deltaY = (position.Y + position.Height/2) - y;
@@ -133,6 +162,16 @@ namespace Roboquatic
                 position.X -= (int)(((deltaX) * speed * 10) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
                 position.Y -= (int)(((deltaY) * speed * 10) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
             }
+
+            //Shoots a projectile if the player pressed left mouse button, and if they are able to shoot
+            if (mouseState.LeftButton == ButtonState.Pressed)
+            {
+                if (shootingTimer >= FramesToFire)
+                {
+                    game.Projectiles.Add(new PlayerProjectile(projectileSprite, ProjectileSpeed, new Rectangle(Position.X + Position.Width, Position.Y, 32, 32), this));
+                    shootingTimer = 0;
+                }
+            }
         }
 
         //Reduces the health of the player based on damage, as long as the player isn't invincible,
@@ -143,6 +182,18 @@ namespace Roboquatic
             {
                 health -= damage;
                 iFrameTimer = 60;
+            }
+        }
+
+        //Updates the player
+        //
+        //Increments both timers related to the player
+        public void Update(GameTime gametime)
+        {
+            shootingTimer++;
+            if (IFrameTimer != 0)
+            {
+                IFrameTimer--;
             }
         }
     }

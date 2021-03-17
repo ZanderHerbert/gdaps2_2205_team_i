@@ -18,17 +18,37 @@ namespace Roboquatic
         }
 
         //Checks if the projectile is in contact with an enemy, and returns that enemy
-        public override Enemy EnemyContact(List<Enemy> enemies)
+        public Enemy EnemyContact(List<Enemy> enemies)
         {
             for(int i = 0; i < enemies.Count; i++)
             {
-                if ((position.Y + position.Height > enemies[i].Position.Y && position.Y < enemies[i].Position.Y + enemies[i].Position.Height) && (position.X + position.Width > enemies[i].Position.X && position.X < enemies[i].Position.X + enemies[i].Position.Width))
+                if (position.Intersects(enemies[i].Position))
                 {
                     return enemies[i];
                 }
             }
             return null;
 
+        }
+
+        //Updates the projectile
+        //
+        //Checks if the projectile hit an enemy, if so damages that enemy, removes that enemy from the list of enemies
+        //in the game, sets hit to true, denoting that the projectile made contact with something, and then moves the
+        //projectile
+        public override void Update(GameTime gameTime, Game1 game)
+        {
+            Enemy hitEnemy = EnemyContact(game.Enemies);
+            if (hitEnemy != null)
+            {
+                hitEnemy.TakeDamage(damage);
+                if (hitEnemy.Health <= 0)
+                {
+                    game.Enemies.Remove(hitEnemy);
+                }
+                hit = true;
+            }
+            position.X += speed;
         }
     }
 }

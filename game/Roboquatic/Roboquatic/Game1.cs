@@ -22,8 +22,6 @@ namespace Roboquatic
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private Player player;
-        private int mouseX;
-        private int mouseY;
         private bool keyboardControls;
         private Texture2D backdrop;
         private Texture2D backdropSwap;
@@ -32,16 +30,36 @@ namespace Roboquatic
         private int viewportWidth;
         private int viewportHeight;
         private int timer;
-        private int shootingTimer;
         private List<Projectile> projectiles;
         private List<Enemy> enemies;
         private Texture2D baseEnemySprite;
         private Texture2D baseEnemyProjectileSprite;
         private Random rng;
-        private Enemy hitEnemy;
         private GameState currentState;
         private KeyboardState previousKbState;
         private SpriteFont text;
+        private EnemyManager enemyManager;
+        private ProjectileManager projectileManager;
+
+        //Get set property for enemies
+        public List<Enemy> Enemies
+        {
+            get { return enemies; }
+            set { enemies = value; }
+        }
+
+        //Get set property for projectiles
+        public List<Projectile> Projectiles
+        {
+            get { return projectiles; }
+            set { projectiles = value; }
+        }
+
+        //Get property for player
+        public Player Player
+        {
+            get { return player; }
+        }
 
         public Game1()
         {
@@ -53,17 +71,17 @@ namespace Roboquatic
         protected override void Initialize()
         {
             // Initializing variables
-            player = new Player(1, 20, 10, new Rectangle(0, 0, 32, 32), 6, 1);
-            keyboardControls = false;
+            keyboardControls = true;
             viewportWidth = this.GraphicsDevice.Viewport.Width;
             viewportHeight = this.GraphicsDevice.Viewport.Height;
             backdropPos = new Rectangle(0, 0, viewportWidth * 2, viewportHeight);
             backdropSwapPos = new Rectangle(viewportWidth * 2, 0, viewportWidth * 2, viewportHeight);
             timer = 0;
-            shootingTimer = player.FramesToFire;
             projectiles = new List<Projectile>(1);
             enemies = new List<Enemy>(1);
             rng = new Random();
+            enemyManager = new EnemyManager();
+            projectileManager = new ProjectileManager();
             currentState = GameState.Menu;//It should be in the Menu state, but this is just for checking if game state works
 
             base.Initialize();
@@ -73,7 +91,8 @@ namespace Roboquatic
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            //Loading in textures
+            //Loading in textures and initializing the player
+            player = new Player(1, 20, 10, new Rectangle(0, 0, 32, 32), 6, 1, Content.Load<Texture2D>("PlaceholderPlayerProjectile"));
             player.Sprite = Content.Load<Texture2D>("PlayerFishSprite");
             backdrop = Content.Load<Texture2D>("PlaceholderBackdrop");
             backdropSwap = Content.Load<Texture2D>("PlaceholderBackdropSwap");
@@ -118,114 +137,25 @@ namespace Roboquatic
 
                     if (player != null)
                     {
-                        for (int i = 0; i < projectiles.Count; i++)
-                        {
-                            if (projectiles[i] is EnemyProjectile)
-                            {
-                                if (projectiles[i].PlayerContact(player))
-                                {
-                                    player.TakeDamage(projectiles[i].Damage);
-                                    projectiles.RemoveAt(i);
-                                    i--;
-                                }
-                            }
-                            if (projectiles[i] is PlayerProjectile)
-                            {
-                                hitEnemy = projectiles[i].EnemyContact(enemies);
-                                if (hitEnemy != null)
-                                {
-                                    hitEnemy.TakeDamage(projectiles[i].Damage);
-                                    if (hitEnemy.Health <= 0)
-                                    {
-                                        enemies.Remove(hitEnemy);
-                                    }
-                                    projectiles.Remove(projectiles[i]);
-                                    i--;
-                                }
-                            }
-                        }
-                        //Moves all projectiles on screen
-                        for (int i = 0; i < projectiles.Count; i++)
-                        {
-                            projectiles[i].Move();
-                        }
+                        //Updates all the projectiles and enemies
+                        projectileManager.ManageProjectiles(this, gameTime, projectiles);
+                        enemyManager.ManageEnemies(this, gameTime, enemies);
 
-                        // Moves all the enemies, increases the timer that controls if they can shoot, checks if they can
-                        // shoot, and then has the enemy shoot if they can.
-                        for (int i = 0; i < enemies.Count; i++)
-                        {
-                            enemies[i].Move(this);
-                            enemies[i].ShootingTimer += 1;
-                            if (enemies[i].CanShoot())
-                            {
-                                enemies[i].ShootingTimer = 0;
-                                projectiles.Add(enemies[i].Shoot());
-                            }
-                        }
+                        //Updates the player object
+                        player.Update(gameTime);
 
-                        // Moves a player down if the S key is pressed, up if the W key is pressed, left if the A key is pressed
-                        // and right if the D key is pressed
+                        //Processes player input through the player object
                         if (keyboardControls)
                         {
-                            if (Keyboard.GetState().IsKeyDown(Keys.S))
-                            {
-                                player.MoveDown();
-                            }
-                            if (Keyboard.GetState().IsKeyDown(Keys.W))
-                            {
-                                player.MoveUp();
-                            }
-                            if (Keyboard.GetState().IsKeyDown(Keys.A))
-                            {
-                                player.MoveLeft();
-                            }
-                            if (Keyboard.GetState().IsKeyDown(Keys.D))
-                            {
-                                player.MoveRight();
-                            }
-                            // Checks if the player pressed space and if the player can shoot and then adds a new player projectile 
-                            // to the list of projectiles and resets the shooting timer
-                            if (Keyboard.GetState().IsKeyDown(Keys.Space))
-                            {
-                                if (shootingTimer >= player.FramesToFire)
-                                {
-                                    projectiles.Add(new PlayerProjectile(Content.Load<Texture2D>("PlaceholderPlayerProjectile"), player.ProjectileSpeed, new Rectangle(player.Position.X + player.Position.Width, player.Position.Y, 32, 32), player));
-                                    shootingTimer = 0;
-                                }
-                            }
+                            player.ProcessInputKeyboard(Keyboard.GetState(), this);
                         }
                         else
                         {
-                            //Gets the position of the mouse, and causes the player object to move towards that position
-                            UpdateMouse();
-                            player.Move(mouseX, mouseY);
-                            // Checks if the player pressed left mouse button and can shoot and then adds a new player projectile  
-                            // to the list of projectiles and resets the shooting timer
-                            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-                            {
-                                if (shootingTimer >= player.FramesToFire)
-                                {
-                                    projectiles.Add(new PlayerProjectile(Content.Load<Texture2D>("PlaceholderPlayerProjectile"), player.ProjectileSpeed, new Rectangle(player.Position.X + player.Position.Width, player.Position.Y, 32, 32), player));
-                                    shootingTimer = 0;
-                                }
-                            }
+                            player.ProcessInputMouse(Mouse.GetState(), this);
                         }
 
-                        //Moves the backdrop, and if the backdrop goes past a certain x value, gets placed at the right edge of
-                        //the screen.
-                        //There are two backdrops because if you were to suddenly reposition the first once it reaches the end
-                        //it is really jarring, also I mirrored the image for the second backdrop so it looks a bit better
-                        backdropPos.X -= 2;
-                        backdropSwapPos.X -= 2;
-
-                        if (backdropPos.X == ((-3) * viewportWidth))
-                        {
-                            backdropPos.X = viewportWidth;
-                        }
-                        if (backdropSwapPos.X == ((-3) * viewportWidth))
-                        {
-                            backdropSwapPos.X = viewportWidth;
-                        }
+                        //MovesBackdrop
+                        MoveBackdrop();
 
                         // Randomly creates enemies based on a timer at random positions
                         //
@@ -236,14 +166,8 @@ namespace Roboquatic
                             enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 2, 120, baseEnemyProjectileSprite));
                         }
 
-
                         //Timers for time/update based actions
                         timer += 1;
-                        shootingTimer += 1;
-                        if (player.IFrameTimer != 0)
-                        {
-                            player.IFrameTimer -= 1;
-                        }
 
                         if (player.Health <= 0)
                         {
@@ -277,13 +201,6 @@ namespace Roboquatic
             base.Update(gameTime);
         }
         
-        //Finds the current mouse position and stores the values in variables mouseX and mouseY
-        protected void UpdateMouse()
-        {
-            MouseState currentMouse = Mouse.GetState();
-            mouseX = currentMouse.X;
-            mouseY = currentMouse.Y;
-        }
 
         protected override void Draw(GameTime gameTime)
         {
@@ -338,6 +255,26 @@ namespace Roboquatic
         private bool SingleKeyPress(Keys key, KeyboardState kbState)
         {
             return previousKbState.IsKeyDown(key) && kbState.IsKeyUp(key);
+        }
+
+        //Moves the backdrop
+        public void MoveBackdrop()
+        {
+            //Moves the backdrop, and if the backdrop goes past a certain x value, gets placed at the right edge of
+            //the screen.
+            //There are two backdrops because if you were to suddenly reposition the first once it reaches the end
+            //it is really jarring, also I mirrored the image for the second backdrop so it looks a bit better
+            backdropPos.X -= 2;
+            backdropSwapPos.X -= 2;
+
+            if (backdropPos.X == ((-3) * viewportWidth))
+            {
+                backdropPos.X = viewportWidth;
+            }
+            if (backdropSwapPos.X == ((-3) * viewportWidth))
+            {
+                backdropSwapPos.X = viewportWidth;
+            }
         }
     }
 }
