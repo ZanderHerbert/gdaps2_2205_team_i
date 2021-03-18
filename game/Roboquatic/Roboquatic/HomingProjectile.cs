@@ -7,24 +7,30 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Roboquatic
 {
-    class AimedEnemyProjectile : Projectile
+    class HomingProjectile : Projectile
     {
         private double deltaX;
         private double deltaY;
         private int xChange;
+        private int prevXChange;
+        private int scndPrevXChange;
         private int yChange;
+        private int prevYChange;
+        private int scndPrevYChange;
 
         //EnemyProjectile constructor, uses its parent Projectile constructor
-        public AimedEnemyProjectile(Texture2D sprite, int speed, Rectangle position, Rectangle playerPosition)
+        public HomingProjectile(Texture2D sprite, int speed, Rectangle position)
             : base(sprite, speed, position)
         {
             damage = 1;
 
-            //Sets values that will be used to determine how the projectile moves
-            deltaX = (position.X + position.Width / 2) - playerPosition.X;
-            deltaY = (position.Y + position.Height / 2) - playerPosition.Y;
-            xChange = (int)(((deltaX) * speed) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
-            yChange = (int)(((deltaY) * speed) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
+            deltaX = 0;
+            deltaY = 0;
+            xChange = 0;
+            yChange = 0;
+            prevXChange = 0;
+            prevYChange = 0;
+            scndPrevXChange = 0;
             angle = Math.Acos((((deltaX)) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY)))));
         }
 
@@ -44,13 +50,25 @@ namespace Roboquatic
         //variable to true to denote that it made contact, then moves the projectile.
         public override void Update(GameTime gameTime, Game1 game)
         {
+            Rectangle playerPos = game.Player.Position;
+
+            
+            deltaX = (position.X + position.Width / 2) - playerPos.X;
+            deltaY = (position.Y + position.Height / 2) - playerPos.Y;
+            scndPrevXChange = prevXChange;
+            prevXChange = xChange;
+            xChange = (int)(((deltaX) * speed) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
+            yChange = (int)(((deltaY) * speed) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
+
             if (PlayerContact(game.Player))
             {
                 game.Player.TakeDamage(damage);
                 hit = true;
             }
-            position.X += xChange;
-            position.Y += yChange; 
+            position.X += xChange + prevXChange / 2 + scndPrevXChange / 4;
+            position.Y += yChange + prevYChange / 2 + scndPrevYChange / 4;
+
+            
         }
     }
 }
