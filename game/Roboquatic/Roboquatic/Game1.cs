@@ -41,9 +41,10 @@ namespace Roboquatic
         private KeyboardState previousKbState;
         private SpriteFont font;
         private GameState previousState;
-        
         private EnemyManager enemyManager;
         private ProjectileManager projectileManager;
+        private int mouseX;
+        private int mouseY;
 
         // Buttons' fields
         private List<Button> buttons = new List<Button>();
@@ -75,6 +76,18 @@ namespace Roboquatic
             set { projectiles = value; }
         }
 
+        //Get property for enemyManager
+        public EnemyManager EnemyManager
+        {
+            get { return enemyManager; }
+        }
+
+        //Get property for projectileManager
+        public ProjectileManager ProjectileManager
+        {
+            get { return projectileManager; }
+        }
+
         //Get property for player
         public Player Player
         {
@@ -100,8 +113,8 @@ namespace Roboquatic
             projectiles = new List<Projectile>(1);
             enemies = new List<Enemy>(1);
             rng = new Random();
-            enemyManager = new EnemyManager();
-            projectileManager = new ProjectileManager();
+            enemyManager = new EnemyManager(enemies);
+            projectileManager = new ProjectileManager(projectiles);
             currentState = GameState.Menu;//It should be in the Menu state, but this is just for checking if game state works
             //previousState = GameState.Menu;
 
@@ -262,11 +275,11 @@ namespace Roboquatic
                     if (player.IsAlive)
                     {
                         //Updates all the projectiles and enemies
-                        projectileManager.ManageProjectiles(this, gameTime, projectiles);
-                        enemyManager.ManageEnemies(this, gameTime, enemies);
+                        projectileManager.ManageProjectiles(this, gameTime);
+                        enemyManager.ManageEnemies(this, gameTime);
 
                         //Updates the player object
-                        player.Update(gameTime);
+                        player.Update(gameTime, this);
 
                         //Processes player input through the player object
                         if (keyboardControls)
@@ -287,7 +300,7 @@ namespace Roboquatic
                         if (timer % 120 == rng.Next(0, 121))
                         {
                             enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 2, 120, baseEnemyProjectileSprite));
-                            enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 2, 120, baseEnemyProjectileSprite));
+                            enemies.Add(new AimingEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 2, 120, baseEnemyProjectileSprite));
                         }
 
                         //Timers for time/update based actions

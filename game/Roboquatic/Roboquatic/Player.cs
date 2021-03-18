@@ -171,6 +171,26 @@ namespace Roboquatic
                 position.Y -= (int)(((deltaY) * speed * 10) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
             }
 
+            int viewWidth = game.GraphicsDevice.Viewport.Width;
+            int viewHeight = game.GraphicsDevice.Viewport.Height;
+
+            if (position.X + position.Width > viewWidth)
+            {
+                position.X = viewWidth - position.Width;
+            }
+            if(position.X < 0)
+            {
+                position.X = 0;
+            }
+            if(position.Y + position.Height > viewHeight)
+            {
+                position.Y = viewHeight - position.Height;
+            }
+            if (position.Y < 0)
+            {
+                position.Y = 0;
+            }
+
             //Shoots a projectile if the player pressed left mouse button, and if they are able to shoot
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
@@ -196,12 +216,18 @@ namespace Roboquatic
         //Updates the player
         //
         //Increments both timers related to the player
-        public void Update(GameTime gametime)
+        public void Update(GameTime gametime, Game1 game)
         {
             shootingTimer++;
             if (IFrameTimer != 0)
             {
                 IFrameTimer--;
+            }
+
+            //Makes the player take damage if they are in contact with an enemy
+            if (game.EnemyManager.PlayerContact(position))
+            {
+                TakeDamage(1);
             }
         }
     }

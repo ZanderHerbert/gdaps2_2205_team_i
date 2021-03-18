@@ -9,8 +9,15 @@ namespace Roboquatic
 {
     public class ProjectileManager
     {
+        private List<Projectile> projectiles;
+
+        public ProjectileManager(List<Projectile> projectiles)
+        {
+            this.projectiles = projectiles;
+        }
+
         //Updates all the projectiles
-        public void ManageProjectiles(Game1 game, GameTime gameTime, List<Projectile> projectiles)
+        public void ManageProjectiles(Game1 game, GameTime gameTime)
         {
             for (int i = 0; i < projectiles.Count; i++)
             {
