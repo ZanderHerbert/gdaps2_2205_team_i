@@ -16,6 +16,12 @@ namespace Roboquatic
         protected Rectangle position;
         protected int damage;
         protected bool hit;
+        protected double angle;
+
+        public double Angle
+        {
+            get { return angle; }
+        }
 
         //Get property for damage
         public int Damage

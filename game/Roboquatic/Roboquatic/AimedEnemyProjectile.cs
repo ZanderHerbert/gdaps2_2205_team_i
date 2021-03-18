@@ -25,6 +25,7 @@ namespace Roboquatic
             deltaY = (position.Y + position.Height / 2) - playerPosition.Y;
             xChange = (int)(((deltaX) * speed) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
             yChange = (int)(((deltaY) * speed) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
+            angle = Math.Acos((((deltaX)) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY)))));
         }
 
         //Checks if the projectile is in contact with the player

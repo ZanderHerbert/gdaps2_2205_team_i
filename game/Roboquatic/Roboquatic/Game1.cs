@@ -377,7 +377,14 @@ namespace Roboquatic
                     _spriteBatch.Draw(backdropSwap, backdropSwapPos, Color.White);
                     for (int i = 0; i < projectiles.Count; i++)
                     {
-                        _spriteBatch.Draw(projectiles[i].Sprite, projectiles[i].Position, Color.White);
+                        if(projectiles[i] is EnemyProjectile)
+                        {
+                            _spriteBatch.Draw(projectiles[i].Sprite, projectiles[i].Position, Color.White);
+                        }
+                        if (projectiles[i] is AimedEnemyProjectile)
+                        {
+                            _spriteBatch.Draw(projectiles[i].Sprite, projectiles[i].Position, null, Color.White, (float)projectiles[i].Angle, new Vector2(), new SpriteEffects(), 0);
+                        }
                     }
                     for (int i = 0; i < enemies.Count; i++)
                     {
