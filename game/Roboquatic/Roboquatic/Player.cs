@@ -223,12 +223,6 @@ namespace Roboquatic
             {
                 IFrameTimer--;
             }
-
-            //Makes the player take damage if they are in contact with an enemy
-            if (game.EnemyManager.PlayerContact(position))
-            {
-                TakeDamage(1);
-            }
         }
     }
 }

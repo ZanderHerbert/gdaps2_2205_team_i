@@ -36,6 +36,7 @@ namespace Roboquatic
             projectileSpeed = -8;
             health = 2;
             shootingTimer = 0;
+            contactDamage = 1;
         }
 
         //Checks if the enemy's shooting timer is great enough for it to be able to shoot

@@ -301,6 +301,7 @@ namespace Roboquatic
                         {
                             enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 2, 120, baseEnemyProjectileSprite));
                             enemies.Add(new AimingEnemy(baseEnemyProjectileSprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 2, 120, baseEnemyProjectileSprite));
+                            enemies.Add(new StaticEnemy(baseEnemyProjectileSprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 4));
                         }
 
                         //Timers for time/update based actions
@@ -377,13 +378,14 @@ namespace Roboquatic
                     _spriteBatch.Draw(backdropSwap, backdropSwapPos, Color.White);
                     for (int i = 0; i < projectiles.Count; i++)
                     {
-                        if(projectiles[i] is EnemyProjectile)
-                        {
-                            _spriteBatch.Draw(projectiles[i].Sprite, projectiles[i].Position, Color.White);
-                        }
-                        if (projectiles[i] is AimedEnemyProjectile)
+                        if(projectiles[i] is AimedEnemyProjectile)
                         {
                             _spriteBatch.Draw(projectiles[i].Sprite, projectiles[i].Position, null, Color.White, (float)projectiles[i].Angle, new Vector2(), new SpriteEffects(), 0);
+                            
+                        }
+                        else
+                        {
+                            _spriteBatch.Draw(projectiles[i].Sprite, projectiles[i].Position, Color.White);
                         }
                     }
                     for (int i = 0; i < enemies.Count; i++)
@@ -395,6 +397,10 @@ namespace Roboquatic
                         else if(enemies[i] is AimingEnemy)
                         {
                             _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, Color.Red);
+                        }
+                        else if(enemies[i] is StaticEnemy)
+                        {
+                            _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, Color.Green);
                         }
                     }
                     if (player != null)
