@@ -300,7 +300,7 @@ namespace Roboquatic
                         if (timer % 120 == rng.Next(0, 121))
                         {
                             enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 2, 120, baseEnemyProjectileSprite));
-                            enemies.Add(new AimingEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 2, 120, baseEnemyProjectileSprite));
+                            enemies.Add(new AimingEnemy(baseEnemyProjectileSprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 2, 120, baseEnemyProjectileSprite));
                         }
 
                         //Timers for time/update based actions
@@ -381,7 +381,14 @@ namespace Roboquatic
                     }
                     for (int i = 0; i < enemies.Count; i++)
                     {
-                        _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, Color.White);
+                        if(enemies[i] is BaseEnemy)
+                        {
+                            _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, Color.White);
+                        }
+                        else if(enemies[i] is AimingEnemy)
+                        {
+                            _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, Color.Red);
+                        }
                     }
                     if (player != null)
                     {
