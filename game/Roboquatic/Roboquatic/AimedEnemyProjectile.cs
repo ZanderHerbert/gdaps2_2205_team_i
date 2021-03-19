@@ -21,8 +21,8 @@ namespace Roboquatic
             damage = 1;
 
             //Sets values that will be used to determine how the projectile moves
-            deltaX = (position.X + position.Width / 2) - playerPosition.X;
-            deltaY = (position.Y + position.Height / 2) - playerPosition.Y;
+            deltaX = (position.X + position.Width / 2) - (playerPosition.X + playerPosition.Width / 2);
+            deltaY = (position.Y + position.Height / 2) - (playerPosition.Y + playerPosition.Height / 2);
             xChange = (int)(((deltaX) * speed) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
             yChange = (int)(((deltaY) * speed) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
             angle = Math.Acos((((deltaX)) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY)))));

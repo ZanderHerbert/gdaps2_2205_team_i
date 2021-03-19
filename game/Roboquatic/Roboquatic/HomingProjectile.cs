@@ -12,26 +12,26 @@ namespace Roboquatic
         private double deltaX;
         private double deltaY;
         private int xChange;
-        private int prevXChange;
-        private int scndPrevXChange;
         private int yChange;
-        private int prevYChange;
-        private int scndPrevYChange;
+        private double xVelocity;
+        private double yVelocity;
+        private double xAcceleration;
+        private double yAcceleration;
+        private int lifeSpan;
 
         //EnemyProjectile constructor, uses its parent Projectile constructor
-        public HomingProjectile(Texture2D sprite, int speed, Rectangle position)
+        public HomingProjectile(Texture2D sprite, int speed, Rectangle position, int lifeSpan)
             : base(sprite, speed, position)
         {
             damage = 1;
 
-            deltaX = 0;
-            deltaY = 0;
+            this.lifeSpan = lifeSpan;
             xChange = 0;
             yChange = 0;
-            prevXChange = 0;
-            prevYChange = 0;
-            scndPrevXChange = 0;
-            angle = Math.Acos((((deltaX)) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY)))));
+            xVelocity = 0;
+            yVelocity = 0;
+            xAcceleration = 0;
+            yAcceleration = 0;
         }
 
         //Checks if the projectile is in contact with the player
@@ -53,22 +53,34 @@ namespace Roboquatic
             Rectangle playerPos = game.Player.Position;
 
             
-            deltaX = (position.X + position.Width / 2) - playerPos.X;
-            deltaY = (position.Y + position.Height / 2) - playerPos.Y;
-            scndPrevXChange = prevXChange;
-            prevXChange = xChange;
-            xChange = (int)(((deltaX) * speed) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
-            yChange = (int)(((deltaY) * speed) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
+            deltaX = (position.X + position.Width / 2) - (playerPos.X + playerPos.Width / 2);
+            deltaY = (position.Y + position.Height / 2) - (playerPos.Y + playerPos.Height / 2);
+            xAcceleration = ((deltaX)) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY)));
+            yAcceleration = ((deltaY)) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY)));
+            xVelocity = (xVelocity + xAcceleration / 3);
+            yVelocity = (yVelocity + yAcceleration / 3);
+            if(Math.Abs(xVelocity) + Math.Abs(yVelocity) > speed)
+            {
+                xVelocity = (xVelocity / (Math.Abs(xVelocity) + Math.Abs(yVelocity))) * (double)speed;
+                yVelocity = (yVelocity / (Math.Abs(xVelocity) + Math.Abs(yVelocity))) * (double)speed;
+            }
+            xChange = (int)(xVelocity);
+            yChange = (int)(yVelocity);
 
             if (PlayerContact(game.Player))
             {
                 game.Player.TakeDamage(damage);
                 hit = true;
             }
-            position.X += xChange + prevXChange / 2 + scndPrevXChange / 4;
-            position.Y += yChange + prevYChange / 2 + scndPrevYChange / 4;
 
-            
+            if(lifeSpan <= 0)
+            {
+                hit = true;
+            }
+
+            position.X -= xChange;
+            position.Y -= yChange;
+            lifeSpan--;
         }
     }
 }

@@ -297,11 +297,21 @@ namespace Roboquatic
                         // Randomly creates enemies based on a timer at random positions
                         //
                         // Will need to be changed, only here for testing purposes
-                        if (timer % 120 == rng.Next(0, 121))
+                        if (timer % 240 == rng.Next(0, 241))
                         {
-                            //enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 2, 120, baseEnemyProjectileSprite));
-                            //enemies.Add(new AimingEnemy(baseEnemyProjectileSprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 2, 120, baseEnemyProjectileSprite));
-                            //enemies.Add(new StaticEnemy(baseEnemyProjectileSprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 4));
+                            enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 2, 120, baseEnemyProjectileSprite));
+                        }
+                        if (timer % 240 == rng.Next(0, 241))
+                        {
+                            enemies.Add(new AimingEnemy(baseEnemyProjectileSprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 2, 120, baseEnemyProjectileSprite));
+                        }
+                        if (timer % 240 == rng.Next(0, 241))
+                        {
+                            enemies.Add(new StaticEnemy(baseEnemyProjectileSprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 4));
+                        }
+                        if (timer % 240 == rng.Next(0, 241))
+                        {
+                            projectiles.Add(new HomingProjectile(baseEnemyProjectileSprite, 6, new Rectangle(viewportWidth - 32, viewportHeight / 2, 32, 32), 240));
                         }
 
                         //Timers for time/update based actions
@@ -378,15 +388,7 @@ namespace Roboquatic
                     _spriteBatch.Draw(backdropSwap, backdropSwapPos, Color.White);
                     for (int i = 0; i < projectiles.Count; i++)
                     {
-                        if(projectiles[i] is AimedEnemyProjectile)
-                        {
-                            _spriteBatch.Draw(projectiles[i].Sprite, projectiles[i].Position, null, Color.White, (float)projectiles[i].Angle, new Vector2(), new SpriteEffects(), 0);
-                            
-                        }
-                        else
-                        {
-                            _spriteBatch.Draw(projectiles[i].Sprite, projectiles[i].Position, Color.White);
-                        }
+                        _spriteBatch.Draw(projectiles[i].Sprite, projectiles[i].Position, Color.White);
                     }
                     for (int i = 0; i < enemies.Count; i++)
                     {
