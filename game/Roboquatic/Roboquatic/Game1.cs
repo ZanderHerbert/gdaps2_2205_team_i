@@ -311,7 +311,7 @@ namespace Roboquatic
                         }
                         if (timer % 240 == rng.Next(0, 241))
                         {
-                            projectiles.Add(new HomingProjectile(baseEnemyProjectileSprite, 6, new Rectangle(viewportWidth - 32, viewportHeight / 2, 32, 32), 240));
+                            enemies.Add(new RangedHomingEnemy(baseEnemyProjectileSprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 2, 240, baseEnemyProjectileSprite));
                         }
 
                         //Timers for time/update based actions
@@ -403,6 +403,10 @@ namespace Roboquatic
                         else if(enemies[i] is StaticEnemy)
                         {
                             _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, Color.Green);
+                        }
+                        else if(enemies[i] is RangedHomingEnemy)
+                        {
+                            _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, Color.Blue);
                         }
                     }
                     if (player != null)
