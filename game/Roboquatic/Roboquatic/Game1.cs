@@ -36,6 +36,8 @@ namespace Roboquatic
         private List<Enemy> enemies;
         private Texture2D baseEnemySprite;
         private Texture2D baseEnemyProjectileSprite;
+        private Texture2D aimedEnemySprite;
+        private Texture2D staticEnemySprite;
         private Random rng;
         private GameState currentState;
         private KeyboardState previousKbState;
@@ -130,8 +132,10 @@ namespace Roboquatic
             player.Sprite = Content.Load<Texture2D>("PlayerFishSprite");
             backdrop = Content.Load<Texture2D>("PlaceholderBackdrop");
             backdropSwap = Content.Load<Texture2D>("PlaceholderBackdropSwap");
-            baseEnemySprite = Content.Load<Texture2D>("EnemyPlaceholder");
+            baseEnemySprite = Content.Load<Texture2D>("EnemyFishSprite2");
             baseEnemyProjectileSprite = Content.Load<Texture2D>("PlaceholderPlayerProjectile");
+            aimedEnemySprite = Content.Load<Texture2D>("EnemyFishSprite1");
+            staticEnemySprite = Content.Load<Texture2D>("EnemyFishSprite3");
             font = Content.Load<SpriteFont>("text");
             startButton = Content.Load<Texture2D>("OnStart");
             controlsButton = Content.Load<Texture2D>("OnControls");
@@ -303,11 +307,11 @@ namespace Roboquatic
                         }
                         if (timer % 240 == rng.Next(0, 241))
                         {
-                            enemies.Add(new AimingEnemy(baseEnemyProjectileSprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 2, 120, baseEnemyProjectileSprite));
+                            enemies.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 2, 120, baseEnemyProjectileSprite));
                         }
                         if (timer % 240 == rng.Next(0, 241))
                         {
-                            enemies.Add(new StaticEnemy(baseEnemyProjectileSprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 4));
+                            enemies.Add(new StaticEnemy(staticEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 4));
                         }
                         if (timer % 240 == rng.Next(0, 241))
                         {
@@ -394,15 +398,15 @@ namespace Roboquatic
                     {
                         if(enemies[i] is BaseEnemy)
                         {
-                            _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, Color.White);
+                            _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, null, Color.White, 0, new Vector2(), SpriteEffects.FlipHorizontally, 0);
                         }
                         else if(enemies[i] is AimingEnemy)
                         {
-                            _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, Color.Red);
+                            _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, null, Color.White, 0, new Vector2(), SpriteEffects.FlipHorizontally, 0);
                         }
                         else if(enemies[i] is StaticEnemy)
                         {
-                            _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, Color.Green);
+                            _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, null, Color.White, 0, new Vector2(), SpriteEffects.FlipHorizontally, 0);
                         }
                         else if(enemies[i] is RangedHomingEnemy)
                         {
