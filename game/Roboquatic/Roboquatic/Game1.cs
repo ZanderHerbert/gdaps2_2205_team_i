@@ -42,6 +42,10 @@ namespace Roboquatic
         private int timer;
         private List<Projectile> projectiles;
 
+        //Test for FileIO
+        private FileIO fileIO;
+        List<Enemy> enemiesToAdd;
+        //Test for FileIO
         private List<Enemy> enemies;
         private Texture2D baseEnemySprite;
         private Texture2D baseEnemyProjectileSprite;
@@ -158,6 +162,14 @@ namespace Roboquatic
             resumeButton = Content.Load<Texture2D>("ResumeButton");
             continueButton = Content.Load<Texture2D>("ContinueButton");
             checkpoint = Content.Load<Texture2D>("Checkpoint");
+
+            //Test for FileIO
+            /*
+            fileIO = new FileIO(rng, viewportHeight, viewportWidth, baseEnemySprite, baseEnemyProjectileSprite, aimedEnemySprite, staticEnemySprite);
+            fileIO.LoadFormation("EnemyFormations.txt");
+            enemiesToAdd = fileIO.AddFormation(1, 10);
+            */
+            //Test for FileIO
 
             // Load buttons
 
@@ -313,6 +325,7 @@ namespace Roboquatic
                         // Randomly creates enemies based on a timer at random positions
                         //
                         // Will need to be changed, only here for testing purposes
+                        
                         if (timer % 360 == rng.Next(0, 361))
                         {
                             enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 64, 64), 2, 120, baseEnemyProjectileSprite));
@@ -329,6 +342,16 @@ namespace Roboquatic
                         {
                             enemies.Add(new RangedHomingEnemy(baseEnemyProjectileSprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 64, 64), 2, 240, baseEnemyProjectileSprite));
                         }
+
+                        //Test for FileIO
+                        /*
+                        for (int i = 0; i < enemiesToAdd.Count; i++)
+                        {
+                            enemies.Add(enemiesToAdd[i]);
+                            enemiesToAdd.RemoveAt(i);
+                        }
+                        */
+                        //Test for FileIO
 
                         //Timers for time/update based actions
                         timer += 1;
