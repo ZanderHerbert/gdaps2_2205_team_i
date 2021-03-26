@@ -55,9 +55,7 @@ namespace Roboquatic
         private GameState previousState;
         private EnemyManager enemyManager;
         private ProjectileManager projectileManager;
-        private int mouseX;
-        private int mouseY;
-
+      
         private SpriteFont text;
 
         // Buttons' fields
