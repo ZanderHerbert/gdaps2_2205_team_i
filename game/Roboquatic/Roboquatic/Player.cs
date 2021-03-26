@@ -209,7 +209,7 @@ namespace Roboquatic
             if(iFrameTimer == 0)
             {
                 health -= damage;
-                iFrameTimer = 60;
+                iFrameTimer = 0;
             }
         }
 
