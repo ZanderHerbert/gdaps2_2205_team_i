@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
@@ -7,17 +10,39 @@ namespace Roboquatic
 {
     class FileIO
     {
+        //Enum
+        enum Enemies
+        {
+            Empty,
+            Base,
+            Aiming,
+            Static,
+            Homing
+        }
         //Fields
         private Random rng;
-        List<bool[,]> formations = new List<bool[,]>();
+        List<Enemies[,]> formations = new List<Enemies[,]>();
         private StreamReader load;
         private StringReader loadFormation;
         private StreamWriter save;
+        private int viewportHeight;
+        private int viewportWidth;
+        private Texture2D baseEnemySprite;
+        private Texture2D baseEnemyProjectileSprite;
+        private Texture2D aimedEnemySprite;
+        private Texture2D staticEnemySprite;
 
         //Constructor
-        public FileIO(Random rng)
+        public FileIO(Random rng, int viewportHeight, int viewportWidth, Texture2D baseEnemySprite, Texture2D baseEnemyProjectileSprite, Texture2D aimedEnemySprite, Texture2D staticEnemySprite)
         {
             this.rng = rng;
+            this.viewportHeight = viewportHeight;
+            this.viewportWidth = viewportWidth;
+
+            this.baseEnemySprite = baseEnemySprite;
+            this.baseEnemyProjectileSprite = baseEnemyProjectileSprite;
+            this.aimedEnemySprite = aimedEnemySprite;
+            this.staticEnemySprite = staticEnemySprite;
         }
 
         //Methods
@@ -71,26 +96,44 @@ namespace Roboquatic
                     int formationHeight = int.Parse(areaNumbers[1]);
 
                     //Creates a 2D bool array to show where enemies are in the list
-                    formations.Add(new bool[formationWidth, formationHeight]);
+                    formations.Add(new Enemies[formationWidth, formationHeight]);
 
-                    //Iterates through the size of array to plcve true where enemies are and false where they are not
+                    //Iterates through the size of array to places each enemy type based on the symbol or empty.
                     for (int j = 0; j < formationHeight; j++)
                     {
                         loadFormation = new StringReader(load.ReadLine());
                         for (int k = 0; k < formationWidth; k++)
                         {
                             int filled = loadFormation.Read();
-                            //int 120 is an x
-                            if (filled == 120)
+                            
+                            switch (filled)
                             {
-                                formations[i][k, j] = true;
-                            }
-                            //int 111 is an o
-                            else if (filled == 111)
-                            {
-                                formations[i][k, j] = false;
+                                //111 is o (empty)
+                                case 111:
+                                    formations[i][k, j] = Enemies.Empty;
+                                    break;
+                                //120 is x (base)
+                                case 120:
+                                    formations[i][k, j] = Enemies.Base;
+                                    break;
+                                //97 is a (aiming)
+                                case 97:
+                                    formations[i][k, j] = Enemies.Aiming;
+                                    break;
+                                //115 is s (static)
+                                case 115:
+                                    formations[i][k, j] = Enemies.Static;
+                                    break;
+                                //104 is h (homing)
+                                case 104:
+                                    formations[i][k, j] = Enemies.Homing;
+                                    break;
+                                
+                                default:
+                                    break;
                             }
                         }
+                        //In the end creates a 2D array with the locations of enemies
                     }
                 }
             }
@@ -101,19 +144,81 @@ namespace Roboquatic
             finally
             {
                 load.Close();
+                loadFormation.Close();
             }
         }
 
-        /*
-        public Enemy[] GetFormation(int index)
+        
+        public List<Enemy> AddFormation(int index, int offset)
         {
+            List<Enemy> enemiesToAdd = new List<Enemy>();
+            Enemies[,] enemies = formations[index];
 
+            for (int i = 0; i < enemies.GetLength(0); i++)
+            {
+                for (int j = 0; j < enemies.GetLength(1); j++)
+                {
+                    switch (enemies[i, j])
+                    {
+                        case Enemies.Base:
+                            enemiesToAdd.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth + (i * 70), offset + (j * 70), 64, 64), 2, 120, baseEnemyProjectileSprite));
+                            break;
+
+                        case Enemies.Aiming:
+                            enemiesToAdd.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth + (i * 70), offset + (j * 70), 64, 64), 2, 120, baseEnemyProjectileSprite));
+                            break;
+
+                        case Enemies.Static:
+                            enemiesToAdd.Add(new StaticEnemy(staticEnemySprite, new Rectangle(viewportWidth + (i * 70), offset + (j * 70), 64, 64), 4));
+                            break;
+
+                        case Enemies.Homing:
+                            enemiesToAdd.Add(new RangedHomingEnemy(baseEnemyProjectileSprite, new Rectangle(viewportWidth + (i * 70), offset + (j * 70), 64, 64), 2, 120, baseEnemyProjectileSprite));
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+            }
+
+            return enemiesToAdd;
         }
 
-        public Enemy[] RandomFormation()
+        public List<Enemy> AddRandomFormation()
         {
+            List<Enemy> enemiesToAdd = new List<Enemy>();
+            Enemies[,] enemies = formations[rng.Next(0,formations.Count - 1)];
 
+            for (int i = 0; i < enemies.GetLength(0); i++)
+            {
+                for (int j = 0; j < enemies.GetLength(1); j++)
+                {
+                    switch (enemies[i, j])
+                    {
+                        case Enemies.Base:
+                            enemiesToAdd.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth + (i * 70), rng.Next(0, viewportHeight / 2) + (j * 70), 64, 64), 2, 120, baseEnemyProjectileSprite));
+                            break;
+
+                        case Enemies.Aiming:
+                            enemiesToAdd.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth + (i * 70), rng.Next(0, viewportHeight / 2) + (j * 70), 64, 64), 2, 120, baseEnemyProjectileSprite));
+                            break;
+
+                        case Enemies.Static:
+                            enemiesToAdd.Add(new StaticEnemy(staticEnemySprite, new Rectangle(viewportWidth + (i * 70), rng.Next(0, viewportHeight / 2) + (j * 70), 64, 64), 4));
+                            break;
+
+                        case Enemies.Homing:
+                            enemiesToAdd.Add(new RangedHomingEnemy(baseEnemyProjectileSprite, new Rectangle(viewportWidth + (i * 70), rng.Next(0, viewportHeight / 2) + (j * 70), 64, 64), 2, 120, baseEnemyProjectileSprite));
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+            }
+
+            return enemiesToAdd;
         }
-        */
     }
 }
