@@ -189,6 +189,7 @@ namespace Roboquatic
         {
             List<Enemy> enemiesToAdd = new List<Enemy>();
             Enemies[,] enemies = formations[rng.Next(0,formations.Count - 1)];
+            int randomOffset = rng.Next(0, viewportHeight / 2);
 
             for (int i = 0; i < enemies.GetLength(0); i++)
             {
@@ -197,19 +198,19 @@ namespace Roboquatic
                     switch (enemies[i, j])
                     {
                         case Enemies.Base:
-                            enemiesToAdd.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth + (i * 70), rng.Next(0, viewportHeight / 2) + (j * 70), 64, 64), 2, 120, baseEnemyProjectileSprite));
+                            enemiesToAdd.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth + (i * 70), randomOffset + (j * 70), 64, 64), 2, 120, baseEnemyProjectileSprite));
                             break;
 
                         case Enemies.Aiming:
-                            enemiesToAdd.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth + (i * 70), rng.Next(0, viewportHeight / 2) + (j * 70), 64, 64), 2, 120, baseEnemyProjectileSprite));
+                            enemiesToAdd.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth + (i * 70), randomOffset + (j * 70), 64, 64), 2, 120, baseEnemyProjectileSprite));
                             break;
 
                         case Enemies.Static:
-                            enemiesToAdd.Add(new StaticEnemy(staticEnemySprite, new Rectangle(viewportWidth + (i * 70), rng.Next(0, viewportHeight / 2) + (j * 70), 64, 64), 4));
+                            enemiesToAdd.Add(new StaticEnemy(staticEnemySprite, new Rectangle(viewportWidth + (i * 70), randomOffset + (j * 70), 64, 64), 4));
                             break;
 
                         case Enemies.Homing:
-                            enemiesToAdd.Add(new RangedHomingEnemy(baseEnemyProjectileSprite, new Rectangle(viewportWidth + (i * 70), rng.Next(0, viewportHeight / 2) + (j * 70), 64, 64), 2, 120, baseEnemyProjectileSprite));
+                            enemiesToAdd.Add(new RangedHomingEnemy(baseEnemyProjectileSprite, new Rectangle(viewportWidth + (i * 70), randomOffset + (j * 70), 64, 64), 2, 120, baseEnemyProjectileSprite));
                             break;
 
                         default:
