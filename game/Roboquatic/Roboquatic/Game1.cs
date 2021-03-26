@@ -18,12 +18,12 @@ namespace Roboquatic
 
     public class Game1 : Game
     {
-        
+
 
         //Declaring fields
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private Player player;
+        public Player player;
         private bool keyboardControls;
         private Texture2D backdrop;
         private Texture2D backdropSwap;
@@ -57,7 +57,10 @@ namespace Roboquatic
         private Texture2D resumeButton;
         private Texture2D continueButton;
 
-
+        // Checkpoints' fields
+        private List<Checkpoint> checkpoints = new List<Checkpoint>();
+        public string currentCheckpoint;
+        private Texture2D checkpoint;
 
         // Title papge
         private Texture2D titlePage;
@@ -115,8 +118,7 @@ namespace Roboquatic
             rng = new Random();
             enemyManager = new EnemyManager(enemies);
             projectileManager = new ProjectileManager(projectiles);
-            currentState = GameState.Menu;//It should be in the Menu state, but this is just for checking if game state works
-            //previousState = GameState.Menu;
+            currentState = GameState.Menu;
 
             base.Initialize();
         }
@@ -142,20 +144,21 @@ namespace Roboquatic
             menuButton = Content.Load<Texture2D>("MenuButton");
             resumeButton = Content.Load<Texture2D>("ResumeButton");
             continueButton = Content.Load<Texture2D>("ContinueButton");
+            checkpoint = Content.Load<Texture2D>("Checkpoint");
 
             // Load buttons
 
             // Menu
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width/2-93,_graphics.GraphicsDevice.Viewport.Height/2-49,187,65),
+                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 93, _graphics.GraphicsDevice.Viewport.Height / 2 - 49, 187, 65),
                 startButton,
                 startButton
                 ));
 
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 93, _graphics.GraphicsDevice.Viewport.Height / 2+39, 187, 65),
+                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 93, _graphics.GraphicsDevice.Viewport.Height / 2 + 39, 187, 65),
                 controlsButton,
                 controlsButton
                 ));
@@ -163,21 +166,21 @@ namespace Roboquatic
             // Controls
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 250, _graphics.GraphicsDevice.Viewport.Height / 2 -100, 187, 150),
+                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 250, _graphics.GraphicsDevice.Viewport.Height / 2 - 100, 187, 150),
                 kbButton,
                 kbButton
                 ));
 
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 + 93, _graphics.GraphicsDevice.Viewport.Height / 2 -100, 187, 150),
+                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 + 93, _graphics.GraphicsDevice.Viewport.Height / 2 - 100, 187, 150),
                 mouseButton,
                 mouseButton
                 ));
 
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 -30, _graphics.GraphicsDevice.Viewport.Height / 2 + 100, 100, 100),
+                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 30, _graphics.GraphicsDevice.Viewport.Height / 2 + 100, 100, 100),
                 backButton,
                 backButton
                 ));
@@ -185,14 +188,14 @@ namespace Roboquatic
             // Pause
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 , 100 , 100, 50),
+                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2, 100, 100, 50),
                 resumeButton,
                 resumeButton
                 ));
 
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 , 200, 100, 50),
+                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2, 200, 100, 50),
                 menuButton,
                 menuButton
                 ));
@@ -221,6 +224,10 @@ namespace Roboquatic
             buttons[6].OnLeftButtonClick += this.MenuButton;
             buttons[7].OnLeftButtonClick += this.SettingsButton;
             buttons[8].OnLeftButtonClick += this.ContinueButton;
+
+            // Checkpoints
+
+            checkpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(100, 100, 100, 100)));
         }
 
         protected override void Update(GameTime gameTime)
@@ -248,15 +255,11 @@ namespace Roboquatic
 
                     IsMouseVisible = true;
 
-                    
+
                     break;
 
                 case GameState.Settings:
                     IsMouseVisible = true;
-                    if (SingleKeyPress(Keys.M, kbState))
-                    {
-                        currentState = GameState.Menu;
-                    }
 
                     buttons[2].Update();
                     buttons[3].Update();
@@ -264,7 +267,7 @@ namespace Roboquatic
                     break;
 
                 case GameState.Game:
-                    
+
                     IsMouseVisible = false;
 
                     if (SingleKeyPress(Keys.Escape, kbState))
@@ -312,6 +315,12 @@ namespace Roboquatic
                             //Change state if the player dies 
                             currentState = GameState.GameOver;
                         }
+
+                        // Update checkpoints
+                        
+                        
+                         checkpoints[0].Update(this);
+                        
                     }
                     break;
 
@@ -331,24 +340,21 @@ namespace Roboquatic
 
                 case GameState.GameOver:
                     IsMouseVisible = true;
-                    if (SingleKeyPress(Keys.Enter, kbState))
-                    {
-                        currentState = GameState.Menu;
-                    }
+
                     buttons[8].Update();
                     break;
             }
 
-            
+
 
             //Get the previous keyboard state
             previousKbState = kbState;
 
-            
+
 
             base.Update(gameTime);
         }
-        
+
 
         protected override void Draw(GameTime gameTime)
         {
@@ -360,7 +366,7 @@ namespace Roboquatic
             switch (currentState)
             {
                 case GameState.Menu:
-                    _spriteBatch.Draw(titlePage, new Rectangle(0,0,_graphics.GraphicsDevice.Viewport.Width,_graphics.GraphicsDevice.Viewport.Height),Color.White);
+                    _spriteBatch.Draw(titlePage, new Rectangle(0, 0, _graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height), Color.White);
                     buttons[0].Draw(_spriteBatch);
                     buttons[1].Draw(_spriteBatch);
                     break;
@@ -375,17 +381,18 @@ namespace Roboquatic
                 case GameState.Game:
                     _spriteBatch.Draw(backdrop, backdropPos, Color.White);
                     _spriteBatch.Draw(backdropSwap, backdropSwapPos, Color.White);
+
                     for (int i = 0; i < projectiles.Count; i++)
                     {
                         _spriteBatch.Draw(projectiles[i].Sprite, projectiles[i].Position, Color.White);
                     }
                     for (int i = 0; i < enemies.Count; i++)
                     {
-                        if(enemies[i] is BaseEnemy)
+                        if (enemies[i] is BaseEnemy)
                         {
                             _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, Color.White);
                         }
-                        else if(enemies[i] is AimingEnemy)
+                        else if (enemies[i] is AimingEnemy)
                         {
                             _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, Color.Red);
                         }
@@ -394,6 +401,11 @@ namespace Roboquatic
                     {
                         _spriteBatch.Draw(player.Sprite, player.Position, Color.White);
                     }
+
+
+
+                    checkpoints[0].Draw(_spriteBatch,this);
+
                     break;
 
                 case GameState.Pause:
