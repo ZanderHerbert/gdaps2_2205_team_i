@@ -15,6 +15,12 @@ namespace Roboquatic
         protected Rectangle position;
         protected int speed;
         protected int health;
+        protected int contactDamage;
+
+        public int ContactDamage
+        {
+            get { return contactDamage; }
+        }
 
         //Get property for health
         public int Health

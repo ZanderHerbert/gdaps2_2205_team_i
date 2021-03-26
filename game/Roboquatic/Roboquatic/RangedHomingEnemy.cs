@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Roboquatic
 {
-    class AimingEnemy : Enemy
+    class RangedHomingEnemy : Enemy
     {
         //Declaring fields
         private int framesToFire;
@@ -27,12 +27,12 @@ namespace Roboquatic
         }
 
         //BaseEnemy Constructor, uses Enemy constructor
-        public AimingEnemy(Texture2D sprite, Rectangle position, int speed, int framesToFire, Texture2D projectileSprite)
+        public RangedHomingEnemy(Texture2D sprite, Rectangle position, int speed, int framesToFire, Texture2D projectileSprite)
             : base(sprite, position, speed)
         {
             this.framesToFire = framesToFire;
             this.projectileSprite = projectileSprite;
-            projectileSpeed = -16;
+            projectileSpeed = 6;
             health = 1;
             shootingTimer = 0;
             contactDamage = 1;
@@ -49,9 +49,9 @@ namespace Roboquatic
         }
 
         //Creates an enemy projectile and returns it
-        public AimedEnemyProjectile Shoot(Player player)
+        public HomingProjectile Shoot()
         {
-            return new AimedEnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - position.Width, position.Y, 32, 32), player.Position);
+            return new HomingProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - position.Width, position.Y, 32, 32), 240);
         }
 
         //Updates the enemy
@@ -61,7 +61,7 @@ namespace Roboquatic
         public override void Update(GameTime gameTime, Game1 game)
         {
             position.X -= speed;
-            if (position.X <= game.GraphicsDevice.Viewport.Width * 3 / 4)
+            if (position.X <= game.GraphicsDevice.Viewport.Width * 5 / 8)
             {
                 speed = 0;
             }
@@ -69,7 +69,7 @@ namespace Roboquatic
             if (CanShoot())
             {
                 shootingTimer = 0;
-                game.Projectiles.Add(Shoot(game.Player));
+                game.Projectiles.Add(Shoot());
             }
         }
     }
