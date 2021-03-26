@@ -111,19 +111,19 @@ namespace Roboquatic
             //Moves the player based on WASD input
             if (kbState.IsKeyDown(Keys.S))
             {
-                position.Y = position.Y + speed * 2;
+                position.Y = position.Y + speed * 4;
             }
             if (kbState.IsKeyDown(Keys.W))
             {
-                position.Y = position.Y - speed * 2;
+                position.Y = position.Y - speed * 4;
             }
             if (kbState.IsKeyDown(Keys.A))
             {
-                position.X = position.X - speed * 2;
+                position.X = position.X - speed * 4;
             }
             if (kbState.IsKeyDown(Keys.D))
             {
-                position.X = position.X + speed * 2;
+                position.X = position.X + speed * 4;
             }
             // Checks if the player pressed space and if the player can shoot and then adds a new player projectile 
             // to the list of projectiles and resets the shooting timer
