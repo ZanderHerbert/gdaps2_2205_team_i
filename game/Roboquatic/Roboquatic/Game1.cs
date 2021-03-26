@@ -251,7 +251,7 @@ namespace Roboquatic
                     // Reset the game
                     enemies.Clear();
                     projectiles.Clear();
-                    player.Position = new Rectangle(0, 0, 32, 32);
+                    player.Position = new Rectangle(0, 0, 48, 48);
                     player.Health = 6;
                     player.IsAlive = true;
 

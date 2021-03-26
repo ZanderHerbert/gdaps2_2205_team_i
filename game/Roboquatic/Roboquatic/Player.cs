@@ -131,7 +131,7 @@ namespace Roboquatic
             {
                 if (shootingTimer >= FramesToFire)
                 {
-                    game.Projectiles.Add(new PlayerProjectile(projectileSprite, ProjectileSpeed, new Rectangle(Position.X + Position.Width, Position.Y, 32, 32), this));
+                    game.Projectiles.Add(new PlayerProjectile(projectileSprite, ProjectileSpeed, new Rectangle(Position.X + position.Width, Position.Y + position.Height / 2 - 16, 32, 32), this));
                     shootingTimer = 0;
                 }
             }
@@ -196,7 +196,7 @@ namespace Roboquatic
             {
                 if (shootingTimer >= FramesToFire)
                 {
-                    game.Projectiles.Add(new PlayerProjectile(projectileSprite, ProjectileSpeed, new Rectangle(Position.X + Position.Width, Position.Y, 32, 32), this));
+                    game.Projectiles.Add(new PlayerProjectile(projectileSprite, ProjectileSpeed, new Rectangle(Position.X + position.Width, Position.Y + position.Height / 2 - 16, 32, 32), this));
                     shootingTimer = 0;
                 }
             }

@@ -7,7 +7,8 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Roboquatic
 {
-    class AimingEnemy : Enemy
+    //The most basic enemy which moves left to right and shoots
+    public class BaseEnemy : Enemy
     {
         //Declaring fields
         private int framesToFire;
@@ -27,13 +28,13 @@ namespace Roboquatic
         }
 
         //BaseEnemy Constructor, uses Enemy constructor
-        public AimingEnemy(Texture2D sprite, Rectangle position, int speed, int framesToFire, Texture2D projectileSprite)
+        public BaseEnemy(Texture2D sprite, Rectangle position, int speed, int framesToFire, Texture2D projectileSprite)
             : base(sprite, position, speed)
         {
             this.framesToFire = framesToFire;
             this.projectileSprite = projectileSprite;
-            projectileSpeed = -16;
-            health = 1;
+            projectileSpeed = -8;
+            health = 2;
             shootingTimer = 0;
             contactDamage = 1;
         }
@@ -49,9 +50,9 @@ namespace Roboquatic
         }
 
         //Creates an enemy projectile and returns it
-        public AimedEnemyProjectile Shoot(Player player)
+        public EnemyProjectile Shoot()
         {
-            return new AimedEnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - position.Width, position.Y, 32, 32), player.Position);
+            return new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, position.Y + position.Height / 2 - 16, 32, 32));
         }
 
         //Updates the enemy
@@ -61,15 +62,19 @@ namespace Roboquatic
         public override void Update(GameTime gameTime, Game1 game)
         {
             position.X -= speed;
-            if (position.X <= game.GraphicsDevice.Viewport.Width * 3 / 4)
+            if (position.X <= game.GraphicsDevice.Viewport.Width / 2)
             {
-                speed = 0;
+                speed = -1;
+            }
+            if (position.X >= game.GraphicsDevice.Viewport.Width * 3 / 4 && speed < 0)
+            {
+                speed = 1;
             }
             shootingTimer++;
             if (CanShoot())
             {
                 shootingTimer = 0;
-                game.Projectiles.Add(Shoot(game.Player));
+                game.Projectiles.Add(Shoot());
             }
         }
     }

@@ -51,7 +51,7 @@ namespace Roboquatic
         //Creates an enemy projectile and returns it
         public HomingProjectile Shoot()
         {
-            return new HomingProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - position.Width, position.Y, 32, 32), 240);
+            return new HomingProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, position.Y + position.Height / 2 - 16, 32, 32), 240);
         }
 
         //Updates the enemy
