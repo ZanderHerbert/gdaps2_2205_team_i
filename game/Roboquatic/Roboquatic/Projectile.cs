@@ -8,13 +8,20 @@ using Microsoft.Xna.Framework.Input;
 namespace Roboquatic
 {
     //Basic class which contains the basic information and methods a projectile needs
-    class Projectile
+    public class Projectile
     {
         // Declaring fields
         protected Texture2D sprite;
         protected int speed;
         protected Rectangle position;
         protected int damage;
+        protected bool hit;
+        protected double angle;
+
+        public double Angle
+        {
+            get { return angle; }
+        }
 
         //Get property for damage
         public int Damage
@@ -26,6 +33,12 @@ namespace Roboquatic
         public Texture2D Sprite
         {
             get { return sprite; }
+        }
+        
+        //Get propert for hit
+        public bool Hit
+        {
+            get { return hit; }
         }
 
         // Get property for position
@@ -40,24 +53,13 @@ namespace Roboquatic
             this.sprite = sprite;
             this.speed = speed;
             this.position = position;
+            hit = false;
         }
 
-        //Moves the projectile
-        public void Move()
+        //Virtual update method to be used by child classes
+        public virtual void Update(GameTime gameTime, Game1 game)
         {
-            position.X += speed;
-        }
 
-        //Virtual method to be overriden by an enemy projectile
-        public virtual bool PlayerContact(Player player)
-        {
-            return false;
-        }
-
-        //Virtual method to be overriden by a player projectile
-        public virtual Enemy EnemyContact(List<Enemy> enemies)
-        {
-            return null;
         }
     }
 }

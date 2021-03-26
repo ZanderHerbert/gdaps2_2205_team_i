@@ -7,8 +7,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Roboquatic
 {
-    //The most basic enemy which moves left to right and shoots
-    public class BaseEnemy : Enemy
+    class RangedHomingEnemy : Enemy
     {
         //Declaring fields
         private int framesToFire;
@@ -28,13 +27,13 @@ namespace Roboquatic
         }
 
         //BaseEnemy Constructor, uses Enemy constructor
-        public BaseEnemy(Texture2D sprite, Rectangle position, int speed, int framesToFire, Texture2D projectileSprite)
+        public RangedHomingEnemy(Texture2D sprite, Rectangle position, int speed, int framesToFire, Texture2D projectileSprite)
             : base(sprite, position, speed)
         {
             this.framesToFire = framesToFire;
             this.projectileSprite = projectileSprite;
-            projectileSpeed = -8;
-            health = 2;
+            projectileSpeed = 6;
+            health = 1;
             shootingTimer = 0;
             contactDamage = 1;
         }
@@ -50,9 +49,9 @@ namespace Roboquatic
         }
 
         //Creates an enemy projectile and returns it
-        public EnemyProjectile Shoot()
+        public HomingProjectile Shoot()
         {
-            return new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - position.Width, position.Y, 32, 32));
+            return new HomingProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - position.Width, position.Y, 32, 32), 240);
         }
 
         //Updates the enemy
@@ -62,13 +61,9 @@ namespace Roboquatic
         public override void Update(GameTime gameTime, Game1 game)
         {
             position.X -= speed;
-            if (position.X <= game.GraphicsDevice.Viewport.Width / 2)
+            if (position.X <= game.GraphicsDevice.Viewport.Width * 5 / 8)
             {
-                speed = -1;
-            }
-            if (position.X >= game.GraphicsDevice.Viewport.Width * 3 / 4 && speed < 0)
-            {
-                speed = 1;
+                speed = 0;
             }
             shootingTimer++;
             if (CanShoot())
