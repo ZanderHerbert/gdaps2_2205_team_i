@@ -21,26 +21,39 @@ namespace Roboquatic
         //Declaring fields
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
         private Player player;
+
         private int mouseX;
         private int mouseY;
+
         private bool keyboardControls;
+
         private Texture2D backdrop;
         private Texture2D backdropSwap;
+
         private Rectangle backdropPos;
         private Rectangle backdropSwapPos;
+
         private int viewportWidth;
         private int viewportHeight;
+
         private int timer;
         private int shootingTimer;
+
         private List<Projectile> projectiles;
+
         private List<Enemy> enemies;
         private Texture2D baseEnemySprite;
         private Texture2D baseEnemyProjectileSprite;
+
         private Random rng;
+
         private Enemy hitEnemy;
+
         private GameState currentState;
         private KeyboardState previousKbState;
+
         private SpriteFont text;
 
         public Game1()
@@ -53,6 +66,7 @@ namespace Roboquatic
         protected override void Initialize()
         {
             // Initializing variables
+
             player = new Player(1, 20, 10, new Rectangle(0, 0, 32, 32), 6, 1);
             keyboardControls = false;
             viewportWidth = this.GraphicsDevice.Viewport.Width;
