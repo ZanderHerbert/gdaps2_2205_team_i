@@ -55,8 +55,6 @@ namespace Roboquatic
         private GameState previousState;
         private EnemyManager enemyManager;
         private ProjectileManager projectileManager;
-        private int mouseX;
-        private int mouseY;
 
         private SpriteFont text;
 
@@ -140,7 +138,7 @@ namespace Roboquatic
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             //Loading in textures and initializing the player
-            player = new Player(1, 20, 10, new Rectangle(0, 0, 32, 32), 6, 1, Content.Load<Texture2D>("PlaceholderPlayerProjectile"));
+            player = new Player(1, 20, 10, new Rectangle(0, 0, 48, 48), 6, 1, Content.Load<Texture2D>("PlaceholderPlayerProjectile"));
             player.Sprite = Content.Load<Texture2D>("PlayerFishSprite");
             backdrop = Content.Load<Texture2D>("PlaceholderBackdrop");
             backdropSwap = Content.Load<Texture2D>("PlaceholderBackdropSwap");
@@ -313,21 +311,21 @@ namespace Roboquatic
                         // Randomly creates enemies based on a timer at random positions
                         //
                         // Will need to be changed, only here for testing purposes
-                        if (timer % 240 == rng.Next(0, 241))
+                        if (timer % 360 == rng.Next(0, 361))
                         {
-                            enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 2, 120, baseEnemyProjectileSprite));
+                            enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 64, 64), 2, 120, baseEnemyProjectileSprite));
                         }
-                        if (timer % 240 == rng.Next(0, 241))
+                        if (timer % 360 == rng.Next(0, 361))
                         {
-                            enemies.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 2, 120, baseEnemyProjectileSprite));
+                            enemies.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 64, 64), 2, 120, baseEnemyProjectileSprite));
                         }
-                        if (timer % 240 == rng.Next(0, 241))
+                        if (timer % 360 == rng.Next(0, 361))
                         {
-                            enemies.Add(new StaticEnemy(staticEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 4));
+                            enemies.Add(new StaticEnemy(staticEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 64, 64), 4));
                         }
-                        if (timer % 240 == rng.Next(0, 241))
+                        if (timer % 360 == rng.Next(0, 361))
                         {
-                            enemies.Add(new RangedHomingEnemy(baseEnemyProjectileSprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 32, 32), 2, 240, baseEnemyProjectileSprite));
+                            enemies.Add(new RangedHomingEnemy(baseEnemyProjectileSprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 64, 64), 2, 240, baseEnemyProjectileSprite));
                         }
 
                         //Timers for time/update based actions
