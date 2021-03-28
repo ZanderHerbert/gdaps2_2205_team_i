@@ -51,6 +51,7 @@ namespace Roboquatic
         private Texture2D baseEnemyProjectileSprite;
         private Texture2D aimedEnemySprite;
         private Texture2D staticEnemySprite;
+        private Texture2D homingEnemySprite;
         private Random rng;
         private GameState currentState;
         private KeyboardState previousKbState;
@@ -143,14 +144,15 @@ namespace Roboquatic
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             //Loading in textures and initializing the player
-            player = new Player(1, 20, 10, new Rectangle(0, 0, 48, 48), 6, 1, Content.Load<Texture2D>("PlaceholderPlayerProjectile"));
+            player = new Player(1, 20, 10, new Rectangle(0, 0, 48, 48), 6, 1, Content.Load<Texture2D>("bubble"));
             player.Sprite = Content.Load<Texture2D>("PlayerFishSprite");
             backdrop = Content.Load<Texture2D>("PlaceholderBackdrop");
             backdropSwap = Content.Load<Texture2D>("PlaceholderBackdropSwap");
             baseEnemySprite = Content.Load<Texture2D>("EnemyFishSprite2");
-            baseEnemyProjectileSprite = Content.Load<Texture2D>("PlaceholderPlayerProjectile");
+            baseEnemyProjectileSprite = Content.Load<Texture2D>("bubble");
             aimedEnemySprite = Content.Load<Texture2D>("EnemyFishSprite1");
             staticEnemySprite = Content.Load<Texture2D>("EnemyFishSprite3");
+            homingEnemySprite = Content.Load<Texture2D>("EnemyFishSprite4");
             font = Content.Load<SpriteFont>("text");
             startButton = Content.Load<Texture2D>("OnStart");
             controlsButton = Content.Load<Texture2D>("OnControls");
@@ -340,7 +342,7 @@ namespace Roboquatic
                         }
                         if (timer % 360 == rng.Next(0, 361))
                         {
-                            enemies.Add(new RangedHomingEnemy(baseEnemyProjectileSprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 64, 64), 2, 240, baseEnemyProjectileSprite));
+                            enemies.Add(new RangedHomingEnemy(homingEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 64, 64), 2, 240, baseEnemyProjectileSprite));
                         }
 
                         //Test for FileIO
@@ -449,7 +451,7 @@ namespace Roboquatic
                         }
                         else if(enemies[i] is RangedHomingEnemy)
                         {
-                            _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, Color.Blue);
+                            _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, null, Color.White, 0, new Vector2(), SpriteEffects.FlipHorizontally, 0);
                         }
                     }
                     if (player != null)
