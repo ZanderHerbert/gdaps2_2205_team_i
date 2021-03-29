@@ -9,9 +9,6 @@ namespace Roboquatic
 {
     class StaticEnemy : Enemy
     {
-        //Declaring fields
-        private Texture2D projectileSprite;
-
         //BaseEnemy Constructor, uses Enemy constructor
         public StaticEnemy(Texture2D sprite, Rectangle position, int speed)
             : base(sprite, position, speed)

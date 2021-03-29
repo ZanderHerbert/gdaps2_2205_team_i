@@ -330,19 +330,19 @@ namespace Roboquatic
                         
                         if (timer % 360 == rng.Next(0, 361))
                         {
-                            enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 64, 64), 2, 120, baseEnemyProjectileSprite));
+                            enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite));
                         }
                         if (timer % 360 == rng.Next(0, 361))
                         {
-                            enemies.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 64, 64), 2, 120, baseEnemyProjectileSprite));
+                            enemies.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite));
                         }
                         if (timer % 360 == rng.Next(0, 361))
                         {
-                            enemies.Add(new StaticEnemy(staticEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 64, 64), 4));
+                            enemies.Add(new StaticEnemy(staticEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 4));
                         }
                         if (timer % 360 == rng.Next(0, 361))
                         {
-                            enemies.Add(new RangedHomingEnemy(homingEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 31), 64, 64), 2, 240, baseEnemyProjectileSprite));
+                            enemies.Add(new RangedHomingEnemy(homingEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 240, baseEnemyProjectileSprite));
                         }
 
                         //Test for FileIO
