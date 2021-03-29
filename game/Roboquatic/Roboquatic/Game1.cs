@@ -23,7 +23,7 @@ namespace Roboquatic
         //Declaring fields
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        public Player player;
+        private Player player;
 
         private int mouseX;
         private int mouseY;
@@ -77,12 +77,19 @@ namespace Roboquatic
         private List<Checkpoint> checkpoints = new List<Checkpoint>();
         public string currentCheckpoint;
         private Texture2D checkpoint;
+        private bool spawnEnemy;
 
         // Game time
-        public int time;
+        private float time;
 
         // Title papge
         private Texture2D titlePage;
+
+        //Get property for total game time in seconds
+        public float Time
+        {
+            get { return time; }
+        }
 
         //Get set property for enemies
         public List<Enemy> Enemies
@@ -114,6 +121,57 @@ namespace Roboquatic
         public Player Player
         {
             get { return player; }
+            set { player = value; }
+        }
+
+        // Get set property for player health
+        public int PlayerHealth
+        {
+            get { return player.Health; }
+            set { player.Health = value; }
+        }
+
+        // Get property for player speed
+        public int PlayerSpeed
+        {
+            get { return player.Speed; }
+        }
+
+        // Get property for player damage
+        public int PlayerDamage
+        {
+            get { return player.ProjectileDamage; }
+        }
+
+        // Get property for player position
+        public Rectangle PlayerPosition
+        {
+            get { return player.Position; }
+        }
+
+        // Get set Property for stop enemies from spawning when player reached a checkpoint
+        public bool SpawnEnemy
+        {
+            get { return spawnEnemy; }
+            set { spawnEnemy = value; }
+        }
+
+        //Get property for viewport width
+        public int ViewportWidth
+        {
+            get { return viewportWidth; }
+        }
+
+        //Get property for viewport width
+        public int ViewportHeight
+        {
+            get { return viewportHeight; }
+        }
+
+        //Get property for font
+        public SpriteFont Font
+        {
+            get { return font; }
         }
 
         public Game1()
@@ -138,6 +196,7 @@ namespace Roboquatic
             enemyManager = new EnemyManager(enemies);
             projectileManager = new ProjectileManager(projectiles);
             currentState = GameState.Menu;
+            spawnEnemy = true;
 
             base.Initialize();
         }
@@ -266,8 +325,8 @@ namespace Roboquatic
             buttons[7].OnLeftButtonClick += this.SettingsButton;
             buttons[8].OnLeftButtonClick += this.ContinueButton;
 
-            // Checkpoints
-            checkpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(100, 100, 100, 100),10));
+            // Add Checkpoints
+            checkpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 5));
         }
 
         protected override void Update(GameTime gameTime)
@@ -282,11 +341,7 @@ namespace Roboquatic
             {
                 case GameState.Menu:
                     // Reset the game
-                    enemies.Clear();
-                    projectiles.Clear();
-                    player.Position = new Rectangle(0, 0, 48, 48);
-                    player.Health = 6;
-                    player.IsAlive = true;
+                    GameReset();
 
                     previousState = currentState;
 
@@ -308,7 +363,7 @@ namespace Roboquatic
 
                 case GameState.Game:
                     // Update actual game time
-                    time = (int)gameTime.TotalGameTime.TotalSeconds;
+                    time += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                     IsMouseVisible = false;
 
@@ -343,22 +398,24 @@ namespace Roboquatic
                         // Randomly creates enemies based on a timer at random positions
                         //
                         // Will need to be changed, only here for testing purposes
-                        
-                        if (timer % 360 == rng.Next(0, 361))
+                        if (spawnEnemy)// If a checkpoint appears, then stop ememies from spawning 
                         {
-                            enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite));
-                        }
-                        if (timer % 360 == rng.Next(0, 361))
-                        {
-                            enemies.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite));
-                        }
-                        if (timer % 360 == rng.Next(0, 361))
-                        {
-                            enemies.Add(new StaticEnemy(staticEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 4));
-                        }
-                        if (timer % 360 == rng.Next(0, 361))
-                        {
-                            enemies.Add(new RangedHomingEnemy(homingEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 240, baseEnemyProjectileSprite));
+                            if (timer % 360 == rng.Next(0, 361))
+                            {
+                                enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite));
+                            }
+                            if (timer % 360 == rng.Next(0, 361))
+                            {
+                                enemies.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite));
+                            }
+                            if (timer % 360 == rng.Next(0, 361))
+                            {
+                                enemies.Add(new StaticEnemy(staticEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 4));
+                            }
+                            if (timer % 360 == rng.Next(0, 361))
+                            {
+                                enemies.Add(new RangedHomingEnemy(homingEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 240, baseEnemyProjectileSprite));
+                            }
                         }
 
                         //Test for FileIO
@@ -382,7 +439,7 @@ namespace Roboquatic
                         }
 
                         // Update checkpoints
-                         checkpoints[0].Update(this);
+                        checkpoints[0].Update(this);
                     }
                     break;
 
@@ -446,12 +503,15 @@ namespace Roboquatic
                     _spriteBatch.Draw(backdropSwap, backdropSwapPos, Color.White);
 
                     // Draw a timer 
-                    _spriteBatch.DrawString(font, time.ToString(), new Vector2(10, 10), Color.White);
+                    _spriteBatch.DrawString(font, string.Format("{0:f0}",time), new Vector2(10, 10), Color.White);
 
+                    // Draw projectiles
                     for (int i = 0; i < projectiles.Count; i++)
                     {
                         _spriteBatch.Draw(projectiles[i].Sprite, projectiles[i].Position, Color.White);
                     }
+
+                    // Draw enemies
                     for (int i = 0; i < enemies.Count; i++)
                     {
                         if (enemies[i] is BaseEnemy)
@@ -462,21 +522,24 @@ namespace Roboquatic
                         {
                             _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, null, Color.White, 0, new Vector2(), SpriteEffects.FlipHorizontally, 0);
                         }
-                        else if(enemies[i] is StaticEnemy)
+                        else if (enemies[i] is StaticEnemy)
                         {
                             _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, null, Color.White, 0, new Vector2(), SpriteEffects.FlipHorizontally, 0);
                         }
-                        else if(enemies[i] is RangedHomingEnemy)
+                        else if (enemies[i] is RangedHomingEnemy)
                         {
                             _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, null, Color.White, 0, new Vector2(), SpriteEffects.FlipHorizontally, 0);
                         }
                     }
+
+                    // Draw player
                     if (player != null)
                     {
                         _spriteBatch.Draw(player.Sprite, player.Position, Color.White);
                     }
 
-                    checkpoints[0].Draw(_spriteBatch,this);
+                    // Draw checkpoints
+                    checkpoints[0].Draw(_spriteBatch, this);
                     break;
 
                 case GameState.Pause:
@@ -574,6 +637,28 @@ namespace Roboquatic
             if (backdropSwapPos.X == ((-3) * viewportWidth))
             {
                 backdropSwapPos.X = viewportWidth;
+            }
+        }
+
+        /// <summary>
+        /// Reset the game in menu state
+        /// </summary>
+        private void GameReset()
+        {
+            // Reset the game
+            enemies.Clear();
+            projectiles.Clear();
+            player.Position = new Rectangle(0, 0, 48, 48);
+            player.Health = 6;
+            player.IsAlive = true;
+            time = 0;
+            timer = 0;
+
+            // reset checkpoints
+            foreach(Checkpoint c in checkpoints)
+            {
+                c.Contact = false;
+                c.Position = new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100);
             }
         }
     }

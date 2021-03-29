@@ -10,6 +10,8 @@ namespace Roboquatic
         private Rectangle position;
         private string checkpointName;
         private int time; // This is the time when a checkpoint should show up in the game
+        private bool contact;
+        private int contactTime;
 
         // Game stats fields
         private int health;
@@ -23,16 +25,23 @@ namespace Roboquatic
             get { return checkpointName; }
         }
 
-        // Get the checkpoint's position
-        public Rectangle GetPosition
+        // Get set the checkpoint's position
+        public Rectangle Position
         {
             get { return position; }
+            set { position = value; }
         }
 
         // Get the checkpoint's image
         public Texture2D GetImage
         {
             get { return checkpointImage; }
+        }
+
+        public bool Contact
+        {
+            get { return contact; }
+            set { contact = value; }
         }
 
         // Constructor
@@ -51,25 +60,47 @@ namespace Roboquatic
         /// <param name="game"></param>
         public void Update(Game1 game)
         {
-            if (position.Contains(game.player.Position))
+            if (position.Contains(game.PlayerPosition))
             {
                 // First save the player's stats
-                health = game.player.Health;
-                speed = game.player.Speed;
-                damage = game.player.ProjectileDamage;
+                health = game.PlayerHealth;
+                speed = game.PlayerSpeed;
+                damage = game.PlayerDamage;
 
                 // Reset the player's health and set the current checkpoint to this checkpoint
-                game.player.Health = 6;
+                game.PlayerHealth = 6;
                 game.currentCheckpoint = checkpointName;
 
-            }
+                // Check if the player has reached the checkpoint or not
+                contact = true;
+
+                contactTime = (int)game.Time;
+            }  
         }
 
+        /// <summary>
+        /// Draw the checkpoint by following certain rules
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="game"></param>
         public void Draw(SpriteBatch spriteBatch, Game1 game)
         {
-            if (time <= game.time && time+5 >= game.time)
+            // Within the checkpoint time, no enemies should spawn
+            // Until the player reached the checkpoint
+            if (time <= game.Time && !contact)
             {
-                if (position.Contains(game.player.Position))
+                game.SpawnEnemy = false;
+            }
+            else
+            {
+                game.SpawnEnemy = true;
+            }
+
+            // Draw the checkpoint only if the player reached the right time and has cleared all the enemies 
+            // Remove the checkpoint if the player contacted with the checkpoint
+            if (time <= game.Time && !contact && game.Enemies.Count<1)
+            {
+                if (position.Contains(game.PlayerPosition))
                 {
                     spriteBatch.Draw(checkpointImage, position, Color.Green);
                 }
@@ -78,10 +109,17 @@ namespace Roboquatic
                     spriteBatch.Draw(checkpointImage, position, Color.White);
                 }
 
-
+                if (position.X >= game.ViewportWidth / 2)
+                {
+                    position.X--;
+                }
             }
 
-
+            // If contacted, then send a message that says "game saved"
+            if (contact && game.Time<=contactTime+3 && game.Time>=time)
+            {
+                spriteBatch.DrawString(game.Font, "Game saved!", new Vector2(game.ViewportWidth / 2, game.ViewportHeight / 2), Color.White);
+            }
         }
     }
 }

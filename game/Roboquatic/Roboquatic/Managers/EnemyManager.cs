@@ -26,6 +26,12 @@ namespace Roboquatic
                 {
                     game.Player.TakeDamage(enemies[i].ContactDamage);
                 }
+
+                // Remove enemies outside of the window
+                if (enemies[i].Position.X < 0)
+                {
+                    enemies.RemoveAt(i);
+                }
             }
         }
 
