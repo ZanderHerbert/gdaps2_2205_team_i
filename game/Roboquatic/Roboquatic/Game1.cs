@@ -77,6 +77,9 @@ namespace Roboquatic
         public string currentCheckpoint;
         private Texture2D checkpoint;
 
+        // Game time
+        public int time;
+
         // Title papge
         private Texture2D titlePage;
 
@@ -145,13 +148,19 @@ namespace Roboquatic
             //Loading in textures and initializing the player
             player = new Player(1, 20, 10, new Rectangle(0, 0, 48, 48), 6, 1, Content.Load<Texture2D>("PlaceholderPlayerProjectile"));
             player.Sprite = Content.Load<Texture2D>("PlayerFishSprite");
+
+            // Load background 
             backdrop = Content.Load<Texture2D>("PlaceholderBackdrop");
             backdropSwap = Content.Load<Texture2D>("PlaceholderBackdropSwap");
+
+            // Load enemies 
             baseEnemySprite = Content.Load<Texture2D>("EnemyFishSprite2");
             baseEnemyProjectileSprite = Content.Load<Texture2D>("PlaceholderPlayerProjectile");
             aimedEnemySprite = Content.Load<Texture2D>("EnemyFishSprite1");
             staticEnemySprite = Content.Load<Texture2D>("EnemyFishSprite3");
             font = Content.Load<SpriteFont>("text");
+
+            // Load Buttons
             startButton = Content.Load<Texture2D>("OnStart");
             controlsButton = Content.Load<Texture2D>("OnControls");
             kbButton = Content.Load<Texture2D>("kbButton");
@@ -161,6 +170,8 @@ namespace Roboquatic
             menuButton = Content.Load<Texture2D>("MenuButton");
             resumeButton = Content.Load<Texture2D>("ResumeButton");
             continueButton = Content.Load<Texture2D>("ContinueButton");
+
+            // Load checkpoint
             checkpoint = Content.Load<Texture2D>("Checkpoint");
 
             //Test for FileIO
@@ -171,8 +182,7 @@ namespace Roboquatic
             */
             //Test for FileIO
 
-            // Load buttons
-
+            // Add buttons
             // Menu
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
@@ -181,6 +191,7 @@ namespace Roboquatic
                 startButton
                 ));
 
+            // Settings
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
                 new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 93, _graphics.GraphicsDevice.Viewport.Height / 2 + 39, 187, 65),
@@ -188,7 +199,7 @@ namespace Roboquatic
                 controlsButton
                 ));
 
-            // Controls
+            // Settings Keyboard
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
                 new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 250, _graphics.GraphicsDevice.Viewport.Height / 2 - 100, 187, 150),
@@ -196,6 +207,7 @@ namespace Roboquatic
                 kbButton
                 ));
 
+            // Settings Mouse
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
                 new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 + 93, _graphics.GraphicsDevice.Viewport.Height / 2 - 100, 187, 150),
@@ -203,6 +215,7 @@ namespace Roboquatic
                 mouseButton
                 ));
 
+            // Back to menu
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
                 new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 30, _graphics.GraphicsDevice.Viewport.Height / 2 + 100, 100, 100),
@@ -240,6 +253,7 @@ namespace Roboquatic
                 continueButton
                 ));
 
+            // Assign methods to the buttons' event 
             buttons[0].OnLeftButtonClick += this.StartButton;
             buttons[1].OnLeftButtonClick += this.SettingsButton;
             buttons[2].OnLeftButtonClick += this.KeyboardControlButton;
@@ -251,8 +265,7 @@ namespace Roboquatic
             buttons[8].OnLeftButtonClick += this.ContinueButton;
 
             // Checkpoints
-
-            checkpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(100, 100, 100, 100)));
+            checkpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(100, 100, 100, 100),10));
         }
 
         protected override void Update(GameTime gameTime)
@@ -275,26 +288,29 @@ namespace Roboquatic
 
                     previousState = currentState;
 
+                    // Buttons Update
                     buttons[0].Update();
                     buttons[1].Update();
 
                     IsMouseVisible = true;
-
-
                     break;
 
                 case GameState.Settings:
                     IsMouseVisible = true;
 
+                    // Buttons Update
                     buttons[2].Update();
                     buttons[3].Update();
                     buttons[4].Update();
                     break;
 
                 case GameState.Game:
+                    // Update actual game time
+                    time = (int)gameTime.TotalGameTime.TotalSeconds;
 
                     IsMouseVisible = false;
 
+                    // Press ESC to pause the game
                     if (SingleKeyPress(Keys.Escape, kbState))
                     {
                         currentState = GameState.Pause;
@@ -364,10 +380,7 @@ namespace Roboquatic
                         }
 
                         // Update checkpoints
-                        
-                        
                          checkpoints[0].Update(this);
-                        
                     }
                     break;
 
@@ -375,11 +388,13 @@ namespace Roboquatic
                     IsMouseVisible = true;
                     previousState = currentState;
 
+                    // Press ESC to resume 
                     if (SingleKeyPress(Keys.Escape, kbState))
                     {
                         currentState = GameState.Game;
                     }
 
+                    // Buttons Update
                     buttons[5].Update();
                     buttons[6].Update();
                     buttons[7].Update();
@@ -388,20 +403,16 @@ namespace Roboquatic
                 case GameState.GameOver:
                     IsMouseVisible = true;
 
+                    // Buttons Update
                     buttons[8].Update();
                     break;
             }
 
-
-
             //Get the previous keyboard state
             previousKbState = kbState;
 
-
-
             base.Update(gameTime);
         }
-
 
         protected override void Draw(GameTime gameTime)
         {
@@ -413,9 +424,12 @@ namespace Roboquatic
             switch (currentState)
             {
                 case GameState.Menu:
+                    // Draw title page
                     _spriteBatch.Draw(titlePage, new Rectangle(0, 0, _graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height), Color.White);
-                    buttons[0].Draw(_spriteBatch);
-                    buttons[1].Draw(_spriteBatch);
+
+                    // Draw buttons
+                    buttons[0].Draw(_spriteBatch); // Start
+                    buttons[1].Draw(_spriteBatch); // Settings 
                     break;
 
                 case GameState.Settings:
@@ -428,6 +442,9 @@ namespace Roboquatic
                 case GameState.Game:
                     _spriteBatch.Draw(backdrop, backdropPos, Color.White);
                     _spriteBatch.Draw(backdropSwap, backdropSwapPos, Color.White);
+
+                    // Draw a timer 
+                    _spriteBatch.DrawString(font, time.ToString(), new Vector2(10, 10), Color.White);
 
                     for (int i = 0; i < projectiles.Count; i++)
                     {
@@ -457,10 +474,7 @@ namespace Roboquatic
                         _spriteBatch.Draw(player.Sprite, player.Position, Color.White);
                     }
 
-
-
                     checkpoints[0].Draw(_spriteBatch,this);
-
                     break;
 
                 case GameState.Pause:
@@ -496,7 +510,7 @@ namespace Roboquatic
             return previousKbState.IsKeyDown(key) && kbState.IsKeyUp(key);
         }
 
-        // Buttons' methods, change state
+        // Buttons' methods for state changing 
         public void StartButton()
         {
             currentState = GameState.Game;
