@@ -74,7 +74,8 @@ namespace Roboquatic
         private Texture2D continueButton;
 
         // Checkpoints' fields
-        private List<Checkpoint> checkpoints = new List<Checkpoint>();
+        private List<Checkpoint> deactivedCheckpoints = new List<Checkpoint>();
+        private Checkpoint activeCheckpoint;
         public string currentCheckpoint;
         private Texture2D checkpoint;
         private bool spawnEnemy;
@@ -89,6 +90,7 @@ namespace Roboquatic
         public float Time
         {
             get { return time; }
+            set { time = value; }
         }
 
         //Get set property for enemies
@@ -326,7 +328,9 @@ namespace Roboquatic
             buttons[8].OnLeftButtonClick += this.ContinueButton;
 
             // Add Checkpoints
-            checkpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 5));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 5));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint2", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 10));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint3", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 15));
         }
 
         protected override void Update(GameTime gameTime)
@@ -438,8 +442,11 @@ namespace Roboquatic
                             currentState = GameState.GameOver;
                         }
 
-                        // Update checkpoints
-                        checkpoints[0].Update(this);
+                        // Find the next uncontacted checkpoint
+                        CheckpointManager();
+
+                        // Update the activated checkpoint
+                        activeCheckpoint.Update(this);
                     }
                     break;
 
@@ -503,7 +510,7 @@ namespace Roboquatic
                     _spriteBatch.Draw(backdropSwap, backdropSwapPos, Color.White);
 
                     // Draw a timer 
-                    _spriteBatch.DrawString(font, string.Format("{0:f0}",time), new Vector2(10, 10), Color.White);
+                    _spriteBatch.DrawString(font, string.Format("{0:f0}", time), new Vector2(10, 10), Color.White);
 
                     // Draw projectiles
                     for (int i = 0; i < projectiles.Count; i++)
@@ -538,8 +545,17 @@ namespace Roboquatic
                         _spriteBatch.Draw(player.Sprite, player.Position, Color.White);
                     }
 
+                    // Find the next uncontacted checkpoint
+                    CheckpointManager();
+
                     // Draw checkpoints
-                    checkpoints[0].Draw(_spriteBatch, this);
+                    activeCheckpoint.Draw(_spriteBatch, this);
+
+                    // Print "game saved" message
+                    foreach(Checkpoint c in deactivedCheckpoints)
+                    {
+                        c.PrintMessage(_spriteBatch,this);
+                    }
                     break;
 
                 case GameState.Pause:
@@ -655,10 +671,23 @@ namespace Roboquatic
             timer = 0;
 
             // reset checkpoints
-            foreach(Checkpoint c in checkpoints)
+            foreach (Checkpoint c in deactivedCheckpoints)
             {
                 c.Contact = false;
                 c.Position = new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100);
+            }
+        }
+
+        // Find the first unctontacted checkpoint 
+        private void CheckpointManager()
+        {
+            for (int i = 0; i < deactivedCheckpoints.Count; i++)
+            {
+                if (!deactivedCheckpoints[i].Contact)
+                {
+                    activeCheckpoint = deactivedCheckpoints[i];
+                    break;
+                }
             }
         }
     }
