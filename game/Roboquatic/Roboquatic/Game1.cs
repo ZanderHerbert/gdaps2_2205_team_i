@@ -237,7 +237,7 @@ namespace Roboquatic
 
             //Test for FileIO
             /*
-            fileIO = new FileIO(rng, viewportHeight, viewportWidth, baseEnemySprite, baseEnemyProjectileSprite, aimedEnemySprite, staticEnemySprite);
+            fileIO = new FileIO(rng, viewportHeight, viewportWidth, baseEnemySprite, baseEnemyProjectileSprite, aimedEnemySprite, staticEnemySprite, homingEnemySprite);
             fileIO.LoadFormation("EnemyFormations.txt");
             enemiesToAdd = fileIO.AddFormation(1, 10);
             */
