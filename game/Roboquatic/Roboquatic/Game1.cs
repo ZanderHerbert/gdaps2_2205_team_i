@@ -239,7 +239,7 @@ namespace Roboquatic
 
             //Test for FileIO
             /*
-            fileIO = new FileIO(rng, viewportHeight, viewportWidth, baseEnemySprite, baseEnemyProjectileSprite, aimedEnemySprite, staticEnemySprite);
+            fileIO = new FileIO(rng, viewportHeight, viewportWidth, baseEnemySprite, baseEnemyProjectileSprite, aimedEnemySprite, staticEnemySprite, homingEnemySprite);
             fileIO.LoadFormation("EnemyFormations.txt");
             enemiesToAdd = fileIO.AddFormation(1, 10);
             */
@@ -519,25 +519,7 @@ namespace Roboquatic
                     }
 
                     // Draw enemies
-                    for (int i = 0; i < enemies.Count; i++)
-                    {
-                        if (enemies[i] is BaseEnemy)
-                        {
-                            _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, null, Color.White, 0, new Vector2(), SpriteEffects.FlipHorizontally, 0);
-                        }
-                        else if (enemies[i] is AimingEnemy)
-                        {
-                            _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, null, Color.White, 0, new Vector2(), SpriteEffects.FlipHorizontally, 0);
-                        }
-                        else if (enemies[i] is StaticEnemy)
-                        {
-                            _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, null, Color.White, 0, new Vector2(), SpriteEffects.FlipHorizontally, 0);
-                        }
-                        else if (enemies[i] is RangedHomingEnemy)
-                        {
-                            _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, null, Color.White, 0, new Vector2(), SpriteEffects.FlipHorizontally, 0);
-                        }
-                    }
+                    enemyManager.Draw(_spriteBatch);
 
                     // Draw player
                     if (player != null)

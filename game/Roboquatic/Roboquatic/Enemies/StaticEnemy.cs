@@ -24,6 +24,15 @@ namespace Roboquatic
         public override void Update(GameTime gameTime, Game1 game)
         {
             position.X -= speed;
+            if (hit)
+            {
+                hitTimer++;
+                if (hitTimer == 5)
+                {
+                    hit = false;
+                    hitTimer = 0;
+                }
+            }
         }
     }
 }

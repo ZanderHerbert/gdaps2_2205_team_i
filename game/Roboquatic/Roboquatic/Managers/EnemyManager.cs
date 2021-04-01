@@ -35,6 +35,14 @@ namespace Roboquatic
             }
         }
 
+        public void Draw(SpriteBatch _spriteBatch)
+        {
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                enemies[i].Draw(_spriteBatch);
+            }
+        }
+
         //Checks if any enemies are in contact with the player
         public bool PlayerContact(Rectangle playerPosition)
         {
