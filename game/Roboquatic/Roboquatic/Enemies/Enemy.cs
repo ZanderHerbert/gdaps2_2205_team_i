@@ -16,6 +16,8 @@ namespace Roboquatic
         protected int speed;
         protected int health;
         protected int contactDamage;
+        protected bool hit;
+        protected int hitTimer;
 
         public int ContactDamage
         {
@@ -46,6 +48,7 @@ namespace Roboquatic
             this.sprite = sprite;
             this.speed = speed;
             this.position = position;
+            hit = false;
         }
 
         //Method which reduces the health of the enemy based on a passed in damage value
@@ -53,11 +56,20 @@ namespace Roboquatic
         public virtual void TakeDamage(int damage)
         {
             health -= damage;
+            hit = true;
         }
 
         public virtual void Update(GameTime gametime, Game1 game)
         {
 
+        }
+
+        public void Draw(SpriteBatch _spriteBatch)
+        {
+            if (!hit)
+            {
+                _spriteBatch.Draw(sprite, position, null, Color.White, 0, new Vector2(), SpriteEffects.FlipHorizontally, 0);
+            }
         }
     }
 }
