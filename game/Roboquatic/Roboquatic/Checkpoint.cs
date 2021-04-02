@@ -9,9 +9,9 @@ namespace Roboquatic
         private Texture2D checkpointImage;
         private Rectangle position;
         private string checkpointName;
-        private int time; // This is the time when a checkpoint should show up in the game
+        private float time; // This is the time when a checkpoint should show up in the game
         private bool contact;
-        private int contactTime;
+
 
         // Game stats fields
         private int health;
@@ -74,17 +74,9 @@ namespace Roboquatic
                 // Check if the player has reached the checkpoint or not
                 contact = true;
 
-                contactTime = (int)game.Time;
-            }  
-        }
+                game.Time = time;
+            }
 
-        /// <summary>
-        /// Draw the checkpoint by following certain rules
-        /// </summary>
-        /// <param name="spriteBatch"></param>
-        /// <param name="game"></param>
-        public void Draw(SpriteBatch spriteBatch, Game1 game)
-        {
             // Within the checkpoint time, no enemies should spawn
             // Until the player reached the checkpoint
             if (time <= game.Time && !contact)
@@ -95,11 +87,21 @@ namespace Roboquatic
             {
                 game.SpawnEnemy = true;
             }
+        }
 
+        /// <summary>
+        /// Draw the checkpoint by following certain rules
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="game"></param>
+        public void Draw(SpriteBatch spriteBatch, Game1 game)
+        {
             // Draw the checkpoint only if the player reached the right time and has cleared all the enemies 
             // Remove the checkpoint if the player contacted with the checkpoint
             if (time <= game.Time && !contact && game.Enemies.Count<1)
             {
+                
+
                 if (position.Contains(game.PlayerPosition))
                 {
                     spriteBatch.Draw(checkpointImage, position, Color.Green);
@@ -114,9 +116,13 @@ namespace Roboquatic
                     position.X--;
                 }
             }
+        }
 
+        // Print "game saved" message after contacted with the checkpoint
+        public void PrintMessage(SpriteBatch spriteBatch, Game1 game)
+        {
             // If contacted, then send a message that says "game saved"
-            if (contact && game.Time<=contactTime+3 && game.Time>=time)
+            if (contact && game.Time <=time + 2 && game.Time >= time)
             {
                 spriteBatch.DrawString(game.Font, "Game saved!", new Vector2(game.ViewportWidth / 2, game.ViewportHeight / 2), Color.White);
             }
