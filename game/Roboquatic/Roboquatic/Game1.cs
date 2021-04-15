@@ -424,15 +424,15 @@ namespace Roboquatic
                         // Will need to be changed, only here for testing purposes
                         if (spawnEnemy)// If a checkpoint appears, then stop ememies from spawning 
                         {
-                            /*
-                             * un-comment if you want to fight the boss :D, also, remember to comment out the other
-                             * enemy spawns if you want to try it, or else you'll have a bad time lol
+                            
+                             // un-comment if you want to fight the boss :D, also, remember to comment out the other
+                             // enemy spawns if you want to try it, or else you'll have a bad time lol
                             if(timer == 0)
                             {
-                                enemies.Add(new Boss(baseEnemySprite, new Rectangle(viewportWidth - 128, viewportHeight / 2 - 64, 128, 128), 0, baseEnemyProjectileSprite, -10, -20, 6, 200, rng));
+                                enemies.Add(new Boss(baseEnemySprite, new Rectangle(viewportWidth - 128, viewportHeight / 2 - 64, 128, 128), 0, baseEnemyProjectileSprite, -10, -20, 6, 200, rng, 3, 1));
                             }
-                            */
                             
+                            /*
                             if (timer % 360 == rng.Next(0, 361))
                             {
                                 enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite));
@@ -449,6 +449,7 @@ namespace Roboquatic
                             {
                                 enemies.Add(new RangedHomingEnemy(homingEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 240, baseEnemyProjectileSprite));
                             }
+                            */
                             
                         }
 
