@@ -42,6 +42,8 @@ namespace Roboquatic
         private int timer;
         private List<Projectile> projectiles;
 
+        private Upgrades upgrade;
+
         //Test for FileIO
         private FileIO fileIO;
         List<Enemy> enemiesToAdd;
@@ -83,7 +85,7 @@ namespace Roboquatic
         // Game time
         private float time;
 
-        // Title papge
+        // Title page
         private Texture2D titlePage;
 
         //Get property for total game time in seconds
@@ -143,6 +145,24 @@ namespace Roboquatic
         public int PlayerDamage
         {
             get { return player.ProjectileDamage; }
+        }
+
+        //Get property for health upgrade
+        public int UpHealth
+        {
+            get { return upgrade.UpHealth; }
+        }
+
+        //Get property for speed upgrade
+        public int UpSpeed
+        {
+            get { return upgrade.UpSpeed; }
+        }
+
+        //Get property for damage upgrade
+        public int UpDamage 
+        {
+            get { return upgrade.UpDamage; }
         }
 
         // Get property for player position
