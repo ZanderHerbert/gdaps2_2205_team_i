@@ -28,7 +28,7 @@ namespace Roboquatic
                 }
 
                 // Remove enemies outside of the window
-                if (enemies[i].Position.X < 0)
+                if (enemies[i].Position.X < 0 - enemies[i].Position.Width)
                 {
                     enemies.RemoveAt(i);
                 }
