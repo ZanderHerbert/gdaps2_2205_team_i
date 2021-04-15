@@ -102,7 +102,7 @@ namespace Roboquatic
             {
                 
 
-                if (position.Contains(game.PlayerPosition))
+                if (position.Intersects(game.PlayerPosition))
                 {
                     spriteBatch.Draw(checkpointImage, position, Color.Green);
                 }
