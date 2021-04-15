@@ -76,7 +76,8 @@ namespace Roboquatic
         private Texture2D continueButton;
 
         // Checkpoints' fields
-        private List<Checkpoint> checkpoints = new List<Checkpoint>();
+        private List<Checkpoint> deactivedCheckpoints = new List<Checkpoint>();
+        private Checkpoint activeCheckpoint;
         public string currentCheckpoint;
         private Texture2D checkpoint;
         private bool spawnEnemy;
@@ -91,6 +92,7 @@ namespace Roboquatic
         public float Time
         {
             get { return time; }
+            set { time = value; }
         }
 
         //Get set property for enemies
@@ -257,7 +259,7 @@ namespace Roboquatic
 
             //Test for FileIO
             /*
-            fileIO = new FileIO(rng, viewportHeight, viewportWidth, baseEnemySprite, baseEnemyProjectileSprite, aimedEnemySprite, staticEnemySprite);
+            fileIO = new FileIO(rng, viewportHeight, viewportWidth, baseEnemySprite, baseEnemyProjectileSprite, aimedEnemySprite, staticEnemySprite, homingEnemySprite);
             fileIO.LoadFormation("EnemyFormations.txt");
             enemiesToAdd = fileIO.AddFormation(1, 10);
             */
@@ -346,7 +348,9 @@ namespace Roboquatic
             buttons[8].OnLeftButtonClick += this.ContinueButton;
 
             // Add Checkpoints
-            checkpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 5));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 5));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint2", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 10));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint3", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 15));
         }
 
         protected override void Update(GameTime gameTime)
@@ -420,6 +424,15 @@ namespace Roboquatic
                         // Will need to be changed, only here for testing purposes
                         if (spawnEnemy)// If a checkpoint appears, then stop ememies from spawning 
                         {
+                            /*
+                             * un-comment if you want to fight the boss :D, also, remember to comment out the other
+                             * enemy spawns if you want to try it, or else you'll have a bad time lol
+                            if(timer == 0)
+                            {
+                                enemies.Add(new Boss(baseEnemySprite, new Rectangle(viewportWidth - 128, viewportHeight / 2 - 64, 128, 128), 0, baseEnemyProjectileSprite, -10, -20, 6, 200, rng));
+                            }
+                            */
+                            
                             if (timer % 360 == rng.Next(0, 361))
                             {
                                 enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite));
@@ -436,6 +449,7 @@ namespace Roboquatic
                             {
                                 enemies.Add(new RangedHomingEnemy(homingEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 240, baseEnemyProjectileSprite));
                             }
+                            
                         }
 
                         //Test for FileIO
@@ -458,8 +472,11 @@ namespace Roboquatic
                             currentState = GameState.GameOver;
                         }
 
-                        // Update checkpoints
-                        checkpoints[0].Update(this);
+                        // Find the next uncontacted checkpoint
+                        CheckpointManager();
+
+                        // Update the activated checkpoint
+                        activeCheckpoint.Update(this);
                     }
                     break;
 
@@ -523,7 +540,7 @@ namespace Roboquatic
                     _spriteBatch.Draw(backdropSwap, backdropSwapPos, Color.White);
 
                     // Draw a timer 
-                    _spriteBatch.DrawString(font, string.Format("{0:f0}",time), new Vector2(10, 10), Color.White);
+                    _spriteBatch.DrawString(font, string.Format("{0:f0}", time), new Vector2(10, 10), Color.White);
 
                     // Draw projectiles
                     for (int i = 0; i < projectiles.Count; i++)
@@ -532,25 +549,7 @@ namespace Roboquatic
                     }
 
                     // Draw enemies
-                    for (int i = 0; i < enemies.Count; i++)
-                    {
-                        if (enemies[i] is BaseEnemy)
-                        {
-                            _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, null, Color.White, 0, new Vector2(), SpriteEffects.FlipHorizontally, 0);
-                        }
-                        else if (enemies[i] is AimingEnemy)
-                        {
-                            _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, null, Color.White, 0, new Vector2(), SpriteEffects.FlipHorizontally, 0);
-                        }
-                        else if (enemies[i] is StaticEnemy)
-                        {
-                            _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, null, Color.White, 0, new Vector2(), SpriteEffects.FlipHorizontally, 0);
-                        }
-                        else if (enemies[i] is RangedHomingEnemy)
-                        {
-                            _spriteBatch.Draw(enemies[i].Sprite, enemies[i].Position, null, Color.White, 0, new Vector2(), SpriteEffects.FlipHorizontally, 0);
-                        }
-                    }
+                    enemyManager.Draw(_spriteBatch);
 
                     // Draw player
                     if (player != null)
@@ -558,8 +557,17 @@ namespace Roboquatic
                         _spriteBatch.Draw(player.Sprite, player.Position, Color.White);
                     }
 
+                    // Find the next uncontacted checkpoint
+                    CheckpointManager();
+
                     // Draw checkpoints
-                    checkpoints[0].Draw(_spriteBatch, this);
+                    activeCheckpoint.Draw(_spriteBatch, this);
+
+                    // Print "game saved" message
+                    foreach(Checkpoint c in deactivedCheckpoints)
+                    {
+                        c.PrintMessage(_spriteBatch,this);
+                    }
                     break;
 
                 case GameState.Pause:
@@ -675,10 +683,23 @@ namespace Roboquatic
             timer = 0;
 
             // reset checkpoints
-            foreach(Checkpoint c in checkpoints)
+            foreach (Checkpoint c in deactivedCheckpoints)
             {
                 c.Contact = false;
                 c.Position = new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100);
+            }
+        }
+
+        // Find the first unctontacted checkpoint 
+        private void CheckpointManager()
+        {
+            for (int i = 0; i < deactivedCheckpoints.Count; i++)
+            {
+                if (!deactivedCheckpoints[i].Contact)
+                {
+                    activeCheckpoint = deactivedCheckpoints[i];
+                    break;
+                }
             }
         }
     }

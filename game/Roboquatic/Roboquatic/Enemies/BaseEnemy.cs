@@ -76,6 +76,15 @@ namespace Roboquatic
                 shootingTimer = 0;
                 game.Projectiles.Add(Shoot());
             }
+            if (hit)
+            {
+                hitTimer++;
+                if (hitTimer == 5)
+                {
+                    hit = false;
+                    hitTimer = 0;
+                }
+            }
         }
     }
 }
