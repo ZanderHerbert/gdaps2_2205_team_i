@@ -8,14 +8,21 @@ using Microsoft.Xna.Framework.Input;
 namespace Roboquatic
 {
     //Parent class to all future enemy classes.
-    class Enemy
+    public class Enemy
     {
         //Decalring fields
         protected Texture2D sprite;
         protected Rectangle position;
         protected int speed;
-        protected int shootingTimer;
         protected int health;
+        protected int contactDamage;
+        protected bool hit;
+        protected int hitTimer;
+
+        public int ContactDamage
+        {
+            get { return contactDamage; }
+        }
 
         //Get property for health
         public int Health
@@ -35,39 +42,13 @@ namespace Roboquatic
             get { return position; }
         }
 
-        //Get and set property for shootingTimer
-        public int ShootingTimer
-        {
-            get { return shootingTimer; }
-            set { shootingTimer = value; }
-        }
-
         //Enemy class constructor
         public Enemy(Texture2D sprite, Rectangle position, int speed)
         {
             this.sprite = sprite;
             this.speed = speed;
             this.position = position;
-            shootingTimer = 0;
-        }
-
-        //Moves the enemy object
-        //Method if virtual so other enemies can move in different ways
-        public virtual void Move(Game1 game)
-        {
-            position.X -= speed;
-        }
-
-        //Virtual method, only to be overriden by classes which have the ability to shoot
-        public virtual bool CanShoot()
-        {
-            return false;
-        }
-
-        //Virtual method, only to be overriden by classes which have the ability to shoot
-        public virtual EnemyProjectile Shoot()
-        {
-            return null;
+            hit = false;
         }
 
         //Method which reduces the health of the enemy based on a passed in damage value
@@ -75,6 +56,20 @@ namespace Roboquatic
         public virtual void TakeDamage(int damage)
         {
             health -= damage;
+            hit = true;
+        }
+
+        public virtual void Update(GameTime gametime, Game1 game)
+        {
+
+        }
+
+        public void Draw(SpriteBatch _spriteBatch)
+        {
+            if (!hit)
+            {
+                _spriteBatch.Draw(sprite, position, null, Color.White, 0, new Vector2(), SpriteEffects.FlipHorizontally, 0);
+            }
         }
     }
 }

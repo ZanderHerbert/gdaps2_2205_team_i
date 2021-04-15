@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 namespace Roboquatic
 {
     //Enemy projectile which only moves left
-    class EnemyProjectile : Projectile
+    public class EnemyProjectile : Projectile
     {
         //EnemyProjectile constructor, uses its parent Projectile constructor
         public EnemyProjectile(Texture2D sprite, int speed, Rectangle position)
@@ -18,13 +18,27 @@ namespace Roboquatic
         }
 
         //Checks if the projectile is in contact with the player
-        public override bool PlayerContact(Player player)
+        public bool PlayerContact(Player player)
         {
-            if((position.Y + position.Height > player.Position.Y && position.Y < player.Position.Y + player.Position.Height) && (position.X + position.Width > player.Position.X && position.X < player.Position.X + player.Position.Width))
+            if(position.Intersects(player.Position))
             {
                 return true;
             }
             return false;
+        }
+
+        //Updates the projectile.
+        //
+        //Checks if the projectile is in contact with the player, and if so, damages the player and then sets the hit
+        //variable to true to denote that it made contact, then moves the projectile.
+        public override void Update(GameTime gameTime, Game1 game)
+        {
+            if (PlayerContact(game.Player))
+            {
+                game.Player.TakeDamage(damage);
+                hit = true;
+            }
+            position.X += speed;
         }
     }
 }
