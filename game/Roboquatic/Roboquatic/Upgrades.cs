@@ -8,9 +8,9 @@ namespace Roboquatic
     {
         //Fields:
 
-        private int upHealth;
-        private int upSpeed;
-        private int upDamage;
+        private int upHealth = 1;
+        private int upSpeed = 1;
+        private int upDamage = 1;
 
         //Properties:
 
@@ -42,17 +42,17 @@ namespace Roboquatic
 
         public int HealthUpgrade (int health)
         {
-           return health = health + upHealth;
+           return health + upHealth;
         }
 
         public int SpeedUpgrade (int speed)
         {
-            return speed = speed + upSpeed;
+            return speed + upSpeed;
         }
 
         public int DamageUpgrade (int damage)
         {
-            return damage = damage + upDamage;
+            return damage + upDamage;
         }
 
     }
