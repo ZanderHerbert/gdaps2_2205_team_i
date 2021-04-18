@@ -50,6 +50,7 @@ namespace Roboquatic
         //Test for FileIO
         private List<Enemy> enemies;
         private Texture2D baseEnemySprite;
+        private Texture2D bossEnemySprite;
         private Texture2D baseEnemyProjectileSprite;
         private Texture2D aimedEnemySprite;
         private Texture2D staticEnemySprite;
@@ -236,6 +237,7 @@ namespace Roboquatic
             backdropSwap = Content.Load<Texture2D>("PlaceholderBackdropSwap");
 
             // Load enemies 
+            bossEnemySprite = Content.Load<Texture2D>("BossSprite1");
             baseEnemySprite = Content.Load<Texture2D>("EnemyFishSprite2");
             baseEnemyProjectileSprite = Content.Load<Texture2D>("bubble");
             aimedEnemySprite = Content.Load<Texture2D>("EnemyFishSprite1");
@@ -246,8 +248,8 @@ namespace Roboquatic
             // Load Buttons
             startButton = Content.Load<Texture2D>("OnStart");
             controlsButton = Content.Load<Texture2D>("OnControls");
-            kbButton = Content.Load<Texture2D>("kbButton");
-            mouseButton = Content.Load<Texture2D>("mouseButton");
+            kbButton = Content.Load<Texture2D>("KeyboardControls");
+            mouseButton = Content.Load<Texture2D>("MouseControls");
             titlePage = Content.Load<Texture2D>("title");
             backButton = Content.Load<Texture2D>("backButton");
             menuButton = Content.Load<Texture2D>("MenuButton");
@@ -255,7 +257,7 @@ namespace Roboquatic
             continueButton = Content.Load<Texture2D>("ContinueButton");
 
             // Load checkpoint
-            checkpoint = Content.Load<Texture2D>("Checkpoint");
+            checkpoint = Content.Load<Texture2D>("CheckpointFlag");
 
             //Test for FileIO
             /*
@@ -285,7 +287,7 @@ namespace Roboquatic
             // Settings Keyboard
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 250, _graphics.GraphicsDevice.Viewport.Height / 2 - 100, 187, 150),
+                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 250, _graphics.GraphicsDevice.Viewport.Height / 2 - 100, 187, 187),
                 kbButton,
                 kbButton
                 ));
@@ -293,7 +295,7 @@ namespace Roboquatic
             // Settings Mouse
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 + 93, _graphics.GraphicsDevice.Viewport.Height / 2 - 100, 187, 150),
+                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 + 93, _graphics.GraphicsDevice.Viewport.Height / 2 - 100, 187, 187),
                 mouseButton,
                 mouseButton
                 ));
@@ -429,7 +431,7 @@ namespace Roboquatic
                              // enemy spawns if you want to try it, or else you'll have a bad time lol
                             if(timer == 0)
                             {
-                                enemies.Add(new Boss(baseEnemySprite, new Rectangle(viewportWidth - 128, viewportHeight / 2 - 64, 128, 128), 0, baseEnemyProjectileSprite, -10, -20, 6, 200, rng, 3, 1));
+                                enemies.Add(new Boss(bossEnemySprite, new Rectangle(viewportWidth - 128, viewportHeight / 2 - 64, 256, 128), 0, baseEnemyProjectileSprite, -10, -20, 6, 200, rng, 3, 1));
                             }
                             
                             /*
