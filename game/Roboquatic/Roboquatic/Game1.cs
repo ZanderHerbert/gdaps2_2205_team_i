@@ -273,7 +273,7 @@ namespace Roboquatic
             //Initializes the fileIO class with all the data and assets that it needs
             fileIO = new FileIO(rng, viewportHeight, viewportWidth, baseEnemySprite, baseEnemyProjectileSprite, aimedEnemySprite, staticEnemySprite, homingEnemySprite);
             //Loads in the file
-            fileIO.LoadFormation("EnemyFormations.txt");
+            //fileIO.LoadFormation("EnemyFormations.txt");
             
             // Add buttons
             // Menu
@@ -358,9 +358,9 @@ namespace Roboquatic
             buttons[8].OnLeftButtonClick += this.ContinueButton;
 
             // Add Checkpoints
-            deactivedCheckpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 5));
-            deactivedCheckpoints.Add(new Checkpoint("checkpoint2", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 10));
-            deactivedCheckpoints.Add(new Checkpoint("checkpoint3", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 15));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 20));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint2", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 40));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint3", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 60));
 
             //Adds the Upgrades
 
@@ -474,10 +474,11 @@ namespace Roboquatic
                             {
                                 if (!addedBoss)
                                 {
-                                    enemies.Add(new Boss(bossEnemySprite, new Rectangle(viewportWidth - 128, viewportHeight / 2 - 64, 256, 128), 0, baseEnemyProjectileSprite, -10, -20, 6, 200, rng, 3, 1));
+                                    enemies.Add(new Boss(bossEnemySprite, new Rectangle(viewportWidth - 128, viewportHeight / 2 - 64, 256, 128), 0, baseEnemyProjectileSprite, -10, -20, 6, 50, rng, 3, 1));
                                     addedBoss = true;
                                 }
                             }
+                            /*
                             else if (deactivedCheckpoints[1].Contact == true)
                             {
                                 if (!addedFormation2)
@@ -504,21 +505,22 @@ namespace Roboquatic
                                     enemiesToAdd.RemoveAt(i);
                                 }
                             }
+                            */
                             else
                             {
-                                if (timer % 360 == rng.Next(0, 361))
+                                if (timer % 240 == rng.Next(0, 240))
                                 {
                                     enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite));
                                 }
-                                if (timer % 360 == rng.Next(0, 361))
+                                if (timer % 240 == rng.Next(0, 240))
                                 {
                                     enemies.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite));
                                 }
-                                if (timer % 360 == rng.Next(0, 361))
+                                if (timer % 240 == rng.Next(0, 240))
                                 {
                                     enemies.Add(new StaticEnemy(staticEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 4));
                                 }
-                                if (timer % 360 == rng.Next(0, 361))
+                                if (timer % 240 == rng.Next(0, 240))
                                 {
                                     enemies.Add(new RangedHomingEnemy(homingEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 240, baseEnemyProjectileSprite));
                                 }
@@ -603,7 +605,7 @@ namespace Roboquatic
                     _spriteBatch.Draw(backdropSwap, backdropSwapPos, Color.White);
 
                     // Draw a timer 
-                    _spriteBatch.DrawString(font, string.Format("{0:f0}", time), new Vector2(10, 10), Color.White);
+                    //_spriteBatch.DrawString(font, string.Format("{0:f0}", time), new Vector2(10, 10), Color.White);
 
                     // Draw projectiles
                     for (int i = 0; i < projectiles.Count; i++)
