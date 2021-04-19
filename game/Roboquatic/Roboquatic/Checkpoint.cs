@@ -100,7 +100,7 @@ namespace Roboquatic
             // Remove the checkpoint if the player contacted with the checkpoint
             if (time <= game.Time && !contact && game.Enemies.Count<1)
             {
-                
+               
 
                 if (position.Intersects(game.PlayerPosition))
                 {

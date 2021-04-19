@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,8 +14,14 @@ namespace Roboquatic
         private int upSpeed = 1;
         private int upDamage = 1;
 
+        private Texture2D healthUpgradeImg;
+        private Texture2D speedUpgradeImg;
+        private Texture2D damageUpgradeImg;
+        private Rectangle position;
+
         //Properties:
 
+        //Allows for read only properties for the actual upgrades:
         public int UpHealth
         {
             get { return upHealth; }
@@ -27,6 +35,31 @@ namespace Roboquatic
         public int UpDamage
         {
             get { return upDamage; }
+        }
+
+        //Allows for get and set properties for the images of the upgrades:
+        public Rectangle Position
+        {
+            get { return position; }
+            set { position = value;}
+        }
+
+        public Texture2D healthImage
+        {
+            get { return healthUpgradeImg; }
+            set { healthUpgradeImg = value; }
+        }
+
+        public Texture2D speedImage
+        {
+            get { return speedUpgradeImg; }
+            set { speedUpgradeImg = value; }
+        }
+
+        public Texture2D damgeImage
+        {
+            get { return damageUpgradeImg; }
+            set { damageUpgradeImg = value; }
         }
 
         //Constructor:
@@ -54,6 +87,7 @@ namespace Roboquatic
         {
             return damage + upDamage;
         }
+
 
     }
 }

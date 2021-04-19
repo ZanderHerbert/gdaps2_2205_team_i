@@ -89,6 +89,11 @@ namespace Roboquatic
         // Title page
         private Texture2D titlePage;
 
+        //Upgrade fields
+        private Texture2D healthUpgrade;
+        private Texture2D speedUpgrade;
+        private Texture2D damageUpgrade;
+
         //Get property for total game time in seconds
         public float Time
         {
@@ -353,6 +358,12 @@ namespace Roboquatic
             deactivedCheckpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 5));
             deactivedCheckpoints.Add(new Checkpoint("checkpoint2", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 10));
             deactivedCheckpoints.Add(new Checkpoint("checkpoint3", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 15));
+
+            //Adds the Upgrades
+
+            healthUpgrade = Content.Load<Texture2D>("heart upgrade");
+            speedUpgrade = Content.Load<Texture2D>("speedometer");
+            damageUpgrade = Content.Load<Texture2D>("bubble");
         }
 
         protected override void Update(GameTime gameTime)
