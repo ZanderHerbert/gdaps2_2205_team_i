@@ -21,7 +21,7 @@ namespace Roboquatic
 
         //Properties:
 
-        
+        //Allows for read only properties for the actual upgrades:
         public int UpHealth
         {
             get { return upHealth; }
@@ -37,6 +37,7 @@ namespace Roboquatic
             get { return upDamage; }
         }
 
+        //Allows for get and set properties for the images of the upgrades:
         public Rectangle Position
         {
             get { return position; }
