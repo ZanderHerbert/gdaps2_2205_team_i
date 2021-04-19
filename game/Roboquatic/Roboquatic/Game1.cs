@@ -78,7 +78,7 @@ namespace Roboquatic
         // Checkpoints' fields
         private List<Checkpoint> deactivedCheckpoints = new List<Checkpoint>();
         private Checkpoint activeCheckpoint;
-        public string currentCheckpoint;
+        private Checkpoint currentCheckpoint;
         private Texture2D checkpoint;
         private bool spawnEnemy;
 
@@ -87,6 +87,17 @@ namespace Roboquatic
 
         // Title page
         private Texture2D titlePage;
+
+        public Checkpoint CurrentCheckpoint
+        {
+            get { return currentCheckpoint; }
+            set { currentCheckpoint = value; }
+        }
+
+        //public Checkpoint ActiveCheckpoint
+        //{
+        //    get { return activeCheckpoint; }
+        //}
 
         //Get property for total game time in seconds
         public float Time
@@ -219,6 +230,7 @@ namespace Roboquatic
             projectileManager = new ProjectileManager(projectiles);
             currentState = GameState.Menu;
             spawnEnemy = true;
+            currentCheckpoint = null;
 
             base.Initialize();
         }
@@ -541,6 +553,7 @@ namespace Roboquatic
 
                     // Draw a timer 
                     _spriteBatch.DrawString(font, string.Format("{0:f0}", time), new Vector2(10, 10), Color.White);
+                    _spriteBatch.DrawString(font, string.Format(currentCheckpoint.GetName), new Vector2(50, 10), Color.White);
 
                     // Draw projectiles
                     for (int i = 0; i < projectiles.Count; i++)
@@ -561,7 +574,7 @@ namespace Roboquatic
                     CheckpointManager();
 
                     // Draw checkpoints
-                    activeCheckpoint.Draw(_spriteBatch, this);
+                    //activeCheckpoint.Draw(_spriteBatch, this);
 
                     // Print "game saved" message
                     foreach(Checkpoint c in deactivedCheckpoints)
@@ -681,6 +694,7 @@ namespace Roboquatic
             player.IsAlive = true;
             time = 0;
             timer = 0;
+            currentCheckpoint = deactivedCheckpoints[0];
 
             // reset checkpoints
             foreach (Checkpoint c in deactivedCheckpoints)

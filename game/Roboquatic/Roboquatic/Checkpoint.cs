@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Roboquatic
 {
-    class Checkpoint
+    public class Checkpoint
     {
         // Checkpoint fields
         private Texture2D checkpointImage;
@@ -60,7 +60,7 @@ namespace Roboquatic
         /// <param name="game"></param>
         public void Update(Game1 game)
         {
-            if (position.Contains(game.PlayerPosition))
+            if (position.Intersects(game.PlayerPosition))
             {
                 // First save the player's stats
                 health = game.PlayerHealth;
@@ -69,7 +69,7 @@ namespace Roboquatic
 
                 // Reset the player's health and set the current checkpoint to this checkpoint
                 game.PlayerHealth = 6;
-                game.currentCheckpoint = checkpointName;
+                game.CurrentCheckpoint = this;
 
                 // Check if the player has reached the checkpoint or not
                 contact = true;
@@ -98,22 +98,13 @@ namespace Roboquatic
         {
             // Draw the checkpoint only if the player reached the right time and has cleared all the enemies 
             // Remove the checkpoint if the player contacted with the checkpoint
-            if (time <= game.Time && !contact && game.Enemies.Count<1)
+            if (time <= game.Time && !contact && game.Enemies.Count < 1)
             {
-                
-
-                if (position.Intersects(game.PlayerPosition))
-                {
-                    spriteBatch.Draw(checkpointImage, position, Color.Green);
-                }
-                else
-                {
-                    spriteBatch.Draw(checkpointImage, position, Color.White);
-                }
+                spriteBatch.Draw(checkpointImage, position, Color.White);
 
                 if (position.X >= game.ViewportWidth / 2)
                 {
-                    position.X--;
+                    position.X -= 2;
                 }
             }
         }
@@ -122,7 +113,7 @@ namespace Roboquatic
         public void PrintMessage(SpriteBatch spriteBatch, Game1 game)
         {
             // If contacted, then send a message that says "game saved"
-            if (contact && game.Time <=time + 2 && game.Time >= time)
+            if (contact && game.Time <= time + 2 && game.Time >= time)
             {
                 spriteBatch.DrawString(game.Font, "Game saved!", new Vector2(game.ViewportWidth / 2, game.ViewportHeight / 2), Color.White);
             }
