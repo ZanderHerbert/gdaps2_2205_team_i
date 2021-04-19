@@ -92,6 +92,11 @@ namespace Roboquatic
         // Title page
         private Texture2D titlePage;
 
+        //Upgrade fields
+        private Texture2D healthUpgrade;
+        private Texture2D speedUpgrade;
+        private Texture2D damageUpgrade;
+
         //Get property for total game time in seconds
         public float Time
         {
@@ -353,9 +358,15 @@ namespace Roboquatic
             buttons[8].OnLeftButtonClick += this.ContinueButton;
 
             // Add Checkpoints
-            deactivedCheckpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 15));
-            deactivedCheckpoints.Add(new Checkpoint("checkpoint2", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 30));
-            deactivedCheckpoints.Add(new Checkpoint("checkpoint3", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 45));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 5));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint2", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 10));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint3", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 15));
+
+            //Adds the Upgrades
+
+            healthUpgrade = Content.Load<Texture2D>("heart upgrade");
+            speedUpgrade = Content.Load<Texture2D>("speedometer");
+            damageUpgrade = Content.Load<Texture2D>("bubble");
         }
 
         protected override void Update(GameTime gameTime)
@@ -435,7 +446,7 @@ namespace Roboquatic
                             /*
                             if(timer == 0)
                             {
-                                enemies.Add(new Boss(bossEnemySprite, new Rectangle(viewportWidth - 128, viewportHeight / 2 - 64, 256, 128), 0, baseEnemyProjectileSprite, -10, -20, 6, 200, rng, 3, 1));
+                                enemies.Add(new Boss(bossEnemySprite, new Rectangle(viewportWidth - 128, viewportHeight / 2 - 64, 256, 128), 0, baseEnemyProjectileSprite, -10, -20, 6, 40, rng, 3, 1));
                             }
                             
                             /*
@@ -606,7 +617,10 @@ namespace Roboquatic
                     // Draw player
                     if (player != null)
                     {
-                        _spriteBatch.Draw(player.Sprite, player.Position, Color.White);
+                        if(player.IFrameTimer % 10 > 4 || player.IFrameTimer == 0)
+                        {
+                            _spriteBatch.Draw(player.Sprite, player.Position, Color.White);
+                        }
                     }
 
                     // Find the next uncontacted checkpoint
