@@ -60,7 +60,7 @@ namespace Roboquatic
         /// <param name="game"></param>
         public void Update(Game1 game)
         {
-            if (position.Contains(game.PlayerPosition))
+            if (position.Intersects(game.PlayerPosition))
             {
                 // First save the player's stats
                 health = game.PlayerHealth;
