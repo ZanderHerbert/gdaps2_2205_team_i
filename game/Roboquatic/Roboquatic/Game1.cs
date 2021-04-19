@@ -431,7 +431,7 @@ namespace Roboquatic
                              // enemy spawns if you want to try it, or else you'll have a bad time lol
                             if(timer == 0)
                             {
-                                enemies.Add(new Boss(bossEnemySprite, new Rectangle(viewportWidth - 128, viewportHeight / 2 - 64, 256, 128), 0, baseEnemyProjectileSprite, -10, -20, 6, 200, rng, 3, 1));
+                                enemies.Add(new Boss(bossEnemySprite, new Rectangle(viewportWidth - 128, viewportHeight / 2 - 64, 256, 128), 0, baseEnemyProjectileSprite, -10, -20, 6, 40, rng, 3, 1));
                             }
                             
                             /*
