@@ -557,7 +557,10 @@ namespace Roboquatic
                     // Draw player
                     if (player != null)
                     {
-                        _spriteBatch.Draw(player.Sprite, player.Position, Color.White);
+                        if(player.IFrameTimer % 10 > 4 || player.IFrameTimer == 0)
+                        {
+                            _spriteBatch.Draw(player.Sprite, player.Position, Color.White);
+                        }
                     }
 
                     // Find the next uncontacted checkpoint
