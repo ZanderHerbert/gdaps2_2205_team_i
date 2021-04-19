@@ -61,6 +61,7 @@ namespace Roboquatic
             finally
             {
                 save.Close();
+                throw new NotImplementedException();
             }
         }
 
@@ -77,6 +78,7 @@ namespace Roboquatic
             finally
             {
                 load.Close();
+                throw new NotImplementedException();
             }
         }
 
@@ -153,16 +155,21 @@ namespace Roboquatic
         
         public List<Enemy> AddFormation(int index, int offset)
         {
+            //Creates a list to return later with the enemies that need to be added
             List<Enemy> enemiesToAdd = new List<Enemy>();
+            //Finds the formation that you want to added based on the index parameter
             Enemies[,] enemies = formations[index];
 
+            //The two for loops iterate through the enemies 2d array
             for (int i = 0; i < enemies.GetLength(0); i++)
             {
                 for (int j = 0; j < enemies.GetLength(1); j++)
                 {
                     switch (enemies[i, j])
                     {
+                        //Depending on the enum it adds that type of enemy
                         case Enemies.Base:
+                            //creates the enemy and makes the rectangle based on where it is in the 2d array
                             enemiesToAdd.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth + (i * 70), offset + (j * 70), 64, 64), 2, 120, baseEnemyProjectileSprite));
                             break;
 
@@ -179,6 +186,7 @@ namespace Roboquatic
                             break;
 
                         default:
+                            //For when the enum is Enemies.Empty
                             break;
                     }
                 }
@@ -187,6 +195,7 @@ namespace Roboquatic
             return enemiesToAdd;
         }
 
+        //Functionally the same as the method before except the formation chosen is random and the offset is random
         public List<Enemy> AddRandomFormation()
         {
             List<Enemy> enemiesToAdd = new List<Enemy>();
