@@ -308,7 +308,7 @@
 /processorParam:TextureFormat=Color
 /build:title.png
 
-#begin Upgrade1-2.png
+#begin UpgradeDamage.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -318,9 +318,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Upgrade1-2.png
+/build:UpgradeDamage.png
 
-#begin Upgrade2-2.png
+#begin UpgradeHealth.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -330,9 +330,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Upgrade2-2.png
+/build:UpgradeHealth.png
 
-#begin Upgrade3-2.png
+#begin UpgradeSpeed.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -342,5 +342,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Upgrade3-2.png
+/build:UpgradeSpeed.png
 

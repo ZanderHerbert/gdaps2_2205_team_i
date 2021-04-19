@@ -39,7 +39,7 @@ namespace Roboquatic
             timer++;
             if (timer % 360 == 359)
             {
-                shotPattern = rng.Next(0, 2);
+                shotPattern = rng.Next(0, 3);
             }
             if (timer % 252 < 126 && canMoveUp)
             {
@@ -144,14 +144,22 @@ namespace Roboquatic
             {
                 position.X -= 24;
             }
-            else if (timer % 360 > 40 && position.X < game.GraphicsDevice.Viewport.Width - position.Width)
+            else if (timer % 360 > 40 && position.X < game.GraphicsDevice.Viewport.Width - position.Width / 2)
             {
                 position.X += 3;
             }
         }
         public void ShotPatternThree(int timer, Game1 game)
         {
-
+            if(timer % 40 == 39)
+            {
+                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, position.Y + position.Height / 2 - 16, 32, 32)));
+            }
+            if(timer % 120 == 119)
+            {
+                game.Projectiles.Add(new HomingProjectile(projectileSprite, homingProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY - 148, 32, 32), 120));
+                game.Projectiles.Add(new HomingProjectile(projectileSprite, homingProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY + 116, 32, 32), 120));
+            }
         }
     }
 }
