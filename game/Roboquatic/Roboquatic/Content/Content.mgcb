@@ -332,6 +332,12 @@
 /processorParam:TextureFormat=Color
 /build:title.png
 
+#begin UnderwaterSounds.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:UnderwaterSounds.wav
+
 #begin UpgradeDamage.png
 /importer:TextureImporter
 /processor:TextureProcessor
