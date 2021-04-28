@@ -101,7 +101,7 @@ namespace Roboquatic
             this.health = health;
             this.projectileDamage = projectileDamage;
             this.projectileSprite = projectileSprite;
-            iFrameTimer = 60;
+            iFrameTimer = 0;
             shootingTimer = framesToFire;
         }
 

@@ -155,10 +155,10 @@ namespace Roboquatic
             {
                 game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, position.Y + position.Height / 2 - 16, 32, 32)));
             }
-            if(timer % 120 == 119)
+            if(timer % 350 == 59 || timer % 360 == 119 || timer % 360 == 179)
             {
-                game.Projectiles.Add(new HomingProjectile(projectileSprite, homingProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY - 148, 32, 32), 120));
-                game.Projectiles.Add(new HomingProjectile(projectileSprite, homingProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY + 116, 32, 32), 120));
+                game.Projectiles.Add(new HomingProjectile(projectileSprite, homingProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY - 148, 32, 32), 180));
+                game.Projectiles.Add(new HomingProjectile(projectileSprite, homingProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY + 116, 32, 32), 180));
             }
         }
     }
