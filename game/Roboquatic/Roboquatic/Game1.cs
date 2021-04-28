@@ -50,6 +50,7 @@ namespace Roboquatic
         //Test for FileIO
         private List<Enemy> enemies;
         private Texture2D baseEnemySprite;
+        private Texture2D bossEnemySprite;
         private Texture2D baseEnemyProjectileSprite;
         private Texture2D aimedEnemySprite;
         private Texture2D staticEnemySprite;
@@ -87,6 +88,11 @@ namespace Roboquatic
 
         // Title page
         private Texture2D titlePage;
+
+        //Upgrade fields
+        private Texture2D healthUpgrade;
+        private Texture2D speedUpgrade;
+        private Texture2D damageUpgrade;
 
         public Checkpoint CurrentCheckpoint
         {
@@ -248,6 +254,7 @@ namespace Roboquatic
             backdropSwap = Content.Load<Texture2D>("PlaceholderBackdropSwap");
 
             // Load enemies 
+            bossEnemySprite = Content.Load<Texture2D>("BossSprite1");
             baseEnemySprite = Content.Load<Texture2D>("EnemyFishSprite2");
             baseEnemyProjectileSprite = Content.Load<Texture2D>("bubble");
             aimedEnemySprite = Content.Load<Texture2D>("EnemyFishSprite1");
@@ -258,8 +265,8 @@ namespace Roboquatic
             // Load Buttons
             startButton = Content.Load<Texture2D>("OnStart");
             controlsButton = Content.Load<Texture2D>("OnControls");
-            kbButton = Content.Load<Texture2D>("kbButton");
-            mouseButton = Content.Load<Texture2D>("mouseButton");
+            kbButton = Content.Load<Texture2D>("KeyboardControls");
+            mouseButton = Content.Load<Texture2D>("MouseControls");
             titlePage = Content.Load<Texture2D>("title");
             backButton = Content.Load<Texture2D>("backButton");
             menuButton = Content.Load<Texture2D>("MenuButton");
@@ -267,7 +274,7 @@ namespace Roboquatic
             continueButton = Content.Load<Texture2D>("ContinueButton");
 
             // Load checkpoint
-            checkpoint = Content.Load<Texture2D>("Checkpoint");
+            checkpoint = Content.Load<Texture2D>("CheckpointFlag");
 
             //Test for FileIO
             /*
@@ -297,7 +304,7 @@ namespace Roboquatic
             // Settings Keyboard
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 250, _graphics.GraphicsDevice.Viewport.Height / 2 - 100, 187, 150),
+                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 250, _graphics.GraphicsDevice.Viewport.Height / 2 - 100, 187, 187),
                 kbButton,
                 kbButton
                 ));
@@ -305,7 +312,7 @@ namespace Roboquatic
             // Settings Mouse
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 + 93, _graphics.GraphicsDevice.Viewport.Height / 2 - 100, 187, 150),
+                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 + 93, _graphics.GraphicsDevice.Viewport.Height / 2 - 100, 187, 187),
                 mouseButton,
                 mouseButton
                 ));
@@ -363,6 +370,12 @@ namespace Roboquatic
             deactivedCheckpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 5));
             deactivedCheckpoints.Add(new Checkpoint("checkpoint2", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 10));
             deactivedCheckpoints.Add(new Checkpoint("checkpoint3", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 15));
+
+            //Adds the Upgrades
+
+            healthUpgrade = Content.Load<Texture2D>("heart upgrade");
+            speedUpgrade = Content.Load<Texture2D>("speedometer");
+            damageUpgrade = Content.Load<Texture2D>("bubble");
         }
 
         protected override void Update(GameTime gameTime)
@@ -436,15 +449,15 @@ namespace Roboquatic
                         // Will need to be changed, only here for testing purposes
                         if (spawnEnemy)// If a checkpoint appears, then stop ememies from spawning 
                         {
-                            /*
-                             * un-comment if you want to fight the boss :D, also, remember to comment out the other
-                             * enemy spawns if you want to try it, or else you'll have a bad time lol
+                            
+                             // un-comment if you want to fight the boss :D, also, remember to comment out the other
+                             // enemy spawns if you want to try it, or else you'll have a bad time lol
                             if(timer == 0)
                             {
-                                enemies.Add(new Boss(baseEnemySprite, new Rectangle(viewportWidth - 128, viewportHeight / 2 - 64, 128, 128), 0, baseEnemyProjectileSprite, -10, -20, 6, 200, rng));
+                                enemies.Add(new Boss(bossEnemySprite, new Rectangle(viewportWidth - 128, viewportHeight / 2 - 64, 256, 128), 0, baseEnemyProjectileSprite, -10, -20, 6, 40, rng, 3, 1));
                             }
-                            */
                             
+                            /*
                             if (timer % 360 == rng.Next(0, 361))
                             {
                                 enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite));
@@ -461,6 +474,7 @@ namespace Roboquatic
                             {
                                 enemies.Add(new RangedHomingEnemy(homingEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 240, baseEnemyProjectileSprite));
                             }
+                            */
                             
                         }
 
