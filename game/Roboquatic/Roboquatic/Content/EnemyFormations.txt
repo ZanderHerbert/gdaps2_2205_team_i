@@ -1,0 +1,12 @@
+2
+5,5
+ooooo
+xxoxx
+aaoaa
+ssoss
+hhohh
+4,4
+xoxo
+oaoa
+soso
+ohoh
