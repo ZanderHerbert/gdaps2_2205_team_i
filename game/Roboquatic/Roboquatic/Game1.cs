@@ -527,7 +527,7 @@ namespace Roboquatic
                             }
                         }
 
-                        if(enemies.Count == 0 && addedBoss)
+                        if(enemies.Count == 0 && addedBoss && player.Health > 0)
                         {
                             currentState = GameState.Menu;
                         }
