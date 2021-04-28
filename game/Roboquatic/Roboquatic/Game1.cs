@@ -527,7 +527,7 @@ namespace Roboquatic
                             }
                         }
 
-                        if(enemies.Count == 0 && addedBoss)
+                        if(enemies.Count == 0 && addedBoss && player.Health > 0)
                         {
                             currentState = GameState.Menu;
                         }
@@ -754,6 +754,7 @@ namespace Roboquatic
             player.IsAlive = true;
             time = 0;
             timer = 0;
+            addedBoss = false;
 
             // reset checkpoints
             foreach (Checkpoint c in deactivedCheckpoints)
