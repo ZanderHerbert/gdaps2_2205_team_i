@@ -38,6 +38,7 @@ namespace Roboquatic
             get { return checkpointImage; }
         }
 
+        // Get and set Contact
         public bool Contact
         {
             get { return contact; }
