@@ -754,6 +754,7 @@ namespace Roboquatic
             player.IsAlive = true;
             time = 0;
             timer = 0;
+            addedBoss = false;
 
             // reset checkpoints
             foreach (Checkpoint c in deactivedCheckpoints)
