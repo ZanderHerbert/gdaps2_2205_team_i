@@ -478,7 +478,6 @@ namespace Roboquatic
                                     addedBoss = true;
                                 }
                             }
-                            /*
                             else if (deactivedCheckpoints[1].Contact == true)
                             {
                                 if (!addedFormation2)
@@ -505,7 +504,6 @@ namespace Roboquatic
                                     enemiesToAdd.RemoveAt(i);
                                 }
                             }
-                            */
                             else
                             {
                                 if (timer % 240 == rng.Next(0, 240))
