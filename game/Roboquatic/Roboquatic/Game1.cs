@@ -365,9 +365,9 @@ namespace Roboquatic
             buttons[8].OnLeftButtonClick += this.ContinueButton;
 
             // Add Checkpoints
-            deactivedCheckpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 60));
-            deactivedCheckpoints.Add(new Checkpoint("checkpoint2", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 120));
-            deactivedCheckpoints.Add(new Checkpoint("checkpoint3", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 180));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 15));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint2", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 30));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint3", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 45));
 
             //Adds the Upgrades
 
@@ -477,6 +477,7 @@ namespace Roboquatic
 
 
                             //FileIO
+                            
                             if (deactivedCheckpoints[2].Contact == true)
                             {
                                 if (!addedBoss)
@@ -485,6 +486,7 @@ namespace Roboquatic
                                     addedBoss = true;
                                 }
                             }
+                            /*
                             else if (deactivedCheckpoints[1].Contact == true)
                             {
                                 if (!addedFormation2)
@@ -511,9 +513,10 @@ namespace Roboquatic
                                     enemiesToAdd.RemoveAt(i);
                                 }
                             }
+                            */
                             else
                             {
-                                if (timer % 240 == rng.Next(0, 240))
+                            if (timer % 240 == rng.Next(0, 240))
                                 {
                                     enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite));
                                 }
