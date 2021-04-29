@@ -82,7 +82,7 @@ namespace Roboquatic
         // Checkpoints' fields
         private List<Checkpoint> deactivedCheckpoints = new List<Checkpoint>();
         private Checkpoint activeCheckpoint;
-        public string currentCheckpoint;
+        private Checkpoint currentCheckpoint;
         private Texture2D checkpoint;
         private bool spawnEnemy;
 
@@ -107,6 +107,12 @@ namespace Roboquatic
         private Texture2D healthUpgrade;
         private Texture2D speedUpgrade;
         private Texture2D damageUpgrade;
+
+        public Checkpoint CurrentCheckpoint
+        {
+            get { return currentCheckpoint; }
+            set { currentCheckpoint = value; }
+        }
 
         //Get property for total game time in seconds
         public float Time
@@ -242,6 +248,7 @@ namespace Roboquatic
             addedFormation1 = false;
             addedFormation2 = false;
             addedBoss = false;
+            currentCheckpoint = null;
 
             logoVect = new Vector2(400, viewportHeight - 390);
             origin = new Vector2(400, 130);
@@ -380,9 +387,9 @@ namespace Roboquatic
             buttons[8].OnLeftButtonClick += this.ContinueButton;
 
             // Add Checkpoints
-            deactivedCheckpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 60));
-            deactivedCheckpoints.Add(new Checkpoint("checkpoint2", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 120));
-            deactivedCheckpoints.Add(new Checkpoint("checkpoint3", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 180));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 15));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint2", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 30));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint3", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 45));
 
             //Adds the Upgrades
 
@@ -524,6 +531,7 @@ namespace Roboquatic
 
 
                             //FileIO
+                            
                             if (deactivedCheckpoints[2].Contact == true)
                             {
                                 if (!addedBoss)
@@ -532,6 +540,7 @@ namespace Roboquatic
                                     addedBoss = true;
                                 }
                             }
+                            /*
                             else if (deactivedCheckpoints[1].Contact == true)
                             {
                                 if (!addedFormation2)
@@ -558,9 +567,10 @@ namespace Roboquatic
                                     enemiesToAdd.RemoveAt(i);
                                 }
                             }
+                            */
                             else
                             {
-                                if (timer % 240 == rng.Next(0, 240))
+                            if (timer % 240 == rng.Next(0, 240))
                                 {
                                     enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite));
                                 }
@@ -667,6 +677,7 @@ namespace Roboquatic
 
                     // Draw a timer 
                     //_spriteBatch.DrawString(font, string.Format("{0:f0}", time), new Vector2(10, 10), Color.White);
+                    //_spriteBatch.DrawString(font, string.Format(currentCheckpoint.GetName), new Vector2(50, 10), Color.White);
 
                     // Draw projectiles
                     for (int i = 0; i < projectiles.Count; i++)
@@ -839,6 +850,7 @@ namespace Roboquatic
             time = 0;
             timer = 0;
             addedBoss = false;
+            currentCheckpoint = deactivedCheckpoints[0];
 
             // reset checkpoints
             foreach (Checkpoint c in deactivedCheckpoints)
