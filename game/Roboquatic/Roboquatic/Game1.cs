@@ -93,7 +93,18 @@ namespace Roboquatic
 
         // Title page
         private Texture2D titlePage;
-
+        private Texture2D titleBubblesLoop;
+        private Texture2D titleBubbles;
+        private Rectangle titleBubblesPos;
+        private Rectangle titleBubblesSwapPos;
+        private Texture2D logo;
+        private Texture2D teamName;
+        private Vector2 logoVect;
+        private Vector2 origin;
+        private Vector2 scale;
+        private int sizeChanges = 0;
+        private float rotation;
+        private float rotationAmount = .0005f;
         //Upgrade fields
         private Texture2D healthUpgrade;
         private Texture2D speedUpgrade;
@@ -242,6 +253,13 @@ namespace Roboquatic
             currentCheckpoint = null;
             hud = new Hud(this);
 
+            logoVect = new Vector2(400, viewportHeight - 390);
+            origin = new Vector2(400, 130);
+            scale = new Vector2(.78f,.78f);
+
+            titleBubblesPos = new Rectangle(0, 0, viewportWidth, viewportHeight);
+            titleBubblesSwapPos = new Rectangle(0, viewportHeight, viewportWidth, viewportHeight);
+
             base.Initialize();
         }
 
@@ -271,7 +289,11 @@ namespace Roboquatic
             controlsButton = Content.Load<Texture2D>("OnControls");
             kbButton = Content.Load<Texture2D>("KeyboardControls");
             mouseButton = Content.Load<Texture2D>("MouseControls");
-            titlePage = Content.Load<Texture2D>("title");
+            titlePage = Content.Load<Texture2D>("titlebg");
+            titleBubbles = Content.Load<Texture2D>("titleBubbles");
+            titleBubblesLoop = Content.Load<Texture2D>("titleBubbles");
+            logo = Content.Load<Texture2D>("titleLogo");
+            teamName = Content.Load<Texture2D>("titleteamname");
             backButton = Content.Load<Texture2D>("backButton");
             menuButton = Content.Load<Texture2D>("MenuButton");
             resumeButton = Content.Load<Texture2D>("ResumeButton");
@@ -394,6 +416,38 @@ namespace Roboquatic
                     GameReset();
 
                     previousState = currentState;
+                    
+                    //Update the size and rotation of the logo on the main menu
+                    if (sizeChanges > 0)
+                    {    
+                        scale.X -= .0005f;
+                        scale.Y -= .0005f;
+                                            
+                        sizeChanges--;
+                    }
+                    
+                    if (sizeChanges == 200 || sizeChanges == -200 )
+                    {
+                        rotationAmount = rotationAmount * -1;
+                        sizeChanges--;
+                    }
+
+                    else if (sizeChanges <= 0 && sizeChanges > -400)
+                    {
+                        scale.X += .0005f;
+                        scale.Y += .0005f;
+                        sizeChanges--;                        
+                    }
+                    if (sizeChanges == -400)
+                    {
+                        
+                        sizeChanges = 400;                
+                    }
+
+                    rotation += rotationAmount;
+
+                    //Moves the backdrop
+                    MoveBackdrop(1, -1);
 
                     // Buttons Update
                     buttons[0].Update();
@@ -443,7 +497,7 @@ namespace Roboquatic
                         }
 
                         //MovesBackdrop
-                        MoveBackdrop();
+                        MoveBackdrop(2, -3);
 
                         // Randomly creates enemies based on a timer at random positions
                         //
@@ -603,6 +657,10 @@ namespace Roboquatic
                 case GameState.Menu:
                     // Draw title page
                     _spriteBatch.Draw(titlePage, new Rectangle(0, 0, _graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height), Color.White);
+                    _spriteBatch.Draw(titleBubbles, titleBubblesPos, Color.White);
+                    _spriteBatch.Draw(titleBubblesLoop, titleBubblesSwapPos, Color.White);
+                    _spriteBatch.Draw(logo, logoVect, null, Color.White, rotation, origin, scale, SpriteEffects.None, 0f);
+                    _spriteBatch.Draw(teamName, new Rectangle(0,0, _graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height), Color.White);
 
                     // Draw buttons
                     buttons[0].Draw(_spriteBatch); // Start
@@ -741,24 +799,52 @@ namespace Roboquatic
         }
 
         //Moves the backdrop
-        public void MoveBackdrop()
+        public void MoveBackdrop(int speed, int multiplier)
         {
-            //Moves the backdrop, and if the backdrop goes past a certain x value, gets placed at the right edge of
+            //Sorry Zander, I stole your method and expanded it for the main menu :) - Quinn
+
+            //Moves the backdrop, and if the backdrop goes past a certain x or y value, gets placed at the right edge of
             //the screen.
             //There are two backdrops because if you were to suddenly reposition the first once it reaches the end
             //it is really jarring, also I mirrored the image for the second backdrop so it looks a bit better
-            backdropPos.X -= 2;
-            backdropSwapPos.X -= 2;
 
-            if (backdropPos.X == ((-3) * viewportWidth))
+            switch (currentState)
             {
-                backdropPos.X = viewportWidth;
-            }
-            if (backdropSwapPos.X == ((-3) * viewportWidth))
-            {
-                backdropSwapPos.X = viewportWidth;
-            }
+                case (GameState.Game):
+
+                    backdropPos.X -= speed;
+                    backdropSwapPos.X -= speed;
+
+                    if (backdropPos.X == multiplier * viewportWidth)
+                    {
+                        backdropPos.X = viewportWidth;
+                    }
+                    if (backdropSwapPos.X == multiplier * viewportWidth)
+                    {
+                        backdropSwapPos.X = viewportWidth;
+                    }
+
+                    break;
+
+                case (GameState.Menu):
+
+                    titleBubblesPos.Y -= speed;
+                    titleBubblesSwapPos.Y -= speed;
+
+                    if (titleBubblesPos.Y == multiplier * viewportHeight)
+                    {
+                        titleBubblesPos.Y = viewportHeight;
+                    }
+                    if (titleBubblesSwapPos.Y == multiplier * viewportHeight)
+                    {
+                        titleBubblesSwapPos.Y = viewportHeight;
+                    }
+
+                    break;
+                          
+            } 
         }
+
 
         /// <summary>
         /// Reset the game in menu state
