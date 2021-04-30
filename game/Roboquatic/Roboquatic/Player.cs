@@ -17,6 +17,7 @@ namespace Roboquatic
         private int projectileDamage;
         private int framesToFire;
         private int projectileSpeed;
+        private int maxHP;
         private int health;
         private int iFrameTimer;
         private int shootingTimer;
@@ -41,6 +42,13 @@ namespace Roboquatic
         {
             get { return health; }
             set { health = value; }
+        }
+
+        // Get/Set property for the player's max health points
+        public int MaxHP
+        {
+            get { return maxHP; }
+            set { maxHP = value; }
         }
 
         //Get set property for projectileDamage
@@ -98,7 +106,8 @@ namespace Roboquatic
             this.framesToFire = framesToFire;
             this.projectileSpeed = projectileSpeed;
             this.position = position;
-            this.health = health;
+            maxHP = health;
+            this.health = maxHP;
             this.projectileDamage = projectileDamage;
             this.projectileSprite = projectileSprite;
             iFrameTimer = 0;

@@ -42,6 +42,8 @@ namespace Roboquatic
         private int timer;
         private List<Projectile> projectiles;
 
+        private Hud hud;
+
         private Upgrades upgrade;
 
         //Test for FileIO
@@ -238,6 +240,7 @@ namespace Roboquatic
             addedFormation2 = false;
             addedBoss = false;
             currentCheckpoint = null;
+            hud = new Hud(this);
 
             base.Initialize();
         }
@@ -280,7 +283,7 @@ namespace Roboquatic
             //Initializes the fileIO class with all the data and assets that it needs
             fileIO = new FileIO(rng, viewportHeight, viewportWidth, baseEnemySprite, baseEnemyProjectileSprite, aimedEnemySprite, staticEnemySprite, homingEnemySprite);
             //Loads in the file
-            //fileIO.LoadFormation("EnemyFormations.txt");
+            fileIO.LoadFormation("../../../EnemyFormations.txt");
             
             // Add buttons
             // Menu
@@ -365,7 +368,7 @@ namespace Roboquatic
             buttons[8].OnLeftButtonClick += this.ContinueButton;
 
             // Add Checkpoints
-            deactivedCheckpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 15));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 5));
             deactivedCheckpoints.Add(new Checkpoint("checkpoint2", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 30));
             deactivedCheckpoints.Add(new Checkpoint("checkpoint3", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 45));
 
@@ -486,7 +489,7 @@ namespace Roboquatic
                                     addedBoss = true;
                                 }
                             }
-                            /*
+                            
                             else if (deactivedCheckpoints[1].Contact == true)
                             {
                                 if (!addedFormation2)
@@ -513,7 +516,7 @@ namespace Roboquatic
                                     enemiesToAdd.RemoveAt(i);
                                 }
                             }
-                            */
+                            
                             else
                             {
                             if (timer % 240 == rng.Next(0, 240))
@@ -624,7 +627,14 @@ namespace Roboquatic
                     // Draw projectiles
                     for (int i = 0; i < projectiles.Count; i++)
                     {
-                        _spriteBatch.Draw(projectiles[i].Sprite, projectiles[i].Position, Color.White);
+                        if (projectiles[i] is PlayerProjectile)
+                        {
+                            _spriteBatch.Draw(projectiles[i].Sprite, projectiles[i].Position, Color.White);
+                        }
+                        else
+                        {
+                            _spriteBatch.Draw(projectiles[i].Sprite, projectiles[i].Position, Color.Red);
+                        }
                     }
 
                     // Draw enemies

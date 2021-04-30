@@ -69,7 +69,7 @@ namespace Roboquatic
                 damage = game.PlayerDamage;
 
                 // Reset the player's health and set the current checkpoint to this checkpoint
-                game.PlayerHealth = 6;
+                game.PlayerHealth = game.Player.MaxHP;
                 game.CurrentCheckpoint = this;
 
                 // Check if the player has reached the checkpoint or not

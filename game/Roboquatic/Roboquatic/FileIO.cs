@@ -105,10 +105,11 @@ namespace Roboquatic
                     //Iterates through the size of array to places each enemy type based on the symbol or empty.
                     for (int j = 0; j < formationHeight; j++)
                     {
-                        loadFormation = new StringReader(load.ReadLine());
+                        string line = load.ReadLine();
+                        char[] characters = line.ToCharArray();
                         for (int k = 0; k < formationWidth; k++)
                         {
-                            int filled = loadFormation.Read();
+                            int filled = characters[k];
                             
                             switch (filled)
                             {
@@ -145,10 +146,9 @@ namespace Roboquatic
             {
                 Console.WriteLine(e.Message);
             }
-            finally
+            if(loadFormation != null && load != null)
             {
                 load.Close();
-                loadFormation.Close();
             }
         }
 
