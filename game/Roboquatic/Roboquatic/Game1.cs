@@ -268,7 +268,7 @@ namespace Roboquatic
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             //Loading in textures and initializing the player
-            player = new Player(1, 20, 10, new Rectangle(0, 0, 48, 48), 6, 1, Content.Load<Texture2D>("bubble"));
+            player = new Player(1, 20, 10, new Rectangle(0, 0, 48, 48), 7, 1, Content.Load<Texture2D>("bubble"));
             player.Sprite = Content.Load<Texture2D>("PlayerFishSprite");
 
             // Load background 
@@ -682,6 +682,9 @@ namespace Roboquatic
                     //_spriteBatch.DrawString(font, string.Format("{0:f0}", time), new Vector2(10, 10), Color.White);
                     //_spriteBatch.DrawString(font, string.Format(currentCheckpoint.GetName), new Vector2(50, 10), Color.White);
 
+                    // Draw the HUD
+                    hud.Draw(_spriteBatch, player);
+
                     // Draw projectiles
                     for (int i = 0; i < projectiles.Count; i++)
                     {
@@ -855,7 +858,7 @@ namespace Roboquatic
             enemies.Clear();
             projectiles.Clear();
             player.Position = new Rectangle(0, 0, 48, 48);
-            player.Health = 6;
+            player.Health = player.MaxHP;
             player.IsAlive = true;
             time = 0;
             timer = 0;

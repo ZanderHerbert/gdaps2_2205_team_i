@@ -145,6 +145,18 @@
 /processorParam:TextureFormat=Color
 /build:EnemyPlaceholder.jpg
 
+#begin HealthSheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:HealthSheet.png
+
 #begin heart upgrade.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -289,6 +301,30 @@
 /processorParam:TextureFormat=Color
 /build:PlayerFishSprite.png
 
+#begin ProgressBar.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ProgressBar.png
+
+#begin ProgressFiller.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ProgressFiller.png
+
 #begin ResumeButton.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -367,18 +403,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:titleBubbles.png
-
-#begin titleLogo.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:titleLogo.png
 
 #begin titleLogo.png
 /importer:TextureImporter
