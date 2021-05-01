@@ -43,6 +43,7 @@ namespace Roboquatic
         private List<Projectile> projectiles;
 
         private Hud hud;
+        private int pastCheckpoints = 0;
 
         private Upgrades upgrade;
 
@@ -391,8 +392,8 @@ namespace Roboquatic
 
             // Add Checkpoints
             deactivedCheckpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 5));
-            deactivedCheckpoints.Add(new Checkpoint("checkpoint2", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 30));
-            deactivedCheckpoints.Add(new Checkpoint("checkpoint3", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 45));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint2", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 10));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint3", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 15));
 
             //Adds the Upgrades
 
@@ -611,7 +612,10 @@ namespace Roboquatic
                         CheckpointManager();
 
                         // Update the activated checkpoint
-                        activeCheckpoint.Update(this);
+                        if(activeCheckpoint != null)
+                        {
+                            activeCheckpoint.Update(this);
+                        }
                     }
                     break;
 
@@ -683,7 +687,7 @@ namespace Roboquatic
                     //_spriteBatch.DrawString(font, string.Format(currentCheckpoint.GetName), new Vector2(50, 10), Color.White);
 
                     // Draw the HUD
-                    hud.Draw(_spriteBatch, player);
+                    hud.Draw(_spriteBatch, player, viewportHeight, pastCheckpoints);
 
                     // Draw projectiles
                     for (int i = 0; i < projectiles.Count; i++)
@@ -714,7 +718,10 @@ namespace Roboquatic
                     CheckpointManager();
 
                     // Draw checkpoints
-                    activeCheckpoint.Draw(_spriteBatch, this);
+                    if(activeCheckpoint != null)
+                    {
+                        activeCheckpoint.Draw(_spriteBatch, this);
+                    }
 
                     // Print "game saved" message
                     foreach(Checkpoint c in deactivedCheckpoints)
@@ -864,6 +871,7 @@ namespace Roboquatic
             timer = 0;
             addedBoss = false;
             currentCheckpoint = deactivedCheckpoints[0];
+            pastCheckpoints = 0;
 
             // reset checkpoints
             foreach (Checkpoint c in deactivedCheckpoints)
@@ -883,6 +891,14 @@ namespace Roboquatic
                     activeCheckpoint = deactivedCheckpoints[i];
                     break;
                 }
+                else
+                {
+                    pastCheckpoints = i + 1;
+                }
+            }
+            if(pastCheckpoints == deactivedCheckpoints.Count)
+            {
+                activeCheckpoint = null;
             }
         }
     }
