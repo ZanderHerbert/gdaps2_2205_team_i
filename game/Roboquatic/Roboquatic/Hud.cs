@@ -30,7 +30,7 @@ namespace Roboquatic
             onceThrough = false;
         }
 
-        public void Draw(SpriteBatch sb, Player player, int screenHeight, int checkpointsCrossed)
+        public void Draw(SpriteBatch sb, Player player, int screenHeight, int checkpointsCrossed, double percent)
         {
             sb.Draw(healthSheet, new Rectangle(20, 20, 93, 54), new Rectangle(0, 0, 155, 90), Color.White);
             for(int i = 0; i <= player.MaxHP - 7; i++)
@@ -86,9 +86,20 @@ namespace Roboquatic
             
             sb.Draw(progressBar, new Rectangle(280, screenHeight - 38, 428, 20), new Rectangle(2, 59, 285, 20), Color.White);
             sb.Draw(progressBar, new Rectangle(60, screenHeight - 45, 144, 30), new Rectangle(7, 4, 240, 50), Color.White);
-            for(int i = 0; i < checkpointsCrossed; i++)
+            for(int i = 0; i <= checkpointsCrossed; i++)
             {
-                sb.Draw(progressBarFiller, new Rectangle(288 + 105 * i, screenHeight - 33, 98, 10), new Rectangle(0, 0, 65, 10), Color.White);
+                if(i == checkpointsCrossed && checkpointsCrossed != 3)
+                {
+                    if(percent == 0.5)
+                    {
+                        Console.WriteLine("");
+                    }
+                    sb.Draw(progressBarFiller, new Rectangle(288 + 105 * i, screenHeight - 33, (int)(98 * percent), 10), new Rectangle(0, 0, 65, 10), Color.White);
+                }
+                else
+                {
+                    sb.Draw(progressBarFiller, new Rectangle(288 + 105 * i, screenHeight - 33, 98, 10), new Rectangle(0, 0, 65, 10), Color.White);
+                }
             }
             sb.Draw(checkpointFlag, new Rectangle(378, screenHeight - 50, 32, 32), Color.White);
             sb.Draw(checkpointFlag, new Rectangle(483, screenHeight - 50, 32, 32), Color.White);

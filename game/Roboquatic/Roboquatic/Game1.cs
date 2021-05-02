@@ -40,6 +40,7 @@ namespace Roboquatic
         private int viewportHeight;
 
         private int timer;
+        private bool increment;
         private List<Projectile> projectiles;
 
         private Hud hud;
@@ -110,6 +111,12 @@ namespace Roboquatic
         private Texture2D healthUpgrade;
         private Texture2D speedUpgrade;
         private Texture2D damageUpgrade;
+
+        public bool Increment
+        {
+            get { return increment; }
+            set { increment = value; }
+        }
 
         public Checkpoint CurrentCheckpoint
         {
@@ -253,6 +260,7 @@ namespace Roboquatic
             addedBoss = false;
             currentCheckpoint = null;
             hud = new Hud(this);
+            increment = true;
 
             logoVect = new Vector2(400, viewportHeight - 390);
             origin = new Vector2(400, 130);
@@ -544,7 +552,7 @@ namespace Roboquatic
                                     addedBoss = true;
                                 }
                             }
-                            
+                            /*
                             else if (deactivedCheckpoints[1].Contact == true)
                             {
                                 if (!addedFormation2)
@@ -571,7 +579,7 @@ namespace Roboquatic
                                     enemiesToAdd.RemoveAt(i);
                                 }
                             }
-                            
+                            */
                             else
                             {
                             if (timer % 240 == rng.Next(0, 240))
@@ -599,7 +607,10 @@ namespace Roboquatic
                         }
 
                         //Timers for time/update based actions
-                        timer += 1;
+                        if (increment)
+                        {
+                            timer += 1;
+                        }
 
                         if (player.Health <= 0)
                         {
@@ -687,7 +698,7 @@ namespace Roboquatic
                     //_spriteBatch.DrawString(font, string.Format(currentCheckpoint.GetName), new Vector2(50, 10), Color.White);
 
                     // Draw the HUD
-                    hud.Draw(_spriteBatch, player, viewportHeight, pastCheckpoints);
+                    hud.Draw(_spriteBatch, player, viewportHeight, pastCheckpoints, (((timer - 1) % 3601.0) / 3601.0));
 
                     // Draw projectiles
                     for (int i = 0; i < projectiles.Count; i++)

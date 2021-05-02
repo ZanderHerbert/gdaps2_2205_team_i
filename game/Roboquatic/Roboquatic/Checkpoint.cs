@@ -83,10 +83,12 @@ namespace Roboquatic
             if (time <= game.Time && !contact)
             {
                 game.SpawnEnemy = false;
+                game.Increment = false;
             }
             else
             {
                 game.SpawnEnemy = true;
+                game.Increment = true;
             }
         }
 
