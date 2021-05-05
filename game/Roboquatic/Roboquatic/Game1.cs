@@ -24,7 +24,7 @@ namespace Roboquatic
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private Player player;
-
+        private MouseState mouse;
         private int mouseX;
         private int mouseY;
 
@@ -69,7 +69,7 @@ namespace Roboquatic
         private GameState previousState;
         private EnemyManager enemyManager;
         private ProjectileManager projectileManager;
-
+        private Texture2D laserSprite;
         private SpriteFont text;
 
         // Buttons' fields
@@ -292,6 +292,7 @@ namespace Roboquatic
             staticEnemySprite = Content.Load<Texture2D>("EnemyFishSprite3");
             homingEnemySprite = Content.Load<Texture2D>("EnemyFishSprite4");
             font = Content.Load<SpriteFont>("text");
+            laserSprite = Content.Load<Texture2D>("EnemyPlaceholder");
 
             // Load Buttons
             startButton = Content.Load<Texture2D>("OnStart");
@@ -548,7 +549,7 @@ namespace Roboquatic
                             {
                                 if (!addedBoss)
                                 {
-                                    enemies.Add(new Boss(bossEnemySprite, new Rectangle(viewportWidth - 128, viewportHeight / 2 - 64, 256, 128), 0, baseEnemyProjectileSprite, -10, -20, 6, 50, rng, 3, 1));
+                                    enemies.Add(new Boss(bossEnemySprite, new Rectangle(viewportWidth - 128, viewportHeight / 2 - 64, 256, 128), 0, baseEnemyProjectileSprite, -10, -20, 6, 50, rng, 3, 1, laserSprite));
                                     addedBoss = true;
                                 }
                             }

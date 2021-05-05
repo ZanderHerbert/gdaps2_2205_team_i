@@ -90,10 +90,6 @@ namespace Roboquatic
             {
                 if(i == checkpointsCrossed && checkpointsCrossed != 3)
                 {
-                    if(percent == 0.5)
-                    {
-                        Console.WriteLine("");
-                    }
                     sb.Draw(progressBarFiller, new Rectangle(288 + 105 * i, screenHeight - 33, (int)(98 * percent), 10), new Rectangle(0, 0, 65, 10), Color.White);
                 }
                 else

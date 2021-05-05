@@ -35,7 +35,7 @@ namespace Roboquatic
             get { return sprite; }
         }
         
-        //Get propert for hit
+        //Get property for hit
         public bool Hit
         {
             get { return hit; }

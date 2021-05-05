@@ -71,5 +71,10 @@ namespace Roboquatic
                 _spriteBatch.Draw(sprite, position, null, Color.White, 0, new Vector2(), SpriteEffects.FlipHorizontally, 0);
             }
         }
+
+        public virtual void DrawLaser(SpriteBatch sb)
+        {
+
+        }
     }
 }

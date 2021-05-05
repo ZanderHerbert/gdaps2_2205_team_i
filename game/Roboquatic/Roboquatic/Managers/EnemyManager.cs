@@ -39,6 +39,10 @@ namespace Roboquatic
         {
             for (int i = 0; i < enemies.Count; i++)
             {
+                if (enemies[i] is Boss)
+                {
+                    enemies[i].DrawLaser(_spriteBatch);
+                }
                 enemies[i].Draw(_spriteBatch);
             }
         }
