@@ -18,8 +18,7 @@ namespace Roboquatic
 
     public class Game1 : Game
     {
-
-
+        #region Field Declaration
         //Declaring fields
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -111,7 +110,9 @@ namespace Roboquatic
         private Texture2D healthUpgrade;
         private Texture2D speedUpgrade;
         private Texture2D damageUpgrade;
+        #endregion
 
+        #region Properties
         public bool Increment
         {
             get { return increment; }
@@ -231,6 +232,7 @@ namespace Roboquatic
         {
             get { return font; }
         }
+        #endregion
 
         public Game1()
         {
@@ -239,6 +241,7 @@ namespace Roboquatic
             IsMouseVisible = false;
         }
 
+        #region Intialization
         protected override void Initialize()
         {
             // Initializing variables
@@ -271,7 +274,9 @@ namespace Roboquatic
 
             base.Initialize();
         }
+        #endregion
 
+        #region Content Loading
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -410,7 +415,9 @@ namespace Roboquatic
             speedUpgrade = Content.Load<Texture2D>("speedometer");
             damageUpgrade = Content.Load<Texture2D>("bubble");
         }
+        #endregion
 
+        #region Update
         protected override void Update(GameTime gameTime)
         {
             KeyboardState kbState = Keyboard.GetState();
@@ -514,35 +521,6 @@ namespace Roboquatic
                         // Will need to be changed, only here for testing purposes
                         if (spawnEnemy)// If a checkpoint appears, then stop ememies from spawning 
                         {
-                            
-                            // un-comment if you want to fight the boss :D, also, remember to comment out the other
-                            // enemy spawns if you want to try it, or else you'll have a bad time lol
-                            /*
-                            if(timer == 0)
-                            {
-                                enemies.Add(new Boss(bossEnemySprite, new Rectangle(viewportWidth - 128, viewportHeight / 2 - 64, 256, 128), 0, baseEnemyProjectileSprite, -10, -20, 6, 40, rng, 3, 1));
-                            }
-                            
-                            /*
-                            if (timer % 360 == rng.Next(0, 361))
-                            {
-                                enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite));
-                            }
-                            if (timer % 360 == rng.Next(0, 361))
-                            {
-                                enemies.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite));
-                            }
-                            if (timer % 360 == rng.Next(0, 361))
-                            {
-                                enemies.Add(new StaticEnemy(staticEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 4));
-                            }
-                            if (timer % 360 == rng.Next(0, 361))
-                            {
-                                enemies.Add(new RangedHomingEnemy(homingEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 240, baseEnemyProjectileSprite));
-                            }
-                            */
-
-
                             //FileIO
                             
                             if (deactivedCheckpoints[2].Contact == true)
@@ -660,7 +638,9 @@ namespace Roboquatic
 
             base.Update(gameTime);
         }
+        #endregion
 
+        #region Draw
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
@@ -760,6 +740,7 @@ namespace Roboquatic
 
             base.Draw(gameTime);
         }
+        #endregion
 
         //Finds the current mouse position and stores the values in variables mouseX and mouseY
         protected void UpdateMouse()
@@ -775,6 +756,7 @@ namespace Roboquatic
             return previousKbState.IsKeyDown(key) && kbState.IsKeyUp(key);
         }
 
+        #region Button Methods
         // Buttons' methods for state changing 
         public void StartButton()
         {
@@ -819,6 +801,7 @@ namespace Roboquatic
         {
             currentState = GameState.Menu;
         }
+        #endregion
 
         //Moves the backdrop
         public void MoveBackdrop(int speed, int multiplier)
@@ -893,7 +876,7 @@ namespace Roboquatic
             }
         }
 
-        // Find the first unctontacted checkpoint 
+        // Find the first uncontacted checkpoint 
         private void CheckpointManager()
         {
             for (int i = 0; i < deactivedCheckpoints.Count; i++)
