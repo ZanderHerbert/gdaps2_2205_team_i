@@ -22,7 +22,7 @@ namespace Roboquatic
             for (int i = 0; i < enemies.Count; i++)
             {
                 enemies[i].Update(gameTime, game);
-                if (PlayerContact(game.Player.Position))
+                if (PlayerContact(game.Player.HitBox))
                 {
                     game.Player.TakeDamage(enemies[i].ContactDamage);
                 }
@@ -52,7 +52,7 @@ namespace Roboquatic
         {
             for(int i = 0; i < enemies.Count; i++)
             {
-                if (enemies[i].Position.Intersects(playerPosition))
+                if (enemies[i].HitBox.Intersects(playerPosition))
                 {
                     return true;
                 }

@@ -28,8 +28,8 @@ namespace Roboquatic
         }
 
         //BaseEnemy Constructor, uses Enemy constructor
-        public BaseEnemy(Texture2D sprite, Rectangle position, int speed, int framesToFire, Texture2D projectileSprite)
-            : base(sprite, position, speed)
+        public BaseEnemy(Texture2D sprite, Rectangle position, int speed, int framesToFire, Texture2D projectileSprite, Rectangle hitBox)
+            : base(sprite, position, speed, hitBox)
         {
             this.framesToFire = framesToFire;
             this.projectileSprite = projectileSprite;
@@ -61,7 +61,16 @@ namespace Roboquatic
         //increments the shooting timer, checks if the enemy can shoot, and shoots a projectile if it can.
         public override void Update(GameTime gameTime, Game1 game)
         {
-            position.X -= speed;
+            if (position.X <= game.ViewportWidth)
+            {
+                position.X -= speed;
+            }
+            else
+            {
+                position.X -= 4;
+            }
+            hitBox.X = position.X;
+            hitBox.Y = position.Y + 4;
             if (position.X <= game.GraphicsDevice.Viewport.Width / 2)
             {
                 speed = -1;
@@ -70,7 +79,10 @@ namespace Roboquatic
             {
                 speed = 1;
             }
-            shootingTimer++;
+            if(position.X <= game.ViewportWidth + position.Width)
+            {
+                shootingTimer++;
+            }
             if (CanShoot())
             {
                 shootingTimer = 0;

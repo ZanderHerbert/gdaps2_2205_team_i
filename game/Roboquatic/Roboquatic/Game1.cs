@@ -26,30 +26,23 @@ namespace Roboquatic
         private MouseState mouse;
         private int mouseX;
         private int mouseY;
-
         private bool keyboardControls;
-
         private Texture2D backdrop;
         private Texture2D backdropSwap;
-
         private Rectangle backdropPos;
         private Rectangle backdropSwapPos;
-
         private int viewportWidth;
         private int viewportHeight;
-
         private int timer;
         private bool increment;
         private List<Projectile> projectiles;
-
         private Hud hud;
         private int pastCheckpoints = 0;
-
         private Upgrades upgrade;
 
         //Test for FileIO
         private FileIO fileIO;
-        List<Enemy> enemiesToAdd;
+        List<Enemy>[] enemiesToAdd;
         private bool addedFormation1;
         private bool addedFormation2;
         private bool addedBoss;
@@ -264,6 +257,7 @@ namespace Roboquatic
             currentCheckpoint = null;
             hud = new Hud(this);
             increment = true;
+            enemiesToAdd = new List<Enemy>[10];
 
             logoVect = new Vector2(400, viewportHeight - 390);
             origin = new Vector2(400, 130);
@@ -282,7 +276,7 @@ namespace Roboquatic
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             //Loading in textures and initializing the player
-            player = new Player(1, 20, 10, new Rectangle(0, 0, 48, 48), 7, 1, Content.Load<Texture2D>("bubble"));
+            player = new Player(1, 20, 10, new Rectangle(0, 0, 48, 48), 7, 1, Content.Load<Texture2D>("bubble"), new Rectangle(0, 0, 47, 27));
             player.Sprite = Content.Load<Texture2D>("PlayerFishSprite");
 
             // Load background 
@@ -500,9 +494,6 @@ namespace Roboquatic
                         projectileManager.ManageProjectiles(this, gameTime);
                         enemyManager.ManageEnemies(this, gameTime);
 
-                        //Updates the player object
-                        player.Update(gameTime, this);
-
                         //Processes player input through the player object
                         if (keyboardControls)
                         {
@@ -512,6 +503,9 @@ namespace Roboquatic
                         {
                             player.ProcessInputMouse(Mouse.GetState(), this);
                         }
+
+                        //Updates the player object
+                        player.Update(gameTime, this);
 
                         //MovesBackdrop
                         MoveBackdrop(2, -3);
@@ -527,55 +521,94 @@ namespace Roboquatic
                             {
                                 if (!addedBoss)
                                 {
-                                    enemies.Add(new Boss(bossEnemySprite, new Rectangle(viewportWidth - 128, viewportHeight / 2 - 64, 256, 128), 0, baseEnemyProjectileSprite, -10, -20, 6, 50, rng, 3, 1, laserSprite));
+                                    enemies.Add(new Boss(bossEnemySprite, new Rectangle(viewportWidth - 128, viewportHeight / 2 - 64, 256, 128), 0, baseEnemyProjectileSprite, -10, -20, 6, 50, rng, 3, 1, laserSprite, new Rectangle(viewportWidth - 128, viewportHeight / 2 - 64, 256, 128)));
                                     addedBoss = true;
                                 }
                             }
-                            /*
                             else if (deactivedCheckpoints[1].Contact == true)
                             {
-                                if (!addedFormation2)
+                                if((timer - 1 + 1 * pastCheckpoints) % 3601 == 15)
                                 {
-                                    enemiesToAdd = fileIO.AddFormation(1, 10);
-                                    addedFormation2 = true;
+                                    enemies.AddRange(fileIO.AddFormation(3, rng.Next(0, viewportHeight - 343)));
                                 }
-                                for (int i = 0; i < enemiesToAdd.Count; i++)
+                                if ((timer - 1 + 1 * pastCheckpoints) % 3601 == 500)
                                 {
-                                    enemies.Add(enemiesToAdd[i]);
-                                    enemiesToAdd.RemoveAt(i);
+                                    enemies.AddRange(fileIO.AddFormation(7, 0));
                                 }
-                            }
+                                if ((timer - 1 + 1 * pastCheckpoints) % 3601 == 2550)
+                                {
+                                    enemies.AddRange(fileIO.AddFormation(4, rng.Next(0, viewportHeight - 343)));
+                                }
+                                if ((timer - 1 + 1 * pastCheckpoints) % 3601 == 2950)
+                                {
+                                    enemies.AddRange(fileIO.AddFormation(8, 0));
+                                }
+                                if ((timer - 1 + 1 * pastCheckpoints) % 3601 == 3550)
+                                {
+                                    enemies.AddRange(fileIO.AddFormation(9, 0));
+                                }
+                                    /*
+                                    if (!addedFormation2)
+                                    {
+                                        enemiesToAdd[0] = fileIO.AddFormation(1, viewportHeight - 343);
+                                        addedFormation2 = true;
+                                    }
+                                    if (enemiesToAdd[0] != null)
+                                    {
+                                        enemies.AddRange(enemiesToAdd[0]);
+                                        enemiesToAdd[0] = null;
+                                    }
+                                    */
+                                }
                             else if (deactivedCheckpoints[0].Contact == true)
                             {
+                                if(timer % 240 == rng.Next(0, 240))
+                                {
+                                    enemies.AddRange(fileIO.AddFormation(5, rng.Next(0, viewportHeight - 63)));
+                                }
+                                if (timer % 360 == rng.Next(0, 360))
+                                {
+                                    enemies.AddRange(fileIO.AddFormation(2, rng.Next(0, viewportHeight - 63)));
+                                }
+                                if (timer % 480 == rng.Next(0, 480))
+                                {
+                                    enemies.AddRange(fileIO.AddFormation(6, rng.Next(0, viewportHeight - 203)));
+                                }
+                                if (timer % 240 == rng.Next(0, 240))
+                                {
+                                    enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite, new Rectangle(0, 0, 64, 52)));
+                                }
+
+                                /*
                                 if (!addedFormation1)
                                 {
-                                    enemiesToAdd = fileIO.AddFormation(0, 10);
+                                    enemiesToAdd[0] = fileIO.AddFormation(0, rng.Next(0, viewportHeight - 343));
                                     addedFormation1 = true;
                                 }
-                                for (int i = 0; i < enemiesToAdd.Count; i++)
+                                if (enemiesToAdd[0] != null)
                                 {
-                                    enemies.Add(enemiesToAdd[i]);
-                                    enemiesToAdd.RemoveAt(i);
+                                    enemies.AddRange(enemiesToAdd[0]);
+                                    enemiesToAdd[0] = null;
                                 }
+                                */
                             }
-                            */
                             else
                             {
-                            if (timer % 240 == rng.Next(0, 240))
+                                if (timer % 240 == rng.Next(0, 240))
                                 {
-                                    enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite));
+                                    enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite, new Rectangle(0, 0, 64, 52)));
                                 }
                                 if (timer % 240 == rng.Next(0, 240))
                                 {
-                                    enemies.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite));
+                                    enemies.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite, new Rectangle(0, 0, 62, 40)));
                                 }
                                 if (timer % 240 == rng.Next(0, 240))
                                 {
-                                    enemies.Add(new StaticEnemy(staticEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 4));
+                                    enemies.Add(new StaticEnemy(staticEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 4, new Rectangle(0, 0, 62, 56)));
                                 }
                                 if (timer % 240 == rng.Next(0, 240))
                                 {
-                                    enemies.Add(new RangedHomingEnemy(homingEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 240, baseEnemyProjectileSprite));
+                                    enemies.Add(new RangedHomingEnemy(homingEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 240, baseEnemyProjectileSprite, new Rectangle(0, 0, 62, 36)));
                                 }
                             }
                         }
@@ -677,6 +710,7 @@ namespace Roboquatic
                     // Draw a timer 
                     //_spriteBatch.DrawString(font, string.Format("{0:f0}", time), new Vector2(10, 10), Color.White);
                     //_spriteBatch.DrawString(font, string.Format(currentCheckpoint.GetName), new Vector2(50, 10), Color.White);
+                    
 
                     // Draw the HUD
                     hud.Draw(_spriteBatch, player, viewportHeight, pastCheckpoints, (((timer - 1) % 3601.0) / 3601.0));
@@ -720,6 +754,7 @@ namespace Roboquatic
                     {
                         c.PrintMessage(_spriteBatch,this);
                     }
+                    //_spriteBatch.DrawString(font, string.Format("{0}", ((timer - 1 + 1 * pastCheckpoints) % 3601.0)), new Vector2(10, 10), Color.White);
                     break;
 
                 case GameState.Pause:

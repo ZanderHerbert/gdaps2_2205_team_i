@@ -48,6 +48,10 @@ namespace Roboquatic
                 }
                 hit = true;
             }
+            if(position.X > game.ViewportWidth)
+            {
+                hit = true;
+            }
             position.X += speed;
         }
     }

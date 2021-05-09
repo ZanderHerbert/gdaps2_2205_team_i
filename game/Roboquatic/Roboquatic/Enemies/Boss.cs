@@ -19,8 +19,8 @@ namespace Roboquatic
         private LaserBeam laser;
         private Texture2D laserSprite;
 
-        public Boss(Texture2D sprite, Rectangle position, int speed, Texture2D projectileSprite, int projectileSpeed, int aimedProjectileSpeed, int homingProjectileSpeed, int health, Random rng, int ySpeed, int contactDamage, Texture2D laserSprite)
-            : base(sprite, position, speed)
+        public Boss(Texture2D sprite, Rectangle position, int speed, Texture2D projectileSprite, int projectileSpeed, int aimedProjectileSpeed, int homingProjectileSpeed, int health, Random rng, int ySpeed, int contactDamage, Texture2D laserSprite, Rectangle hitBox)
+            : base(sprite, position, speed, hitBox)
         {
             this.projectileSprite = projectileSprite;
             this.projectileSpeed = projectileSpeed;
@@ -40,6 +40,8 @@ namespace Roboquatic
 
         public override void Update(GameTime gametime, Game1 game)
         {
+            hitBox.X = position.X;
+            hitBox.Y = position.Y;
             timer++;
             if (timer % 360 == 359)
             {

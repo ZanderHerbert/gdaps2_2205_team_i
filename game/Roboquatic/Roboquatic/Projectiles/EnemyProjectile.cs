@@ -20,7 +20,7 @@ namespace Roboquatic
         //Checks if the projectile is in contact with the player
         public bool PlayerContact(Player player)
         {
-            if(position.Intersects(player.Position))
+            if(position.Intersects(player.HitBox))
             {
                 return true;
             }
