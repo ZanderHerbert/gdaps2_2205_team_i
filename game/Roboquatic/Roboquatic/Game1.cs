@@ -39,6 +39,7 @@ namespace Roboquatic
         private Hud hud;
         private int pastCheckpoints = 0;
         private Upgrades upgrade;
+        private Texture2D pauseText;
 
         //Test for FileIO
         private FileIO fileIO;
@@ -241,8 +242,8 @@ namespace Roboquatic
             keyboardControls = false;
             viewportWidth = this.GraphicsDevice.Viewport.Width;
             viewportHeight = this.GraphicsDevice.Viewport.Height;
-            backdropPos = new Rectangle(0, 0, viewportWidth * 2, viewportHeight);
-            backdropSwapPos = new Rectangle(viewportWidth * 2, 0, viewportWidth * 2, viewportHeight);
+            backdropPos = new Rectangle(0, 0, viewportWidth, viewportHeight);
+            backdropSwapPos = new Rectangle(viewportWidth, 0, viewportWidth, viewportHeight);
             timer = 0;
             projectiles = new List<Projectile>(1);
             enemies = new List<Enemy>(1);
@@ -280,10 +281,10 @@ namespace Roboquatic
             player.Sprite = Content.Load<Texture2D>("PlayerFishSprite");
 
             // Load background 
-            backdrop = Content.Load<Texture2D>("PlaceholderBackdrop");
-            backdropSwap = Content.Load<Texture2D>("PlaceholderBackdropSwap");
+            backdrop = Content.Load<Texture2D>("bg2");
+            backdropSwap = Content.Load<Texture2D>("bg2");
 
-            // Load enemies 
+            // Load enemies & misc
             bossEnemySprite = Content.Load<Texture2D>("BossSprite1");
             baseEnemySprite = Content.Load<Texture2D>("EnemyFishSprite2");
             baseEnemyProjectileSprite = Content.Load<Texture2D>("bubble");
@@ -292,6 +293,7 @@ namespace Roboquatic
             homingEnemySprite = Content.Load<Texture2D>("EnemyFishSprite4");
             font = Content.Load<SpriteFont>("text");
             laserSprite = Content.Load<Texture2D>("EnemyPlaceholder");
+            pauseText = Content.Load<Texture2D>("Pause");
 
             // Load Buttons
             startButton = Content.Load<Texture2D>("OnStart");
@@ -374,7 +376,7 @@ namespace Roboquatic
 
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2, 300, 187, 65),
+                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 93, 300, 187, 65),
                 controlsButton,
                 controlsButton
                 ));
@@ -470,6 +472,9 @@ namespace Roboquatic
                 case GameState.Settings:
                     IsMouseVisible = true;
 
+                    //Moves the backdrop
+                    MoveBackdrop(1, -1);
+
                     // Buttons Update
                     buttons[2].Update();
                     buttons[3].Update();
@@ -508,7 +513,7 @@ namespace Roboquatic
                         player.Update(gameTime, this);
 
                         //MovesBackdrop
-                        MoveBackdrop(2, -3);
+                        MoveBackdrop(2, -1);
 
                         // Randomly creates enemies based on a timer at random positions
                         //
@@ -646,6 +651,9 @@ namespace Roboquatic
                     IsMouseVisible = true;
                     previousState = currentState;
 
+                    //Moves the backdrop
+                    MoveBackdrop(1, -1);
+
                     // Press ESC to resume 
                     if (SingleKeyPress(Keys.Escape, kbState))
                     {
@@ -660,6 +668,9 @@ namespace Roboquatic
 
                 case GameState.GameOver:
                     IsMouseVisible = true;
+
+                    //Moves the backdrop
+                    MoveBackdrop(1, -1);
 
                     // Buttons Update
                     buttons[8].Update();
@@ -697,7 +708,10 @@ namespace Roboquatic
                     break;
 
                 case GameState.Settings:
-                    _spriteBatch.DrawString(font, "Settings", new Vector2(0, 0), Color.White);
+                    _spriteBatch.Draw(titlePage, new Rectangle(0, 0, viewportWidth, viewportHeight), Color.White);
+                    _spriteBatch.Draw(titleBubbles, titleBubblesPos, Color.White);
+                    _spriteBatch.Draw(titleBubblesLoop, titleBubblesSwapPos, Color.White);
+                    _spriteBatch.DrawString(font, "Select Your Control Scheme", new Vector2(70, 0), Color.Black);
                     buttons[2].Draw(_spriteBatch);
                     buttons[3].Draw(_spriteBatch);
                     buttons[4].Draw(_spriteBatch);
@@ -758,15 +772,20 @@ namespace Roboquatic
                     break;
 
                 case GameState.Pause:
-                    _spriteBatch.DrawString(font, "Pause", new Vector2(0, 0), Color.White);
-
+                    _spriteBatch.Draw(titlePage, new Rectangle(0, 0, viewportWidth, viewportHeight), Color.White);
+                    _spriteBatch.Draw(titleBubbles, titleBubblesPos, Color.White);
+                    _spriteBatch.Draw(titleBubblesLoop, titleBubblesSwapPos, Color.White);
+                    _spriteBatch.Draw(pauseText, new Vector2(5, 5), Color.White);
                     buttons[5].Draw(_spriteBatch);
                     buttons[6].Draw(_spriteBatch);
                     buttons[7].Draw(_spriteBatch);
                     break;
 
                 case GameState.GameOver:
-                    _spriteBatch.DrawString(font, "GameOver", new Vector2(0, 0), Color.White);
+                    _spriteBatch.Draw(titlePage, new Rectangle(0, 0, viewportWidth, viewportHeight), Color.White);
+                    _spriteBatch.Draw(titleBubbles, titleBubblesPos, Color.White);
+                    _spriteBatch.Draw(titleBubblesLoop, titleBubblesSwapPos, Color.White);
+                    _spriteBatch.DrawString(font, "GameOver", new Vector2(260, 0), Color.Black);
                     buttons[8].Draw(_spriteBatch);
                     break;
             }
@@ -867,6 +886,9 @@ namespace Roboquatic
                     break;
 
                 case (GameState.Menu):
+                case (GameState.Settings):
+                case (GameState.Pause):
+                case (GameState.GameOver):
 
                     titleBubblesPos.Y -= speed;
                     titleBubblesSwapPos.Y -= speed;
