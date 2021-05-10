@@ -797,7 +797,7 @@ namespace Roboquatic
                     
 
                     // Draw the HUD
-                    hud.Draw(_spriteBatch, player, viewportHeight, pastCheckpoints, (((timer - 1) % 3601.0) / 3601.0));
+                    hud.Draw(_spriteBatch, player, viewportHeight, pastCheckpoints, (((timer - 1) % 3601.0) / 3601.0), upgrade);
 
                     // Draw projectiles
                     for (int i = 0; i < projectiles.Count; i++)

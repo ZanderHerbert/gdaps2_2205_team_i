@@ -42,7 +42,7 @@ namespace Roboquatic
         //Methods
 
         //Draws all HUD related sprites, including the health bar and the progress bar, and fills each based on the Player's positiona dn health
-        public void Draw(SpriteBatch sb, Player player, int screenHeight, int checkpointsCrossed, double percent)
+        public void Draw(SpriteBatch sb, Player player, int screenHeight, int checkpointsCrossed, double percent, Upgrades upgrade)
         {
 
             sb.Draw(healthSheet, new Rectangle(20, 20, 93, 54), new Rectangle(0, 0, 155, 90), Color.White);
@@ -104,7 +104,10 @@ namespace Roboquatic
             {
                 if(i == checkpointsCrossed && checkpointsCrossed != 3)
                 {
-                    sb.Draw(progressBarFiller, new Rectangle(288 + 105 * i, screenHeight - 33, (int)(98 * percent), 10), new Rectangle(0, 0, 65, 10), Color.White);
+                    if(upgrade == null)
+                    {
+                        sb.Draw(progressBarFiller, new Rectangle(288 + 105 * i, screenHeight - 33, (int)(98 * percent), 10), new Rectangle(0, 0, 65, 10), Color.White);
+                    }
                 }
                 else
                 {
