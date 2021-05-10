@@ -57,7 +57,7 @@ namespace Roboquatic
         {
             if (draw)
             {
-                sb.Draw(sprite, position, Color.White);
+                sb.Draw(sprite, position, Color.Red);
             }
         }
     }
