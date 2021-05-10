@@ -25,12 +25,16 @@ namespace Roboquatic
         public Hud(Game1 game)
         {
             healthSheet = game.Content.Load<Texture2D>("HealthSheet");
+
             progressBar = game.Content.Load<Texture2D>("ProgressBar");
             progressBarFiller = game.Content.Load<Texture2D>("ProgressFiller");
+
             checkpointFlag = game.Content.Load<Texture2D>("CheckpointFlag");
+
             bossTexture = game.Content.Load<Texture2D>("BossSprite1");
             playerTexture = game.Content.Load<Texture2D>("PlayerFishSprite");
             progressText = game.Content.Load<Texture2D>("Progress");
+
             rightHealthOffset = 0;
             onceThrough = false;
         }
@@ -40,6 +44,7 @@ namespace Roboquatic
         //Draws all HUD related sprites, including the health bar and the progress bar, and fills each based on the Player's positiona dn health
         public void Draw(SpriteBatch sb, Player player, int screenHeight, int checkpointsCrossed, double percent)
         {
+
             sb.Draw(healthSheet, new Rectangle(20, 20, 93, 54), new Rectangle(0, 0, 155, 90), Color.White);
             for(int i = 0; i <= player.MaxHP - 7; i++)
             {
@@ -47,6 +52,7 @@ namespace Roboquatic
             }
             rightHealthOffset = 21 * (player.MaxHP - 6);
             sb.Draw(healthSheet, new Rectangle(113 + rightHealthOffset, 20, 42, 54), new Rectangle(190, 0, 70, 90), Color.White);
+
 
             if(player.Health == 1)
             {
@@ -91,7 +97,7 @@ namespace Roboquatic
                 }
             }
 
-            
+           
             sb.Draw(progressBar, new Rectangle(280, screenHeight - 38, 428, 20), new Rectangle(2, 59, 285, 20), Color.White);
             sb.Draw(progressText, new Rectangle(60, screenHeight - 45, 144, 30), new Rectangle(0, 0, 240, 50), Color.White);
             for(int i = 0; i <= checkpointsCrossed; i++)
