@@ -7,14 +7,19 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Roboquatic
 {
+    //Manager class which manages projectiles
     public class ProjectileManager
     {
+        //Fields
         private List<Projectile> projectiles;
 
+        //Constructor
         public ProjectileManager(List<Projectile> projectiles)
         {
             this.projectiles = projectiles;
         }
+
+        //Methods
 
         //Updates all the projectiles
         public void ManageProjectiles(Game1 game, GameTime gameTime)

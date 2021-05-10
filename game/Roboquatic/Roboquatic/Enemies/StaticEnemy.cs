@@ -17,13 +17,14 @@ namespace Roboquatic
             contactDamage = 2;
         }
 
+        //Methods
+
         //Updates the enemy
-        //
-        //Moves the enemy, then checks the enemy position to see if it needs to change the speed of the enemy,
-        //increments the shooting timer, checks if the enemy can shoot, and shoots a projectile if it can.
         public override void Update(GameTime gameTime, Game1 game)
         {
+            //Changes position of the enemy
             position.X -= speed;
+            //Increments a hit timer if it was hit, so that it becomes invisible for 5 frames to indicate being hit
             if (hit)
             {
                 hitTimer++;
@@ -33,6 +34,7 @@ namespace Roboquatic
                     hitTimer = 0;
                 }
             }
+            //Moves hitbox to its new position
             hitBox.X = position.X + 2;
             hitBox.Y = position.Y;
         }

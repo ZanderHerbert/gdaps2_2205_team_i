@@ -10,7 +10,7 @@ namespace Roboquatic
     //Parent class to all future enemy classes.
     public class Enemy
     {
-        //Decalring fields
+        //Fields
         protected Texture2D sprite;
         protected Rectangle position;
         protected int speed;
@@ -20,6 +20,9 @@ namespace Roboquatic
         protected int hitTimer;
         protected Rectangle hitBox;
 
+        //Properties
+
+        //Get property for contactDamage
         public int ContactDamage
         {
             get { return contactDamage; }
@@ -67,11 +70,13 @@ namespace Roboquatic
             hit = true;
         }
 
+        //Virtual method for update for all enemies to use
         public virtual void Update(GameTime gametime, Game1 game)
         {
 
         }
 
+        //Draw method which draws the enemy if their hit bool is false
         public void Draw(SpriteBatch _spriteBatch)
         {
             if (!hit)
@@ -80,6 +85,7 @@ namespace Roboquatic
             }
         }
 
+        //Draw laser virtual method for the Boss to use, since it is in a list of enemies when draw functions are called on it
         public virtual void DrawLaser(SpriteBatch sb)
         {
 

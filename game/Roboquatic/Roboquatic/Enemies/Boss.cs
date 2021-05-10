@@ -4,8 +4,10 @@ using System;
 
 namespace Roboquatic
 {
+    //The Boss enemy which moves around and have multiple attack patterns based on rng
     class Boss : Enemy
     {
+        //Fields
         private int shotPattern;
         private Texture2D projectileSprite;
         private int projectileSpeed;
@@ -19,6 +21,7 @@ namespace Roboquatic
         private LaserBeam laser;
         private Texture2D laserSprite;
 
+        //Constructor
         public Boss(Texture2D sprite, Rectangle position, int speed, Texture2D projectileSprite, int projectileSpeed, int aimedProjectileSpeed, int homingProjectileSpeed, int health, Random rng, int ySpeed, int contactDamage, Texture2D laserSprite, Rectangle hitBox)
             : base(sprite, position, speed, hitBox)
         {
@@ -37,16 +40,25 @@ namespace Roboquatic
             laser = null;
         }
 
+        //Methods
 
+        //Updates the Boss
         public override void Update(GameTime gametime, Game1 game)
         {
+            //Syncs the hitbox with the position(This is done in the beginning because one attack pattern alters the position)
             hitBox.X = position.X;
             hitBox.Y = position.Y;
+
+            //Incrementing timer for logic
             timer++;
+
+            //Chooses which shot pattern through randomness
             if (timer % 360 == 359)
             {
                 shotPattern = rng.Next(0, 4);
             }
+
+            //Moves the boss up and down
             if (timer % 252 < 126 && canMoveUp)
             {
                 position.Y += ySpeed;
@@ -56,11 +68,13 @@ namespace Roboquatic
                 position.Y -= ySpeed;
             }
 
+            //Lets the boss move up after a little bit so that the Boss is centered around the middle of the screen
             if (timer % 250 == 63)
             {
                 canMoveUp = true;
             }
 
+            //Enters a method based on the shotpattern
             switch (shotPattern)
             {
                 case 0:
@@ -82,6 +96,7 @@ namespace Roboquatic
                 default:
                     break;
             }
+            //Hit timer which increments, and while the hit timer is below 5, the Boss will be invisible (seen in enemy draw method) to show damage
             if (hit)
             {
                 hitTimer++;
@@ -92,6 +107,8 @@ namespace Roboquatic
                 }
             }
         }
+
+        //Shot pattern which shoots a V of bullets, followed by 3 sets of 2 aimed bullets, along with one homing bullet with the second set of aimed bullets
         public void ShotPatternOne(int timer, Game1 game)
         {
             if (timer % 360 == 0)
@@ -148,6 +165,8 @@ namespace Roboquatic
             }
 
         }
+
+        //Moves the boss quickly to the left in a charge attack, and then slowly moves it back to the right
         public void ShotPatternTwo(int timer, Game1 game)
         {
             if (timer % 360 <= 40 && position.X > 0 - position.Width)
@@ -159,6 +178,9 @@ namespace Roboquatic
                 position.X += 3;
             }
         }
+
+        //Regularly shoots a right to left projectile in front of the boss, while also spawning 3 sets of 2 homing projectiles from the right corners of 
+        //the screen
         public void ShotPatternThree(int timer, Game1 game)
         {
             if (timer % 40 == 39)
@@ -171,6 +193,8 @@ namespace Roboquatic
                 game.Projectiles.Add(new HomingProjectile(projectileSprite, homingProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY + 116, 32, 32), 180));
             }
         }
+
+        //Creates two lasers, and updates them
         public void ShotPatternFour(int timer, Game1 game)
         {
             if(timer % 360 == 10)
@@ -195,6 +219,7 @@ namespace Roboquatic
             }
         }
 
+        //Draws the laser, needed since the laser has no reference in Game1(I think)
         public override void DrawLaser(SpriteBatch sb)
         {
             if(laser != null)

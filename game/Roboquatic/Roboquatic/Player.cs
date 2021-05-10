@@ -10,7 +10,7 @@ namespace Roboquatic
     //The player class is the class that is used to create and control the player object
     public class Player
     {
-        //Declaring Fields
+        //Fields
         private int speed;
         private Rectangle position;
         private Texture2D sprite;
@@ -25,6 +25,9 @@ namespace Roboquatic
         private bool isAlive;
         private Rectangle hitBox;
 
+        //Properties
+
+        //Get set property for isAlive
         public bool IsAlive
         {
             get { return isAlive; }
@@ -100,6 +103,7 @@ namespace Roboquatic
             set { projectileSprite = value; }
         }
 
+        //Get property for hitBox
         public Rectangle HitBox
         {
             get { return hitBox; }
@@ -120,6 +124,8 @@ namespace Roboquatic
             shootingTimer = framesToFire;
             this.hitBox = hitBox;
         }
+
+        //Methods
 
         //Processes player input under keyboard controls
         public void ProcessInputKeyboard(KeyboardState kbState, Game1 game)

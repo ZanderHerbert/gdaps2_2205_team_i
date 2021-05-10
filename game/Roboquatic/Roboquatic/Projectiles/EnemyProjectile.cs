@@ -17,6 +17,8 @@ namespace Roboquatic
             damage = 1;
         }
 
+        //Method
+
         //Checks if the projectile is in contact with the player
         public bool PlayerContact(Player player)
         {

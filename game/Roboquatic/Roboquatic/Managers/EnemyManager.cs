@@ -7,20 +7,26 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Roboquatic
 {
+    //Manager class which manages enemies
     public class EnemyManager
     {
+        //Fields
         private List<Enemy> enemies;
 
+        //Constructor
         public EnemyManager(List<Enemy> enemies)
         {
             this.enemies = enemies;
         }
+
+        //Methods
 
         //Updates all the enemies
         public void ManageEnemies(Game1 game, GameTime gameTime)
         {
             for (int i = 0; i < enemies.Count; i++)
             {
+                //Updates enemies and handles collision detection
                 enemies[i].Update(gameTime, game);
                 if (enemies[i].HitBox.Intersects(game.Player.HitBox))
                 {
@@ -35,6 +41,7 @@ namespace Roboquatic
             }
         }
 
+        //Draws all enemies
         public void Draw(SpriteBatch _spriteBatch)
         {
             for (int i = 0; i < enemies.Count; i++)

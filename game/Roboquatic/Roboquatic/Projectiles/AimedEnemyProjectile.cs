@@ -7,8 +7,10 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Roboquatic
 {
+    //Projectile which is aimed at the player when it is created
     class AimedEnemyProjectile : Projectile
     {
+        //Fields
         private double deltaX;
         private double deltaY;
         private int xChange;

@@ -17,6 +17,8 @@ namespace Roboquatic
             damage = player.ProjectileDamage;
         }
 
+        //Methods
+
         //Checks if the projectile is in contact with an enemy, and returns that enemy
         public Enemy EnemyContact(List<Enemy> enemies)
         {

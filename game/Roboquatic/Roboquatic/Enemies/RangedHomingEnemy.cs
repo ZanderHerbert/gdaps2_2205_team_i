@@ -9,11 +9,13 @@ namespace Roboquatic
 {
     class RangedHomingEnemy : Enemy
     {
-        //Declaring fields
+        //Fields
         private int framesToFire;
         private int projectileSpeed;
         private Texture2D projectileSprite;
         private int shootingTimer;
+
+        //Properties
 
         //Get property for framesToFire
         public int FramesToFire
@@ -21,6 +23,7 @@ namespace Roboquatic
             get { return framesToFire; }
         }
 
+        //Get property for shootingTimer
         public int ShootingTimer
         {
             get { return shootingTimer; }
@@ -37,6 +40,8 @@ namespace Roboquatic
             shootingTimer = 0;
             contactDamage = 1;
         }
+
+        //Methods
 
         //Checks if the enemy's shooting timer is great enough for it to be able to shoot
         public bool CanShoot()
@@ -55,11 +60,9 @@ namespace Roboquatic
         }
 
         //Updates the enemy
-        //
-        //Moves the enemy, then checks the enemy position to see if it needs to change the speed of the enemy,
-        //increments the shooting timer, checks if the enemy can shoot, and shoots a projectile if it can.
         public override void Update(GameTime gameTime, Game1 game)
         {
+            //Moves the enemy, then checks the enemy position to see if it needs to change the speed of the enemy, and moves the hitBox to the position.
             if (position.X <= game.ViewportWidth)
             {
                 position.X -= speed;
@@ -74,6 +77,7 @@ namespace Roboquatic
             {
                 speed = 0;
             }
+            //Increments the shooting timer, checks if the enemy can shoot, and shoots a projectile if it can.
             if (position.X <= game.ViewportWidth + position.Width)
             {
                 shootingTimer++;
@@ -83,6 +87,7 @@ namespace Roboquatic
                 shootingTimer = 0;
                 game.Projectiles.Add(Shoot());
             }
+            //Increments a hit timer if it was hit, so that it becomes invisible for 5 frames to indicate being hit
             if (hit)
             {
                 hitTimer++;
