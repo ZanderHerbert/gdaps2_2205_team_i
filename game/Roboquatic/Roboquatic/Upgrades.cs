@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Roboquatic
 {
-    class Upgrades
+    public class Upgrades
     {
         //Fields:
 
@@ -14,35 +14,39 @@ namespace Roboquatic
         private int upSpeed = 1;
         private int upDamage = 1;
 
+        private bool contact = false;
+
         private Texture2D healthUpgradeImg;
         private Texture2D speedUpgradeImg;
         private Texture2D damageUpgradeImg;
-        private Rectangle position;
+
+        private Rectangle positionHealth;
+        private Rectangle positionDamage;
+        private Rectangle positionSpeed;
 
         //Properties:
 
-        //Allows for read only properties for the actual upgrades:
-        public int UpHealth
+        //Allows for get and set properties for the position of the upgrades:
+
+        public Rectangle PositionHealth
         {
-            get { return upHealth; }
+            get { return positionHealth; }
+            set { positionHealth = value; }
         }
 
-        public int UpSpeed
+        public Rectangle PositionDamage
         {
-            get { return upSpeed; }
+            get { return positionDamage; }
+            set { positionDamage = value; }
         }
 
-        public int UpDamage
+        public Rectangle PositionSpeed
         {
-            get { return upDamage; }
+            get { return positionSpeed; }
+            set { positionSpeed = value; }
         }
 
         //Allows for get and set properties for the images of the upgrades:
-        public Rectangle Position
-        {
-            get { return position; }
-            set { position = value;}
-        }
 
         public Texture2D healthImage
         {
@@ -56,7 +60,7 @@ namespace Roboquatic
             set { speedUpgradeImg = value; }
         }
 
-        public Texture2D damgeImage
+        public Texture2D damageImage
         {
             get { return damageUpgradeImg; }
             set { damageUpgradeImg = value; }
@@ -64,30 +68,99 @@ namespace Roboquatic
 
         //Constructor:
 
-        public Upgrades (int upHealth, int upSpeed, int upDamage)
+        public Upgrades(int upHealth, int upSpeed, int upDamage,
+            Rectangle positionHealth, Rectangle positionDamage, Rectangle positionSpeed,
+            Texture2D healthImage, Texture2D damageImage, Texture2D speedImage)
         {
+
             this.upHealth = upHealth;
             this.upSpeed = upSpeed;
             this.upDamage = upDamage;
+
+            this.positionHealth = positionHealth;
+            this.positionDamage = positionDamage;
+            this.positionSpeed = positionSpeed;
+
+            this.healthImage = healthImage;
+            this.damageImage = damageImage;
+            this.speedImage = speedImage;
         }
 
         //Method that implements the upgrades
 
-        public int HealthUpgrade (int health)
+        //Update method 
+
+        public void Update(Game1 game)
         {
-           return health + upHealth;
+            //Checks if the player is in contact with the upgrade image
+
+            if (positionHealth.Intersects(game.PlayerPosition))
+            {
+                //Adds the upgrade to the max health
+
+                game.Player.MaxHP = game.Player.MaxHP + upHealth;
+
+                //Adds the health
+
+                game.Player.Health = game.Player.MaxHP;
+
+                //Makes the upgrade null so it no longer appears on screen and changes contact to true
+
+                game.Upgrade = null;
+
+                contact = true;
+            }
+            else if (positionDamage.Intersects(game.PlayerPosition))
+            {
+                //Adds the upgrade ammount to the projectile damage
+
+                game.Player.ProjectileDamage = game.Player.ProjectileDamage + upDamage;
+
+                //Makes the upgrade null so it no longer appears on screen and changes contact to true
+
+                game.Upgrade = null;
+
+                contact = true;
+            }
+            else if (positionSpeed.Intersects(game.PlayerPosition))
+            {
+                //Adds the upgrade ammount to the player's speed
+                game.Player.Speed = game.Player.Speed + upSpeed;
+
+                //Makes the upgrade null so it no longer appears on screen and changes contact to true
+
+                game.Upgrade = null;
+
+                contact = true;
+            }
         }
 
-        public int SpeedUpgrade (int speed)
+        // Draw the upgrades
+        public void Draw(SpriteBatch spriteBatch, SpriteFont font, Game1 game)
         {
-            return speed + upSpeed;
+            //Makes a variable to hold font
+
+            
+            //checks if the player reached the right time, cleared all enemies, and passed the checkpoint 
+          
+            if (time <= game.Time && !contact && game.Enemies.Count < 1)
+            {
+                //Draws the upgrades
+
+                spriteBatch.Draw(healthImage, positionHealth, Color.White);
+                spriteBatch.Draw(damageImage, positionDamage, Color.White);
+                spriteBatch.Draw(speedImage, positionSpeed, Color.White);
+
+                //Draws the text for each upgrade
+
+                spriteBatch.DrawString(font, "Health", new Vector2(game.ViewportWidth / 2 - 24, 148), Color.White);
+                spriteBatch.DrawString(font, "Damage", new Vector2(game.ViewportWidth / 2 - 224, 148), Color.White);
+                spriteBatch.DrawString(font, "Speed", new Vector2(game.ViewportWidth / 2 + 176, 148), Color.White);
+
+
+            }
         }
-
-        public int DamageUpgrade (int damage)
-        {
-            return damage + upDamage;
-        }
-
-
     }
+
+
 }

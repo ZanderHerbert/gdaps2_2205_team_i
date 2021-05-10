@@ -70,6 +70,7 @@ namespace Roboquatic
         private ProjectileManager projectileManager;
         private Texture2D laserSprite;
         private SpriteFont text;
+        private SpriteFont upgradeFont;
 
         // Buttons' fields
         private List<Button> buttons = new List<Button>();
@@ -106,10 +107,15 @@ namespace Roboquatic
         private int sizeChanges = 0;
         private float rotation;
         private float rotationAmount = .0005f;
+
         //Upgrade fields
         private Texture2D healthUpgrade;
         private Texture2D speedUpgrade;
         private Texture2D damageUpgrade;
+
+        private Rectangle posHealth;
+        private Rectangle posDamage;
+        private Rectangle posSpeed;
         #endregion
 
         #region Properties
@@ -184,24 +190,29 @@ namespace Roboquatic
             get { return player.ProjectileDamage; }
         }
 
-        //Get property for health upgrade
-        public int UpHealth
+        public Upgrades Upgrade
         {
-            get { return upgrade.UpHealth; }
+            get { return upgrade; }
+            set { upgrade = value; }
         }
 
-        //Get property for speed upgrade
-        public int UpSpeed
+        public Rectangle PosHealth
         {
-            get { return upgrade.UpSpeed; }
+            get { return posHealth; }
+            set { posHealth = value; }
         }
 
-        //Get property for damage upgrade
-        public int UpDamage 
+        public Rectangle PosDamage
         {
-            get { return upgrade.UpDamage; }
+            get { return posDamage; }
+            set { posHealth = value; }
         }
+        public Rectangle PosSpeed
+        {
+            get { return posSpeed; }
+            set { posHealth = value; }
 
+        }
         // Get property for player position
         public Rectangle PlayerPosition
         {
@@ -272,6 +283,12 @@ namespace Roboquatic
             titleBubblesPos = new Rectangle(0, 0, viewportWidth, viewportHeight);
             titleBubblesSwapPos = new Rectangle(0, viewportHeight, viewportWidth, viewportHeight);
 
+            //Initializes position for upgrades
+
+            posHealth = new Rectangle(viewportWidth / 2 - 24, 100 ,48, 48);
+            posDamage = new Rectangle(viewportWidth / 2 - 224, 100, 48, 48);
+            posSpeed = new Rectangle(ViewportWidth / 2 + 176, 100, 48, 48);
+
             base.Initialize();
         }
         #endregion
@@ -316,7 +333,17 @@ namespace Roboquatic
 
             // Load checkpoint
             checkpoint = Content.Load<Texture2D>("CheckpointFlag");
-            
+
+            //Load Upgrades 
+
+            healthUpgrade = Content.Load<Texture2D>("UpgradeHealth");
+            damageUpgrade = Content.Load<Texture2D>("UpgradeDamage");
+            speedUpgrade = Content.Load<Texture2D>("UpgradeSpeed");
+
+            //Load font for upgrades
+
+            upgradeFont = Content.Load<SpriteFont>("upgrade font");
+
             //Initializes the fileIO class with all the data and assets that it needs
             fileIO = new FileIO(rng, viewportHeight, viewportWidth, baseEnemySprite, baseEnemyProjectileSprite, aimedEnemySprite, staticEnemySprite, homingEnemySprite);
             //Loads in the file
@@ -405,15 +432,10 @@ namespace Roboquatic
             buttons[8].OnLeftButtonClick += this.ContinueButton;
 
             // Add Checkpoints
-            deactivedCheckpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 60));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 6));
             deactivedCheckpoints.Add(new Checkpoint("checkpoint2", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 120));
             deactivedCheckpoints.Add(new Checkpoint("checkpoint3", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 180));
 
-            //Adds the Upgrades
-
-            healthUpgrade = Content.Load<Texture2D>("heart upgrade");
-            speedUpgrade = Content.Load<Texture2D>("speedometer");
-            damageUpgrade = Content.Load<Texture2D>("bubble");
         }
         #endregion
 
@@ -604,7 +626,17 @@ namespace Roboquatic
                         // Update the activated checkpoint
                         if(activeCheckpoint != null)
                         {
-                            activeCheckpoint.Update(this);
+                            if (activeCheckpoint.Update(this))
+                            {
+                                upgrade = new Upgrades(1, 1, 1, posHealth, posDamage, posSpeed, healthUpgrade, damageUpgrade, speedUpgrade);
+                            }
+                        }
+
+                        //Checks if upgrades arent null and update sthem
+
+                        if (upgrade != null)
+                        {
+                            upgrade.Update(this);
                         }
                     }
                     break;
@@ -719,6 +751,13 @@ namespace Roboquatic
                     foreach(Checkpoint c in deactivedCheckpoints)
                     {
                         c.PrintMessage(_spriteBatch,this);
+                    }
+
+                    //Draws the upgrades
+
+                    if (upgrade != null)
+                    {
+                        upgrade.Draw(_spriteBatch, upgradeFont, this);
                     }
                     break;
 

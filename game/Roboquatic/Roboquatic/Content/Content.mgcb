@@ -434,6 +434,13 @@
 /processorParam:Quality=Best
 /build:UnderwaterSounds.wav
 
+#begin upgrade font.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:upgrade font.spritefont
+
 #begin UpgradeDamage.png
 /importer:TextureImporter
 /processor:TextureProcessor
