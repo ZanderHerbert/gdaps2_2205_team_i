@@ -292,7 +292,7 @@ namespace Roboquatic
             staticEnemySprite = Content.Load<Texture2D>("EnemyFishSprite3");
             homingEnemySprite = Content.Load<Texture2D>("EnemyFishSprite4");
             font = Content.Load<SpriteFont>("text");
-            laserSprite = Content.Load<Texture2D>("EnemyPlaceholder");
+            laserSprite = Content.Load<Texture2D>("laser");
             pauseText = Content.Load<Texture2D>("Pause");
 
             // Load Buttons
@@ -711,7 +711,7 @@ namespace Roboquatic
                     _spriteBatch.Draw(titlePage, new Rectangle(0, 0, viewportWidth, viewportHeight), Color.White);
                     _spriteBatch.Draw(titleBubbles, titleBubblesPos, Color.White);
                     _spriteBatch.Draw(titleBubblesLoop, titleBubblesSwapPos, Color.White);
-                    _spriteBatch.DrawString(font, "Select Your Control Scheme", new Vector2(70, 0), Color.Black);
+                    _spriteBatch.DrawString(font, "Select Your Control Scheme", new Vector2(70, 30), Color.Black);
                     buttons[2].Draw(_spriteBatch);
                     buttons[3].Draw(_spriteBatch);
                     buttons[4].Draw(_spriteBatch);
@@ -785,7 +785,7 @@ namespace Roboquatic
                     _spriteBatch.Draw(titlePage, new Rectangle(0, 0, viewportWidth, viewportHeight), Color.White);
                     _spriteBatch.Draw(titleBubbles, titleBubblesPos, Color.White);
                     _spriteBatch.Draw(titleBubblesLoop, titleBubblesSwapPos, Color.White);
-                    _spriteBatch.DrawString(font, "GameOver", new Vector2(260, 0), Color.Black);
+                    _spriteBatch.DrawString(font, "GameOver", new Vector2(260, 100), Color.Black);
                     buttons[8].Draw(_spriteBatch);
                     break;
             }
@@ -857,6 +857,7 @@ namespace Roboquatic
         }
         #endregion
 
+        #region Backdrop Method
         //Moves the backdrop
         public void MoveBackdrop(int speed, int multiplier)
         {
@@ -906,7 +907,7 @@ namespace Roboquatic
                           
             } 
         }
-
+        #endregion
 
         /// <summary>
         /// Reset the game in menu state
