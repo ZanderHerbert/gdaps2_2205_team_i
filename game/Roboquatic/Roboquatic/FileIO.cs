@@ -34,7 +34,8 @@ namespace Roboquatic
         private Texture2D homingEnemySprite;
 
         //Constructor
-        public FileIO(Random rng, int viewportHeight, int viewportWidth, Texture2D baseEnemySprite, Texture2D baseEnemyProjectileSprite, Texture2D aimedEnemySprite, Texture2D staticEnemySprite, Texture2D homingEnemySprite)
+        public FileIO(Random rng, int viewportHeight, int viewportWidth, Texture2D baseEnemySprite, Texture2D baseEnemyProjectileSprite, 
+            Texture2D aimedEnemySprite, Texture2D staticEnemySprite, Texture2D homingEnemySprite)
         {
             this.rng = rng;
             this.viewportHeight = viewportHeight;
@@ -48,6 +49,9 @@ namespace Roboquatic
         }
 
         //Methods
+        
+        /* These were the methods for saving and loading the character, but we decided to not implement this 
+         * 
         public void SaveCharacter(string fileName)
         {
             try
@@ -81,6 +85,7 @@ namespace Roboquatic
                 throw new NotImplementedException();
             }
         }
+        */
 
         public void LoadFormation(string fileName)
         {
@@ -170,11 +175,13 @@ namespace Roboquatic
                         //Depending on the enum it adds that type of enemy
                         case Enemies.Base:
                             //creates the enemy and makes the rectangle based on where it is in the 2d array
-                            enemiesToAdd.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth + (i * 70), offset + (j * 69), 64, 64), 2, 120, baseEnemyProjectileSprite, new Rectangle(0, 0, 64, 52)));
+                            enemiesToAdd.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth + (i * 70), offset + (j * 69), 64, 64), 2, 120, 
+                                baseEnemyProjectileSprite, new Rectangle(0, 0, 64, 52)));
                             break;
 
                         case Enemies.Aiming:
-                            enemiesToAdd.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth + (i * 70), offset + (j * 69), 64, 64), 2, 120, baseEnemyProjectileSprite, new Rectangle(0, 0, 62, 40)));
+                            enemiesToAdd.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth + (i * 70), offset + (j * 69), 64, 64), 2, 120,
+                                baseEnemyProjectileSprite, new Rectangle(0, 0, 62, 40)));
                             break;
 
                         case Enemies.Static:
@@ -182,7 +189,8 @@ namespace Roboquatic
                             break;
 
                         case Enemies.Homing:
-                            enemiesToAdd.Add(new RangedHomingEnemy(homingEnemySprite, new Rectangle(viewportWidth + (i * 70), offset + (j * 69), 64, 64), 2, 240, baseEnemyProjectileSprite, new Rectangle(0, 0, 62, 36)));
+                            enemiesToAdd.Add(new RangedHomingEnemy(homingEnemySprite, new Rectangle(viewportWidth + (i * 70), offset + (j * 69), 64, 64), 2, 240,
+                                baseEnemyProjectileSprite, new Rectangle(0, 0, 62, 36)));
                             break;
 
                         default:
@@ -209,11 +217,13 @@ namespace Roboquatic
                     switch (enemies[i, j])
                     {
                         case Enemies.Base:
-                            enemiesToAdd.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth + (i * 70), randomOffset + (j * 69), 64, 64), 2, 120, baseEnemyProjectileSprite, new Rectangle(0, 0, 64, 52)));
+                            enemiesToAdd.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth + (i * 70), randomOffset + (j * 69), 64, 64), 2, 120, 
+                                baseEnemyProjectileSprite, new Rectangle(0, 0, 64, 52)));
                             break;
 
                         case Enemies.Aiming:
-                            enemiesToAdd.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth + (i * 70), randomOffset + (j * 69), 64, 64), 2, 120, baseEnemyProjectileSprite, new Rectangle(0, 0, 62, 40)));
+                            enemiesToAdd.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth + (i * 70), randomOffset + (j * 69), 64, 64), 2, 120, 
+                                baseEnemyProjectileSprite, new Rectangle(0, 0, 62, 40)));
                             break;
 
                         case Enemies.Static:
@@ -221,7 +231,8 @@ namespace Roboquatic
                             break;
 
                         case Enemies.Homing:
-                            enemiesToAdd.Add(new RangedHomingEnemy(homingEnemySprite, new Rectangle(viewportWidth + (i * 70), randomOffset + (j * 69), 64, 64), 2, 240, baseEnemyProjectileSprite, new Rectangle(0, 0, 62, 36)));
+                            enemiesToAdd.Add(new RangedHomingEnemy(homingEnemySprite, new Rectangle(viewportWidth + (i * 70), randomOffset + (j * 69), 64, 64), 2, 240,
+                                baseEnemyProjectileSprite, new Rectangle(0, 0, 62, 36)));
                             break;
 
                         default:

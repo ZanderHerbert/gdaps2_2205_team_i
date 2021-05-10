@@ -613,19 +613,8 @@ namespace Roboquatic
                                 {
                                     enemies.AddRange(fileIO.AddFormation(9, 0));
                                 }
-                                    /*
-                                    if (!addedFormation2)
-                                    {
-                                        enemiesToAdd[0] = fileIO.AddFormation(1, viewportHeight - 343);
-                                        addedFormation2 = true;
-                                    }
-                                    if (enemiesToAdd[0] != null)
-                                    {
-                                        enemies.AddRange(enemiesToAdd[0]);
-                                        enemiesToAdd[0] = null;
-                                    }
-                                    */
                                 }
+
                             else if (deactivedCheckpoints[0].Contact == true)
                             {
                                 if(timer % 240 == rng.Next(0, 240))
@@ -645,18 +634,6 @@ namespace Roboquatic
                                     enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite, new Rectangle(0, 0, 64, 52)));
                                 }
 
-                                /*
-                                if (!addedFormation1)
-                                {
-                                    enemiesToAdd[0] = fileIO.AddFormation(0, rng.Next(0, viewportHeight - 343));
-                                    addedFormation1 = true;
-                                }
-                                if (enemiesToAdd[0] != null)
-                                {
-                                    enemies.AddRange(enemiesToAdd[0]);
-                                    enemiesToAdd[0] = null;
-                                }
-                                */
                             }
                             else
                             {
