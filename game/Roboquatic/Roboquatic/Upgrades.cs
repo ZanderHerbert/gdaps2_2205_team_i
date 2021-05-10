@@ -15,6 +15,7 @@ namespace Roboquatic
         private int upDamage = 1;
 
         private bool contact = false;
+        private float time;
 
         private Texture2D healthUpgradeImg;
         private Texture2D speedUpgradeImg;
