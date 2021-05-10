@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 
@@ -105,6 +106,8 @@ namespace Roboquatic
         private Texture2D healthUpgrade;
         private Texture2D speedUpgrade;
         private Texture2D damageUpgrade;
+        //Audio fields
+        private Song audio;
         #endregion
 
         #region Properties
@@ -424,6 +427,14 @@ namespace Roboquatic
             healthUpgrade = Content.Load<Texture2D>("heart upgrade");
             speedUpgrade = Content.Load<Texture2D>("speedometer");
             damageUpgrade = Content.Load<Texture2D>("bubble");
+
+            //Loads audiofile
+            this.audio = Content.Load<Song>("UnderwaterSounds");
+            MediaPlayer.Play(audio);
+            MediaPlayer.IsRepeating = true;
+            //Use this to adjust volume
+            //1.0 is full and 0.0 is silent
+            MediaPlayer.Volume = 1.0f;
         }
         #endregion
 
