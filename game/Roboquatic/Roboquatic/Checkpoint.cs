@@ -12,7 +12,6 @@ namespace Roboquatic
         private float time; // This is the time when a checkpoint should show up in the game
         private bool contact;
 
-
         // Game stats fields
         private int health;
         private int damage;
@@ -121,10 +120,12 @@ namespace Roboquatic
         public void PrintMessage(SpriteBatch spriteBatch, Game1 game)
         {
             // If contacted, then send a message that says "game saved"
-            if (contact && game.Time <= time + 2 && game.Time >= time)
+            /*
+            if (contact && game.Time < time + 2 && game.Time >= time && game.Upgrade != null)
             {
                 spriteBatch.DrawString(game.Font, "Game saved!", new Vector2(game.ViewportWidth / 2, game.ViewportHeight / 2), Color.White);
             }
+            */
         }
     }
 }

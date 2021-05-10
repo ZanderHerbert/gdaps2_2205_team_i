@@ -512,11 +512,11 @@
 /processorParam:TextureFormat=Color
 /build:titleteamname.png
 
-#begin UnderwaterSounds.wav
-/importer:WavImporter
+#begin UnderwaterSounds.mp3
+/importer:Mp3Importer
 /processor:SongProcessor
 /processorParam:Quality=Best
-/build:UnderwaterSounds.wav
+/build:UnderwaterSounds.mp3
 
 #begin upgrade font.spritefont
 /importer:FontDescriptionImporter

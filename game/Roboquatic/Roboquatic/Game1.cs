@@ -293,7 +293,6 @@ namespace Roboquatic
             increment = true;
             enemiesToAdd = new List<Enemy>[10];
             pickups = new List<HealthPickup>();
-
             logoVect = new Vector2(400, viewportHeight - 390);
             origin = new Vector2(400, 130);
             scale = new Vector2(.78f,.78f);
@@ -535,7 +534,10 @@ namespace Roboquatic
 
                 case GameState.Game:
                     // Update actual game time
-                    time += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (increment)
+                    {
+                        time += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    }
 
                     IsMouseVisible = false;
 
@@ -576,6 +578,11 @@ namespace Roboquatic
                         //MovesBackdrop
                         MoveBackdrop(2, -1);
 
+                        if(pastCheckpoints == 3)
+                        {
+                            spawnEnemy = true;
+                        }
+
                         // Randomly creates enemies based on a timer at random positions
                         //
                         // Will need to be changed, only here for testing purposes
@@ -584,7 +591,7 @@ namespace Roboquatic
                             //FileIO
                             
                             //Spawns boss after reaching end
-                            if (deactivedCheckpoints[2].Contact == true)
+                            if (pastCheckpoints == 3)
                             {
                                 if (!addedBoss)
                                 {
@@ -993,6 +1000,8 @@ namespace Roboquatic
             projectiles.Clear();
             player.Position = new Rectangle(0, 0, 48, 48);
             player.Health = player.MaxHP;
+            player.ProjectileDamage = 1;
+            player.Speed = 1;
             player.IsAlive = true;
             time = 0;
             timer = 0;
