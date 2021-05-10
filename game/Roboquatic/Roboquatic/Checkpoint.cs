@@ -59,8 +59,21 @@ namespace Roboquatic
         /// Save the player's progress
         /// </summary>
         /// <param name="game"></param>
-        public void Update(Game1 game)
+        public bool Update(Game1 game)
         {
+            // Within the checkpoint time, no enemies should spawn
+            // Until the player reached the checkpoint
+            if (time <= game.Time && !contact )
+            {
+                game.SpawnEnemy = false;
+                game.Increment = false;
+            }
+            else if (game.Upgrade == null)
+            {
+                game.SpawnEnemy = true;
+                game.Increment = true;
+            }
+
             if (position.Intersects(game.PlayerPosition))
             {
                 // First save the player's stats
@@ -76,20 +89,12 @@ namespace Roboquatic
                 contact = true;
 
                 game.Time = time;
+
+                return true;
             }
 
-            // Within the checkpoint time, no enemies should spawn
-            // Until the player reached the checkpoint
-            if (time <= game.Time && !contact)
-            {
-                game.SpawnEnemy = false;
-                game.Increment = false;
-            }
-            else
-            {
-                game.SpawnEnemy = true;
-                game.Increment = true;
-            }
+            return false;
+
         }
 
         /// <summary>
