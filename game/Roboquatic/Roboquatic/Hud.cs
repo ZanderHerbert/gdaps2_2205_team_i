@@ -17,6 +17,7 @@ namespace Roboquatic
         private Texture2D checkpointFlag;
         private Texture2D playerTexture;
         private Texture2D bossTexture;
+        private Texture2D progressText;
 
         public Hud(Game1 game)
         {
@@ -26,6 +27,7 @@ namespace Roboquatic
             checkpointFlag = game.Content.Load<Texture2D>("CheckpointFlag");
             bossTexture = game.Content.Load<Texture2D>("BossSprite1");
             playerTexture = game.Content.Load<Texture2D>("PlayerFishSprite");
+            progressText = game.Content.Load<Texture2D>("Progress");
             rightHealthOffset = 0;
             onceThrough = false;
         }
@@ -85,7 +87,7 @@ namespace Roboquatic
 
             
             sb.Draw(progressBar, new Rectangle(280, screenHeight - 38, 428, 20), new Rectangle(2, 59, 285, 20), Color.White);
-            sb.Draw(progressBar, new Rectangle(60, screenHeight - 45, 144, 30), new Rectangle(7, 4, 240, 50), Color.White);
+            sb.Draw(progressText, new Rectangle(60, screenHeight - 45, 144, 30), new Rectangle(0, 0, 240, 50), Color.White);
             for(int i = 0; i <= checkpointsCrossed; i++)
             {
                 if(i == checkpointsCrossed && checkpointsCrossed != 3)

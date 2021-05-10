@@ -25,6 +25,18 @@
 /processorParam:TextureFormat=Color
 /build:backButton.png
 
+#begin backButton2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:backButton2.png
+
 #begin bg2.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -229,6 +241,18 @@
 /processorParam:TextureFormat=Color
 /build:MenuButton.png
 
+#begin menuButton2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:menuButton2.png
+
 #begin mouseButton.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -337,6 +361,18 @@
 /processorParam:TextureFormat=Color
 /build:PlayerFishSprite.png
 
+#begin Progress.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Progress.png
+
 #begin ProgressBar.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -372,6 +408,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ResumeButton.png
+
+#begin resumeButton2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:resumeButton2.png
 
 #begin roboquatic2.png
 /importer:TextureImporter

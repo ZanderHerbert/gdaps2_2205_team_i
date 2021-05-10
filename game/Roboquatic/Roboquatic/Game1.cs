@@ -40,6 +40,7 @@ namespace Roboquatic
         private int pastCheckpoints = 0;
         private Upgrades upgrade;
         private Texture2D pauseText;
+        private List<HealthPickup> pickups;
 
         //Test for FileIO
         private FileIO fileIO;
@@ -140,6 +141,12 @@ namespace Roboquatic
             set { projectiles = value; }
         }
 
+        public List<HealthPickup> Pickups
+        {
+            get { return pickups; }
+            set { pickups = value; }
+        }
+
         //Get property for enemyManager
         public EnemyManager EnemyManager
         {
@@ -226,6 +233,12 @@ namespace Roboquatic
         {
             get { return font; }
         }
+
+        //Get property for rng
+        public Random RNG
+        {
+            get { return rng; }
+        }
         #endregion
 
         public Game1()
@@ -259,6 +272,7 @@ namespace Roboquatic
             hud = new Hud(this);
             increment = true;
             enemiesToAdd = new List<Enemy>[10];
+            pickups = new List<HealthPickup>();
 
             logoVect = new Vector2(400, viewportHeight - 390);
             origin = new Vector2(400, 130);
@@ -305,10 +319,10 @@ namespace Roboquatic
             titleBubblesLoop = Content.Load<Texture2D>("titleBubbles");
             logo = Content.Load<Texture2D>("titleLogo");
             teamName = Content.Load<Texture2D>("titleteamname");
-            backButton = Content.Load<Texture2D>("backButton");
-            menuButton = Content.Load<Texture2D>("MenuButton");
-            resumeButton = Content.Load<Texture2D>("ResumeButton");
-            continueButton = Content.Load<Texture2D>("ContinueButton");
+            backButton = Content.Load<Texture2D>("backButton2");
+            menuButton = Content.Load<Texture2D>("menuButton2");
+            resumeButton = Content.Load<Texture2D>("resumeButton2");
+            continueButton = Content.Load<Texture2D>("menuButton2");
 
             // Load checkpoint
             checkpoint = Content.Load<Texture2D>("CheckpointFlag");
@@ -362,14 +376,14 @@ namespace Roboquatic
             // Pause
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2, 100, 100, 50),
+                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 89, 100, 179, 54),
                 resumeButton,
                 resumeButton
                 ));
 
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2, 200, 100, 50),
+                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 89, 200, 179, 54),
                 menuButton,
                 menuButton
                 ));
@@ -384,7 +398,7 @@ namespace Roboquatic
             // Gameover
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2, 300, 187, 65),
+                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 89, 250, 179, 54),
                 continueButton,
                 continueButton
                 ));
@@ -498,6 +512,15 @@ namespace Roboquatic
                         //Updates all the projectiles and enemies
                         projectileManager.ManageProjectiles(this, gameTime);
                         enemyManager.ManageEnemies(this, gameTime);
+
+                        for(int i = 0; i < pickups.Count; i++)
+                        {
+                            if (pickups[i].Update(player))
+                            {
+                                pickups.Remove(pickups[i]);
+                                i--;
+                            }
+                        }
 
                         //Processes player input through the player object
                         if (keyboardControls)
@@ -745,6 +768,11 @@ namespace Roboquatic
                     // Draw enemies
                     enemyManager.Draw(_spriteBatch);
 
+                    foreach(HealthPickup pickup in pickups)
+                    {
+                        pickup.Draw(_spriteBatch);
+                    }
+
                     // Draw player
                     if (player != null)
                     {
@@ -768,7 +796,6 @@ namespace Roboquatic
                     {
                         c.PrintMessage(_spriteBatch,this);
                     }
-                    //_spriteBatch.DrawString(font, string.Format("{0}", ((timer - 1 + 1 * pastCheckpoints) % 3601.0)), new Vector2(10, 10), Color.White);
                     break;
 
                 case GameState.Pause:
@@ -785,7 +812,7 @@ namespace Roboquatic
                     _spriteBatch.Draw(titlePage, new Rectangle(0, 0, viewportWidth, viewportHeight), Color.White);
                     _spriteBatch.Draw(titleBubbles, titleBubblesPos, Color.White);
                     _spriteBatch.Draw(titleBubblesLoop, titleBubblesSwapPos, Color.White);
-                    _spriteBatch.DrawString(font, "GameOver", new Vector2(260, 100), Color.Black);
+                    _spriteBatch.DrawString(font, "GameOver", new Vector2(270, 150), Color.Black);
                     buttons[8].Draw(_spriteBatch);
                     break;
             }

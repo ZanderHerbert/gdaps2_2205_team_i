@@ -44,6 +44,10 @@ namespace Roboquatic
                 hitEnemy.TakeDamage(damage);
                 if (hitEnemy.Health <= 0)
                 {
+                    if(game.RNG.Next(0,20) == 0)
+                    {
+                        game.Pickups.Add(new HealthPickup(new Rectangle(hitEnemy.Position.X, hitEnemy.Position.Y, 32, 32), game));
+                    }
                     game.Enemies.Remove(hitEnemy);
                 }
                 hit = true;
