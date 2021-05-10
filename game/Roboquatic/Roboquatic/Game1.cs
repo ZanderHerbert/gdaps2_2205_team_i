@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 
@@ -26,30 +27,25 @@ namespace Roboquatic
         private MouseState mouse;
         private int mouseX;
         private int mouseY;
-
         private bool keyboardControls;
-
         private Texture2D backdrop;
         private Texture2D backdropSwap;
-
         private Rectangle backdropPos;
         private Rectangle backdropSwapPos;
-
         private int viewportWidth;
         private int viewportHeight;
-
         private int timer;
         private bool increment;
         private List<Projectile> projectiles;
-
         private Hud hud;
         private int pastCheckpoints = 0;
-
         private Upgrades upgrade;
+        private Texture2D pauseText;
+        private List<HealthPickup> pickups;
 
         //Test for FileIO
         private FileIO fileIO;
-        List<Enemy> enemiesToAdd;
+        List<Enemy>[] enemiesToAdd;
         private bool addedFormation1;
         private bool addedFormation2;
         private bool addedBoss;
@@ -112,6 +108,8 @@ namespace Roboquatic
         private Texture2D healthUpgrade;
         private Texture2D speedUpgrade;
         private Texture2D damageUpgrade;
+        //Audio fields
+        private Song audio;
 
         private Rectangle posHealth;
         private Rectangle posDamage;
@@ -150,6 +148,12 @@ namespace Roboquatic
         {
             get { return projectiles; }
             set { projectiles = value; }
+        }
+
+        public List<HealthPickup> Pickups
+        {
+            get { return pickups; }
+            set { pickups = value; }
         }
 
         //Get property for enemyManager
@@ -243,6 +247,12 @@ namespace Roboquatic
         {
             get { return font; }
         }
+
+        //Get property for rng
+        public Random RNG
+        {
+            get { return rng; }
+        }
         #endregion
 
         public Game1()
@@ -259,8 +269,8 @@ namespace Roboquatic
             keyboardControls = false;
             viewportWidth = this.GraphicsDevice.Viewport.Width;
             viewportHeight = this.GraphicsDevice.Viewport.Height;
-            backdropPos = new Rectangle(0, 0, viewportWidth * 2, viewportHeight);
-            backdropSwapPos = new Rectangle(viewportWidth * 2, 0, viewportWidth * 2, viewportHeight);
+            backdropPos = new Rectangle(0, 0, viewportWidth, viewportHeight);
+            backdropSwapPos = new Rectangle(viewportWidth, 0, viewportWidth, viewportHeight);
             timer = 0;
             projectiles = new List<Projectile>(1);
             enemies = new List<Enemy>(1);
@@ -275,6 +285,8 @@ namespace Roboquatic
             currentCheckpoint = null;
             hud = new Hud(this);
             increment = true;
+            enemiesToAdd = new List<Enemy>[10];
+            pickups = new List<HealthPickup>();
 
             logoVect = new Vector2(400, viewportHeight - 390);
             origin = new Vector2(400, 130);
@@ -299,14 +311,14 @@ namespace Roboquatic
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             //Loading in textures and initializing the player
-            player = new Player(1, 20, 10, new Rectangle(0, 0, 48, 48), 7, 1, Content.Load<Texture2D>("bubble"));
+            player = new Player(1, 20, 10, new Rectangle(0, 0, 48, 48), 7, 1, Content.Load<Texture2D>("bubble"), new Rectangle(0, 0, 47, 27));
             player.Sprite = Content.Load<Texture2D>("PlayerFishSprite");
 
             // Load background 
-            backdrop = Content.Load<Texture2D>("PlaceholderBackdrop");
-            backdropSwap = Content.Load<Texture2D>("PlaceholderBackdropSwap");
+            backdrop = Content.Load<Texture2D>("bg2");
+            backdropSwap = Content.Load<Texture2D>("bg2");
 
-            // Load enemies 
+            // Load enemies & misc
             bossEnemySprite = Content.Load<Texture2D>("BossSprite1");
             baseEnemySprite = Content.Load<Texture2D>("EnemyFishSprite2");
             baseEnemyProjectileSprite = Content.Load<Texture2D>("bubble");
@@ -314,7 +326,8 @@ namespace Roboquatic
             staticEnemySprite = Content.Load<Texture2D>("EnemyFishSprite3");
             homingEnemySprite = Content.Load<Texture2D>("EnemyFishSprite4");
             font = Content.Load<SpriteFont>("text");
-            laserSprite = Content.Load<Texture2D>("EnemyPlaceholder");
+            laserSprite = Content.Load<Texture2D>("laser");
+            pauseText = Content.Load<Texture2D>("Pause");
 
             // Load Buttons
             startButton = Content.Load<Texture2D>("OnStart");
@@ -326,10 +339,10 @@ namespace Roboquatic
             titleBubblesLoop = Content.Load<Texture2D>("titleBubbles");
             logo = Content.Load<Texture2D>("titleLogo");
             teamName = Content.Load<Texture2D>("titleteamname");
-            backButton = Content.Load<Texture2D>("backButton");
-            menuButton = Content.Load<Texture2D>("MenuButton");
-            resumeButton = Content.Load<Texture2D>("ResumeButton");
-            continueButton = Content.Load<Texture2D>("ContinueButton");
+            backButton = Content.Load<Texture2D>("backButton2");
+            menuButton = Content.Load<Texture2D>("menuButton2");
+            resumeButton = Content.Load<Texture2D>("resumeButton2");
+            continueButton = Content.Load<Texture2D>("menuButton2");
 
             // Load checkpoint
             checkpoint = Content.Load<Texture2D>("CheckpointFlag");
@@ -393,21 +406,21 @@ namespace Roboquatic
             // Pause
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2, 100, 100, 50),
+                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 89, 100, 179, 54),
                 resumeButton,
                 resumeButton
                 ));
 
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2, 200, 100, 50),
+                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 89, 200, 179, 54),
                 menuButton,
                 menuButton
                 ));
 
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2, 300, 187, 65),
+                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 93, 300, 187, 65),
                 controlsButton,
                 controlsButton
                 ));
@@ -415,7 +428,7 @@ namespace Roboquatic
             // Gameover
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2, 300, 187, 65),
+                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 89, 250, 179, 54),
                 continueButton,
                 continueButton
                 ));
@@ -436,6 +449,19 @@ namespace Roboquatic
             deactivedCheckpoints.Add(new Checkpoint("checkpoint2", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 120));
             deactivedCheckpoints.Add(new Checkpoint("checkpoint3", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 180));
 
+            //Adds the Upgrades
+
+            healthUpgrade = Content.Load<Texture2D>("heart upgrade");
+            speedUpgrade = Content.Load<Texture2D>("speedometer");
+            damageUpgrade = Content.Load<Texture2D>("bubble");
+
+            //Loads audiofile
+            this.audio = Content.Load<Song>("UnderwaterSounds");
+            MediaPlayer.Play(audio);
+            MediaPlayer.IsRepeating = true;
+            //Use this to adjust volume
+            //1.0 is full and 0.0 is silent
+            MediaPlayer.Volume = 1.0f;
         }
         #endregion
 
@@ -498,6 +524,9 @@ namespace Roboquatic
                 case GameState.Settings:
                     IsMouseVisible = true;
 
+                    //Moves the backdrop
+                    MoveBackdrop(1, -1);
+
                     // Buttons Update
                     buttons[2].Update();
                     buttons[3].Update();
@@ -522,8 +551,14 @@ namespace Roboquatic
                         projectileManager.ManageProjectiles(this, gameTime);
                         enemyManager.ManageEnemies(this, gameTime);
 
-                        //Updates the player object
-                        player.Update(gameTime, this);
+                        for(int i = 0; i < pickups.Count; i++)
+                        {
+                            if (pickups[i].Update(player))
+                            {
+                                pickups.Remove(pickups[i]);
+                                i--;
+                            }
+                        }
 
                         //Processes player input through the player object
                         if (keyboardControls)
@@ -535,8 +570,11 @@ namespace Roboquatic
                             player.ProcessInputMouse(Mouse.GetState(), this);
                         }
 
+                        //Updates the player object
+                        player.Update(gameTime, this);
+
                         //MovesBackdrop
-                        MoveBackdrop(2, -3);
+                        MoveBackdrop(2, -1);
 
                         // Randomly creates enemies based on a timer at random positions
                         //
@@ -549,55 +587,94 @@ namespace Roboquatic
                             {
                                 if (!addedBoss)
                                 {
-                                    enemies.Add(new Boss(bossEnemySprite, new Rectangle(viewportWidth - 128, viewportHeight / 2 - 64, 256, 128), 0, baseEnemyProjectileSprite, -10, -20, 6, 50, rng, 3, 1, laserSprite));
+                                    enemies.Add(new Boss(bossEnemySprite, new Rectangle(viewportWidth - 128, viewportHeight / 2 - 64, 256, 128), 0, baseEnemyProjectileSprite, -10, -20, 6, 50, rng, 3, 1, laserSprite, new Rectangle(viewportWidth - 128, viewportHeight / 2 - 64, 256, 128)));
                                     addedBoss = true;
                                 }
                             }
-                            /*
                             else if (deactivedCheckpoints[1].Contact == true)
                             {
-                                if (!addedFormation2)
+                                if((timer - 1 + 1 * pastCheckpoints) % 3601 == 15)
                                 {
-                                    enemiesToAdd = fileIO.AddFormation(1, 10);
-                                    addedFormation2 = true;
+                                    enemies.AddRange(fileIO.AddFormation(3, rng.Next(0, viewportHeight - 343)));
                                 }
-                                for (int i = 0; i < enemiesToAdd.Count; i++)
+                                if ((timer - 1 + 1 * pastCheckpoints) % 3601 == 500)
                                 {
-                                    enemies.Add(enemiesToAdd[i]);
-                                    enemiesToAdd.RemoveAt(i);
+                                    enemies.AddRange(fileIO.AddFormation(7, 0));
                                 }
-                            }
+                                if ((timer - 1 + 1 * pastCheckpoints) % 3601 == 2550)
+                                {
+                                    enemies.AddRange(fileIO.AddFormation(4, rng.Next(0, viewportHeight - 343)));
+                                }
+                                if ((timer - 1 + 1 * pastCheckpoints) % 3601 == 2950)
+                                {
+                                    enemies.AddRange(fileIO.AddFormation(8, 0));
+                                }
+                                if ((timer - 1 + 1 * pastCheckpoints) % 3601 == 3550)
+                                {
+                                    enemies.AddRange(fileIO.AddFormation(9, 0));
+                                }
+                                    /*
+                                    if (!addedFormation2)
+                                    {
+                                        enemiesToAdd[0] = fileIO.AddFormation(1, viewportHeight - 343);
+                                        addedFormation2 = true;
+                                    }
+                                    if (enemiesToAdd[0] != null)
+                                    {
+                                        enemies.AddRange(enemiesToAdd[0]);
+                                        enemiesToAdd[0] = null;
+                                    }
+                                    */
+                                }
                             else if (deactivedCheckpoints[0].Contact == true)
                             {
+                                if(timer % 240 == rng.Next(0, 240))
+                                {
+                                    enemies.AddRange(fileIO.AddFormation(5, rng.Next(0, viewportHeight - 63)));
+                                }
+                                if (timer % 360 == rng.Next(0, 360))
+                                {
+                                    enemies.AddRange(fileIO.AddFormation(2, rng.Next(0, viewportHeight - 63)));
+                                }
+                                if (timer % 480 == rng.Next(0, 480))
+                                {
+                                    enemies.AddRange(fileIO.AddFormation(6, rng.Next(0, viewportHeight - 203)));
+                                }
+                                if (timer % 240 == rng.Next(0, 240))
+                                {
+                                    enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite, new Rectangle(0, 0, 64, 52)));
+                                }
+
+                                /*
                                 if (!addedFormation1)
                                 {
-                                    enemiesToAdd = fileIO.AddFormation(0, 10);
+                                    enemiesToAdd[0] = fileIO.AddFormation(0, rng.Next(0, viewportHeight - 343));
                                     addedFormation1 = true;
                                 }
-                                for (int i = 0; i < enemiesToAdd.Count; i++)
+                                if (enemiesToAdd[0] != null)
                                 {
-                                    enemies.Add(enemiesToAdd[i]);
-                                    enemiesToAdd.RemoveAt(i);
+                                    enemies.AddRange(enemiesToAdd[0]);
+                                    enemiesToAdd[0] = null;
                                 }
+                                */
                             }
-                            */
                             else
                             {
-                            if (timer % 240 == rng.Next(0, 240))
+                                if (timer % 240 == rng.Next(0, 240))
                                 {
-                                    enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite));
+                                    enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite, new Rectangle(0, 0, 64, 52)));
                                 }
                                 if (timer % 240 == rng.Next(0, 240))
                                 {
-                                    enemies.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite));
+                                    enemies.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite, new Rectangle(0, 0, 62, 40)));
                                 }
                                 if (timer % 240 == rng.Next(0, 240))
                                 {
-                                    enemies.Add(new StaticEnemy(staticEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 4));
+                                    enemies.Add(new StaticEnemy(staticEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 4, new Rectangle(0, 0, 62, 56)));
                                 }
                                 if (timer % 240 == rng.Next(0, 240))
                                 {
-                                    enemies.Add(new RangedHomingEnemy(homingEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 240, baseEnemyProjectileSprite));
+                                    enemies.Add(new RangedHomingEnemy(homingEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 240, baseEnemyProjectileSprite, new Rectangle(0, 0, 62, 36)));
                                 }
                             }
                         }
@@ -645,6 +722,9 @@ namespace Roboquatic
                     IsMouseVisible = true;
                     previousState = currentState;
 
+                    //Moves the backdrop
+                    MoveBackdrop(1, -1);
+
                     // Press ESC to resume 
                     if (SingleKeyPress(Keys.Escape, kbState))
                     {
@@ -659,6 +739,9 @@ namespace Roboquatic
 
                 case GameState.GameOver:
                     IsMouseVisible = true;
+
+                    //Moves the backdrop
+                    MoveBackdrop(1, -1);
 
                     // Buttons Update
                     buttons[8].Update();
@@ -696,7 +779,10 @@ namespace Roboquatic
                     break;
 
                 case GameState.Settings:
-                    _spriteBatch.DrawString(font, "Settings", new Vector2(0, 0), Color.White);
+                    _spriteBatch.Draw(titlePage, new Rectangle(0, 0, viewportWidth, viewportHeight), Color.White);
+                    _spriteBatch.Draw(titleBubbles, titleBubblesPos, Color.White);
+                    _spriteBatch.Draw(titleBubblesLoop, titleBubblesSwapPos, Color.White);
+                    _spriteBatch.DrawString(font, "Select Your Control Scheme", new Vector2(70, 30), Color.Black);
                     buttons[2].Draw(_spriteBatch);
                     buttons[3].Draw(_spriteBatch);
                     buttons[4].Draw(_spriteBatch);
@@ -709,6 +795,7 @@ namespace Roboquatic
                     // Draw a timer 
                     //_spriteBatch.DrawString(font, string.Format("{0:f0}", time), new Vector2(10, 10), Color.White);
                     //_spriteBatch.DrawString(font, string.Format(currentCheckpoint.GetName), new Vector2(50, 10), Color.White);
+                    
 
                     // Draw the HUD
                     hud.Draw(_spriteBatch, player, viewportHeight, pastCheckpoints, (((timer - 1) % 3601.0) / 3601.0));
@@ -728,6 +815,11 @@ namespace Roboquatic
 
                     // Draw enemies
                     enemyManager.Draw(_spriteBatch);
+
+                    foreach(HealthPickup pickup in pickups)
+                    {
+                        pickup.Draw(_spriteBatch);
+                    }
 
                     // Draw player
                     if (player != null)
@@ -762,15 +854,20 @@ namespace Roboquatic
                     break;
 
                 case GameState.Pause:
-                    _spriteBatch.DrawString(font, "Pause", new Vector2(0, 0), Color.White);
-
+                    _spriteBatch.Draw(titlePage, new Rectangle(0, 0, viewportWidth, viewportHeight), Color.White);
+                    _spriteBatch.Draw(titleBubbles, titleBubblesPos, Color.White);
+                    _spriteBatch.Draw(titleBubblesLoop, titleBubblesSwapPos, Color.White);
+                    _spriteBatch.Draw(pauseText, new Vector2(5, 5), Color.White);
                     buttons[5].Draw(_spriteBatch);
                     buttons[6].Draw(_spriteBatch);
                     buttons[7].Draw(_spriteBatch);
                     break;
 
                 case GameState.GameOver:
-                    _spriteBatch.DrawString(font, "GameOver", new Vector2(0, 0), Color.White);
+                    _spriteBatch.Draw(titlePage, new Rectangle(0, 0, viewportWidth, viewportHeight), Color.White);
+                    _spriteBatch.Draw(titleBubbles, titleBubblesPos, Color.White);
+                    _spriteBatch.Draw(titleBubblesLoop, titleBubblesSwapPos, Color.White);
+                    _spriteBatch.DrawString(font, "GameOver", new Vector2(270, 150), Color.Black);
                     buttons[8].Draw(_spriteBatch);
                     break;
             }
@@ -842,6 +939,7 @@ namespace Roboquatic
         }
         #endregion
 
+        #region Backdrop Method
         //Moves the backdrop
         public void MoveBackdrop(int speed, int multiplier)
         {
@@ -871,6 +969,9 @@ namespace Roboquatic
                     break;
 
                 case (GameState.Menu):
+                case (GameState.Settings):
+                case (GameState.Pause):
+                case (GameState.GameOver):
 
                     titleBubblesPos.Y -= speed;
                     titleBubblesSwapPos.Y -= speed;
@@ -888,7 +989,7 @@ namespace Roboquatic
                           
             } 
         }
-
+        #endregion
 
         /// <summary>
         /// Reset the game in menu state

@@ -170,19 +170,19 @@ namespace Roboquatic
                         //Depending on the enum it adds that type of enemy
                         case Enemies.Base:
                             //creates the enemy and makes the rectangle based on where it is in the 2d array
-                            enemiesToAdd.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth + (i * 70), offset + (j * 70), 64, 64), 2, 120, baseEnemyProjectileSprite));
+                            enemiesToAdd.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth + (i * 70), offset + (j * 69), 64, 64), 2, 120, baseEnemyProjectileSprite, new Rectangle(0, 0, 64, 52)));
                             break;
 
                         case Enemies.Aiming:
-                            enemiesToAdd.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth + (i * 70), offset + (j * 70), 64, 64), 2, 120, baseEnemyProjectileSprite));
+                            enemiesToAdd.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth + (i * 70), offset + (j * 69), 64, 64), 2, 120, baseEnemyProjectileSprite, new Rectangle(0, 0, 62, 40)));
                             break;
 
                         case Enemies.Static:
-                            enemiesToAdd.Add(new StaticEnemy(staticEnemySprite, new Rectangle(viewportWidth + (i * 70), offset + (j * 70), 64, 64), 4));
+                            enemiesToAdd.Add(new StaticEnemy(staticEnemySprite, new Rectangle(viewportWidth + (i * 70), offset + (j * 69), 64, 64), 4, new Rectangle(0, 0, 62, 56)));
                             break;
 
                         case Enemies.Homing:
-                            enemiesToAdd.Add(new RangedHomingEnemy(homingEnemySprite, new Rectangle(viewportWidth + (i * 70), offset + (j * 70), 64, 64), 2, 120, baseEnemyProjectileSprite));
+                            enemiesToAdd.Add(new RangedHomingEnemy(homingEnemySprite, new Rectangle(viewportWidth + (i * 70), offset + (j * 69), 64, 64), 2, 240, baseEnemyProjectileSprite, new Rectangle(0, 0, 62, 36)));
                             break;
 
                         default:
@@ -209,19 +209,19 @@ namespace Roboquatic
                     switch (enemies[i, j])
                     {
                         case Enemies.Base:
-                            enemiesToAdd.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth + (i * 70), randomOffset + (j * 70), 64, 64), 2, 120, baseEnemyProjectileSprite));
+                            enemiesToAdd.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth + (i * 70), randomOffset + (j * 69), 64, 64), 2, 120, baseEnemyProjectileSprite, new Rectangle(0, 0, 64, 52)));
                             break;
 
                         case Enemies.Aiming:
-                            enemiesToAdd.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth + (i * 70), randomOffset + (j * 70), 64, 64), 2, 120, baseEnemyProjectileSprite));
+                            enemiesToAdd.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth + (i * 70), randomOffset + (j * 69), 64, 64), 2, 120, baseEnemyProjectileSprite, new Rectangle(0, 0, 62, 40)));
                             break;
 
                         case Enemies.Static:
-                            enemiesToAdd.Add(new StaticEnemy(staticEnemySprite, new Rectangle(viewportWidth + (i * 70), randomOffset + (j * 70), 64, 64), 4));
+                            enemiesToAdd.Add(new StaticEnemy(staticEnemySprite, new Rectangle(viewportWidth + (i * 70), randomOffset + (j * 69), 64, 64), 4, new Rectangle(0, 0, 62, 56)));
                             break;
 
                         case Enemies.Homing:
-                            enemiesToAdd.Add(new RangedHomingEnemy(homingEnemySprite, new Rectangle(viewportWidth + (i * 70), randomOffset + (j * 70), 64, 64), 2, 120, baseEnemyProjectileSprite));
+                            enemiesToAdd.Add(new RangedHomingEnemy(homingEnemySprite, new Rectangle(viewportWidth + (i * 70), randomOffset + (j * 69), 64, 64), 2, 240, baseEnemyProjectileSprite, new Rectangle(0, 0, 62, 36)));
                             break;
 
                         default:

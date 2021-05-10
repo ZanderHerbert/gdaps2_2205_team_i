@@ -18,6 +18,7 @@ namespace Roboquatic
         protected int contactDamage;
         protected bool hit;
         protected int hitTimer;
+        protected Rectangle hitBox;
 
         public int ContactDamage
         {
@@ -42,12 +43,19 @@ namespace Roboquatic
             get { return position; }
         }
 
+        // Get property for hitBox
+        public Rectangle HitBox
+        {
+            get { return hitBox; }
+        }
+
         //Enemy class constructor
-        public Enemy(Texture2D sprite, Rectangle position, int speed)
+        public Enemy(Texture2D sprite, Rectangle position, int speed, Rectangle hitBox)
         {
             this.sprite = sprite;
             this.speed = speed;
             this.position = position;
+            this.hitBox = hitBox;
             hit = false;
         }
 

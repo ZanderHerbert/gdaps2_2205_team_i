@@ -10,8 +10,8 @@ namespace Roboquatic
     class StaticEnemy : Enemy
     {
         //BaseEnemy Constructor, uses Enemy constructor
-        public StaticEnemy(Texture2D sprite, Rectangle position, int speed)
-            : base(sprite, position, speed)
+        public StaticEnemy(Texture2D sprite, Rectangle position, int speed, Rectangle hitBox)
+            : base(sprite, position, speed, hitBox)
         {
             health = 4;
             contactDamage = 2;
@@ -33,6 +33,8 @@ namespace Roboquatic
                     hitTimer = 0;
                 }
             }
+            hitBox.X = position.X + 2;
+            hitBox.Y = position.Y;
         }
     }
 }

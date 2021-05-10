@@ -23,6 +23,7 @@ namespace Roboquatic
         private int shootingTimer;
         private Texture2D projectileSprite;
         private bool isAlive;
+        private Rectangle hitBox;
 
         public bool IsAlive
         {
@@ -99,8 +100,13 @@ namespace Roboquatic
             set { projectileSprite = value; }
         }
 
+        public Rectangle HitBox
+        {
+            get { return hitBox; }
+        }
+
         //Player Constructor
-        public Player(int speed, int framesToFire, int projectileSpeed, Rectangle position, int health, int projectileDamage, Texture2D projectileSprite)
+        public Player(int speed, int framesToFire, int projectileSpeed, Rectangle position, int health, int projectileDamage, Texture2D projectileSprite, Rectangle hitBox)
         {
             this.speed = speed;
             this.framesToFire = framesToFire;
@@ -112,6 +118,7 @@ namespace Roboquatic
             this.projectileSprite = projectileSprite;
             iFrameTimer = 0;
             shootingTimer = framesToFire;
+            this.hitBox = hitBox;
         }
 
         //Processes player input under keyboard controls
@@ -232,6 +239,9 @@ namespace Roboquatic
             {
                 IFrameTimer--;
             }
+            // 18 x 31
+            hitBox.X = position.X + 1;
+            hitBox.Y = position.Y + 9;
         }
     }
 }

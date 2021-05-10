@@ -22,7 +22,7 @@ namespace Roboquatic
             for (int i = 0; i < enemies.Count; i++)
             {
                 enemies[i].Update(gameTime, game);
-                if (PlayerContact(game.Player.Position))
+                if (enemies[i].HitBox.Intersects(game.Player.HitBox))
                 {
                     game.Player.TakeDamage(enemies[i].ContactDamage);
                 }
@@ -45,19 +45,6 @@ namespace Roboquatic
                 }
                 enemies[i].Draw(_spriteBatch);
             }
-        }
-
-        //Checks if any enemies are in contact with the player
-        public bool PlayerContact(Rectangle playerPosition)
-        {
-            for(int i = 0; i < enemies.Count; i++)
-            {
-                if (enemies[i].Position.Intersects(playerPosition))
-                {
-                    return true;
-                }
-            }
-            return false;
         }
     }
 }
