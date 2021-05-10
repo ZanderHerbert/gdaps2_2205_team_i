@@ -7,8 +7,10 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Roboquatic
 {
+    //Controls the Heads Up Display
     class Hud
     {
+        //Fields
         private Texture2D healthSheet;
         private Texture2D progressBar;
         private Texture2D progressBarFiller;
@@ -19,6 +21,7 @@ namespace Roboquatic
         private Texture2D bossTexture;
         private Texture2D progressText;
 
+        //Constructor
         public Hud(Game1 game)
         {
             healthSheet = game.Content.Load<Texture2D>("HealthSheet");
@@ -32,6 +35,9 @@ namespace Roboquatic
             onceThrough = false;
         }
 
+        //Methods
+
+        //Draws all HUD related sprites, including the health bar and the progress bar, and fills each based on the Player's positiona dn health
         public void Draw(SpriteBatch sb, Player player, int screenHeight, int checkpointsCrossed, double percent)
         {
             sb.Draw(healthSheet, new Rectangle(20, 20, 93, 54), new Rectangle(0, 0, 155, 90), Color.White);

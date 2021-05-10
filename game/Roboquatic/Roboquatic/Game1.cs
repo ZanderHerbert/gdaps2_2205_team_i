@@ -20,7 +20,7 @@ namespace Roboquatic
     public class Game1 : Game
     {
         #region Field Declaration
-        //Declaring fields
+        //Fields
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private Player player;
@@ -49,7 +49,6 @@ namespace Roboquatic
         private bool addedFormation1;
         private bool addedFormation2;
         private bool addedBoss;
-
         private List<Enemy> enemies;
         private Texture2D baseEnemySprite;
         private Texture2D bossEnemySprite;
@@ -111,18 +110,24 @@ namespace Roboquatic
         //Audio fields
         private Song audio;
 
+        //Upgrade fields
         private Rectangle posHealth;
         private Rectangle posDamage;
         private Rectangle posSpeed;
         #endregion
 
         #region Properties
+
+        //Properties
+
+        //Get set for increment
         public bool Increment
         {
             get { return increment; }
             set { increment = value; }
         }
 
+        //Get set for currentCheckpoint
         public Checkpoint CurrentCheckpoint
         {
             get { return currentCheckpoint; }
@@ -150,6 +155,7 @@ namespace Roboquatic
             set { projectiles = value; }
         }
 
+        //Get set for pickups
         public List<HealthPickup> Pickups
         {
             get { return pickups; }
@@ -445,7 +451,7 @@ namespace Roboquatic
             buttons[8].OnLeftButtonClick += this.ContinueButton;
 
             // Add Checkpoints
-            deactivedCheckpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 6));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 60));
             deactivedCheckpoints.Add(new Checkpoint("checkpoint2", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 120));
             deactivedCheckpoints.Add(new Checkpoint("checkpoint3", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 180));
 
@@ -583,6 +589,7 @@ namespace Roboquatic
                         {
                             //FileIO
                             
+                            //Spawns boss after reaching end
                             if (deactivedCheckpoints[2].Contact == true)
                             {
                                 if (!addedBoss)
@@ -591,6 +598,7 @@ namespace Roboquatic
                                     addedBoss = true;
                                 }
                             }
+                            //Formation spawns for 3rd section
                             else if (deactivedCheckpoints[1].Contact == true)
                             {
                                 if((timer - 1 + 1 * pastCheckpoints) % 3601 == 15)
@@ -626,6 +634,7 @@ namespace Roboquatic
                                     }
                                     */
                                 }
+                            //Formation spawns for 2nd section
                             else if (deactivedCheckpoints[0].Contact == true)
                             {
                                 if(timer % 240 == rng.Next(0, 240))
@@ -658,6 +667,7 @@ namespace Roboquatic
                                 }
                                 */
                             }
+                            //Spawns for 1st section
                             else
                             {
                                 if (timer % 240 == rng.Next(0, 240))

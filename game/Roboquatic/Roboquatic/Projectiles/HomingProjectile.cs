@@ -7,8 +7,10 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Roboquatic
 {
+    //Enemy projectile which follows the player
     class HomingProjectile : Projectile
     {
+        //Fields
         private double deltaX;
         private double deltaY;
         private int xChange;
@@ -33,6 +35,8 @@ namespace Roboquatic
             xAcceleration = 0;
             yAcceleration = 0;
         }
+
+        //Methods
 
         //Checks if the projectile is in contact with the player
         public bool PlayerContact(Player player)

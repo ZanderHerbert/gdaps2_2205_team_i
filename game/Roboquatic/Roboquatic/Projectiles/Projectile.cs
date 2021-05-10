@@ -18,6 +18,9 @@ namespace Roboquatic
         protected bool hit;
         protected double angle;
 
+        //Properties
+
+        //Get property for angle
         public double Angle
         {
             get { return angle; }
