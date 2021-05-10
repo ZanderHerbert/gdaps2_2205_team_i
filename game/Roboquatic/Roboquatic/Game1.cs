@@ -451,15 +451,9 @@ namespace Roboquatic
             buttons[8].OnLeftButtonClick += this.ContinueButton;
 
             // Add Checkpoints
-            deactivedCheckpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 60));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 6));
             deactivedCheckpoints.Add(new Checkpoint("checkpoint2", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 120));
             deactivedCheckpoints.Add(new Checkpoint("checkpoint3", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 180));
-
-            //Adds the Upgrades
-
-            healthUpgrade = Content.Load<Texture2D>("heart upgrade");
-            speedUpgrade = Content.Load<Texture2D>("speedometer");
-            damageUpgrade = Content.Load<Texture2D>("bubble");
 
             //Loads audiofile
             this.audio = Content.Load<Song>("UnderwaterSounds");
