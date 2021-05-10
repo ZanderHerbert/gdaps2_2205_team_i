@@ -9,6 +9,7 @@ namespace Roboquatic
 {
     class Hud
     {
+        //Fields:
 
         private Texture2D healthSheet;
         private Texture2D progressBar;
