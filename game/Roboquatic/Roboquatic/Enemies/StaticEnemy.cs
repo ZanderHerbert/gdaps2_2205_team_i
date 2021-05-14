@@ -35,7 +35,7 @@ namespace Roboquatic
                 }
             }
             //Moves hitbox to its new position
-            hitBox.X = position.X + 2;
+            hitBox.X = position.X + (int)(2 * GlobalScalars.x);
             hitBox.Y = position.Y;
         }
     }

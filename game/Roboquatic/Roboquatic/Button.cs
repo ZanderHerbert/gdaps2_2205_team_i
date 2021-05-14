@@ -38,7 +38,7 @@ namespace Roboquatic
         public Button(GraphicsDevice device, Rectangle position, Texture2D buttonImage, Texture2D OffButtonImage)
         {
             // Assign parameters to fields 
-            this.buttonLocation = position;
+            this.buttonLocation = new Rectangle(position.X, position.Y, (int)(position.Width * GlobalScalars.x), (int)(position.Height * GlobalScalars.y));
             this.onButtonImage = buttonImage;
             this.offButtonImage = OffButtonImage;
 

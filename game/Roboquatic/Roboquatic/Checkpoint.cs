@@ -49,7 +49,7 @@ namespace Roboquatic
         {
             this.checkpointName = checkpointName;
             this.checkpointImage = checkpointImage;
-            this.position = position;
+            this.position = new Rectangle(position.X, position.Y, (int)(position.Width * GlobalScalars.x), (int)(position.Height * GlobalScalars.y));
             this.time = time;
         }
 
@@ -111,7 +111,7 @@ namespace Roboquatic
 
                 if (position.X >= game.ViewportWidth / 2)
                 {
-                    position.X -= 2;
+                    position.X -= (int)(2 * GlobalScalars.x);
                 }
             }
         }

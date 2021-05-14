@@ -154,9 +154,9 @@ namespace Roboquatic
 
                 //Draws the text for each upgrade
 
-                spriteBatch.DrawString(font, "Health", new Vector2(game.ViewportWidth / 2 - 24, 148), Color.White);
-                spriteBatch.DrawString(font, "Damage", new Vector2(game.ViewportWidth / 2 - 224, 148), Color.White);
-                spriteBatch.DrawString(font, "Speed", new Vector2(game.ViewportWidth / 2 + 176, 148), Color.White);
+                spriteBatch.DrawString(font, "Health", new Vector2(376 * GlobalScalars.x, 148 * GlobalScalars.y), Color.White, 0, Vector2.Zero, new Vector2(GlobalScalars.x, GlobalScalars.y), SpriteEffects.None, 0);
+                spriteBatch.DrawString(font, "Damage", new Vector2(176 * GlobalScalars.x, 148 * GlobalScalars.y), Color.White, 0, Vector2.Zero, new Vector2(GlobalScalars.x, GlobalScalars.y), SpriteEffects.None, 0);
+                spriteBatch.DrawString(font, "Speed", new Vector2(576 * GlobalScalars.x, 148 * GlobalScalars.y), Color.White, 0, Vector2.Zero, new Vector2(GlobalScalars.x, GlobalScalars.y), SpriteEffects.None, 0);
 
 
             }

@@ -54,8 +54,8 @@ namespace Roboquatic
         public Projectile(Texture2D sprite, int speed, Rectangle position)
         {
             this.sprite = sprite;
-            this.speed = speed;
-            this.position = position;
+            this.speed = (int)(speed * (GlobalScalars.x + GlobalScalars.y) / 2);
+            this.position = GlobalScalars.scaleSize(position);
             hit = false;
         }
 

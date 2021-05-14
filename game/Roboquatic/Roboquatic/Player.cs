@@ -112,17 +112,17 @@ namespace Roboquatic
         //Player Constructor
         public Player(int speed, int framesToFire, int projectileSpeed, Rectangle position, int health, int projectileDamage, Texture2D projectileSprite, Rectangle hitBox)
         {
-            this.speed = speed;
+            this.speed = (int)(speed * (GlobalScalars.x + GlobalScalars.y) / 2);
             this.framesToFire = framesToFire;
             this.projectileSpeed = projectileSpeed;
-            this.position = position;
+            this.position = GlobalScalars.scaleRect(position);
             maxHP = health;
             this.health = maxHP;
             this.projectileDamage = projectileDamage;
             this.projectileSprite = projectileSprite;
             iFrameTimer = 0;
             shootingTimer = framesToFire;
-            this.hitBox = hitBox;
+            this.hitBox = GlobalScalars.scaleRect(hitBox);
         }
 
         //Methods
@@ -218,7 +218,7 @@ namespace Roboquatic
             {
                 if (shootingTimer >= FramesToFire)
                 {
-                    game.Projectiles.Add(new PlayerProjectile(projectileSprite, ProjectileSpeed, new Rectangle(Position.X + position.Width, Position.Y + position.Height / 2 - 16, 32, 32), this));
+                    game.Projectiles.Add(new PlayerProjectile(projectileSprite, ProjectileSpeed, new Rectangle(Position.X + position.Width, Position.Y + position.Height / 2 - (int)(GlobalScalars.y * 16), 32, 32), this));
                     shootingTimer = 0;
                 }
             }
@@ -246,8 +246,8 @@ namespace Roboquatic
                 IFrameTimer--;
             }
             // 18 x 31
-            hitBox.X = position.X + 1;
-            hitBox.Y = position.Y + 9;
+            hitBox.X = position.X + (int)(GlobalScalars.x);
+            hitBox.Y = position.Y + (int)(9 * GlobalScalars.y);
         }
     }
 }

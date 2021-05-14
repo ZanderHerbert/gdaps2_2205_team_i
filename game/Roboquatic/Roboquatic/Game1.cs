@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 
 
+
 namespace Roboquatic
 {
     enum GameState
@@ -32,8 +33,13 @@ namespace Roboquatic
         private Texture2D backdropSwap;
         private Rectangle backdropPos;
         private Rectangle backdropSwapPos;
+        private const int oldWidth = 800;
         private int viewportWidth;
+        private const int oldHeight = 480;
         private int viewportHeight;
+        private Matrix drawScale;
+        private float scaleX;
+        private float scaleY;
         private int timer;
         private bool increment;
         private List<Projectile> projectiles;
@@ -42,6 +48,7 @@ namespace Roboquatic
         private Upgrades upgrade;
         private Texture2D pauseText;
         private List<HealthPickup> pickups;
+        
 
         //Test for FileIO
         private FileIO fileIO;
@@ -272,9 +279,16 @@ namespace Roboquatic
         protected override void Initialize()
         {
             // Initializing variables
+            viewportWidth = GraphicsDevice.DisplayMode.Width;
+            viewportHeight = GraphicsDevice.DisplayMode.Height;
+            //Uncomment for old screen size (and comment out the fullscreen command below)
+            //viewportWidth = 800;
+            //viewportHeight = 480;
+            scaleX = ((float)viewportWidth) / oldWidth;
+            scaleY = ((float)viewportHeight) / oldHeight;
+            GlobalScalars.x = scaleX;
+            GlobalScalars.y = scaleY;
             keyboardControls = false;
-            viewportWidth = this.GraphicsDevice.Viewport.Width;
-            viewportHeight = this.GraphicsDevice.Viewport.Height;
             backdropPos = new Rectangle(0, 0, viewportWidth, viewportHeight);
             backdropSwapPos = new Rectangle(viewportWidth, 0, viewportWidth, viewportHeight);
             timer = 0;
@@ -293,18 +307,22 @@ namespace Roboquatic
             increment = true;
             enemiesToAdd = new List<Enemy>[10];
             pickups = new List<HealthPickup>();
-            logoVect = new Vector2(400, viewportHeight - 390);
+            logoVect = new Vector2(400 * scaleX, viewportHeight - 390 * scaleY);
             origin = new Vector2(400, 130);
-            scale = new Vector2(.78f,.78f);
+            scale = new Vector2(.78f * scaleX,.78f * scaleY);
+            _graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+            _graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+            _graphics.IsFullScreen = true;
+            _graphics.ApplyChanges();
 
             titleBubblesPos = new Rectangle(0, 0, viewportWidth, viewportHeight);
             titleBubblesSwapPos = new Rectangle(0, viewportHeight, viewportWidth, viewportHeight);
 
             //Initializes position for upgrades
 
-            posHealth = new Rectangle(viewportWidth / 2 - 24, 100 ,48, 48);
-            posDamage = new Rectangle(viewportWidth / 2 - 224, 100, 48, 48);
-            posSpeed = new Rectangle(ViewportWidth / 2 + 176, 100, 48, 48);
+            posHealth = new Rectangle((int)(viewportWidth / 2 - 24 * scaleX), (int)(100 * scaleY), (int)(48 * scaleX), (int)(48 * scaleY));
+            posDamage = new Rectangle((int)(viewportWidth / 2 - 224 * scaleX), (int)(100 * scaleY), (int)(48 * scaleX), (int)(48 * scaleY));
+            posSpeed = new Rectangle((int)(viewportWidth / 2 + 176 * scaleX), (int)(100 * scaleY), (int)(48 * scaleX), (int)(48 * scaleY));
 
             base.Initialize();
         }
@@ -371,7 +389,7 @@ namespace Roboquatic
             // Menu
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 93, _graphics.GraphicsDevice.Viewport.Height / 2 - 49, 187, 65),
+                new Rectangle(viewportWidth / 2 - (int)(93 * scaleX), viewportHeight / 2 - (int)(49 * scaleY), 187, 65),
                 startButton,
                 startButton
                 ));
@@ -379,7 +397,7 @@ namespace Roboquatic
             // Settings
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 93, _graphics.GraphicsDevice.Viewport.Height / 2 + 39, 187, 65),
+                new Rectangle(viewportWidth / 2 - (int)(93 * scaleX), viewportHeight / 2 + (int)(39 * scaleY), 187, 65),
                 controlsButton,
                 controlsButton
                 ));
@@ -387,7 +405,7 @@ namespace Roboquatic
             // Settings Keyboard
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 250, _graphics.GraphicsDevice.Viewport.Height / 2 - 100, 187, 187),
+                new Rectangle(viewportWidth / 2 - (int)(250 * scaleX), viewportHeight / 2 - (int)(100 * scaleY), 187, 187),
                 kbButton,
                 kbButton
                 ));
@@ -395,7 +413,7 @@ namespace Roboquatic
             // Settings Mouse
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 + 93, _graphics.GraphicsDevice.Viewport.Height / 2 - 100, 187, 187),
+                new Rectangle(viewportWidth / 2 + (int)(93 * scaleX), viewportHeight / 2 - (int)(100 * scaleY), 187, 187),
                 mouseButton,
                 mouseButton
                 ));
@@ -403,7 +421,7 @@ namespace Roboquatic
             // Back to menu
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 30, _graphics.GraphicsDevice.Viewport.Height / 2 + 100, 100, 100),
+                new Rectangle(viewportWidth / 2 - (int)(30 * scaleX), viewportHeight / 2 + (int)(100 * scaleY), 100, 100),
                 backButton,
                 backButton
                 ));
@@ -411,21 +429,21 @@ namespace Roboquatic
             // Pause
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 89, 100, 179, 54),
+                new Rectangle(viewportWidth / 2 - (int)(89 * scaleX), (int)(100 * scaleY), 179, 54),
                 resumeButton,
                 resumeButton
                 ));
 
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 89, 200, 179, 54),
+                new Rectangle(viewportWidth / 2 - (int)(89 * scaleX), (int)(200 * scaleY), 179, 54),
                 menuButton,
                 menuButton
                 ));
 
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 93, 300, 187, 65),
+                new Rectangle(viewportWidth / 2 - (int)(93 * scaleX), (int)(300 * scaleY), 187, 65),
                 controlsButton,
                 controlsButton
                 ));
@@ -433,7 +451,7 @@ namespace Roboquatic
             // Gameover
             buttons.Add(new Button(
                 _graphics.GraphicsDevice,
-                new Rectangle(_graphics.GraphicsDevice.Viewport.Width / 2 - 89, 250, 179, 54),
+                new Rectangle(viewportWidth / 2 - (int)(89 * scaleX), (int)(250 * scaleY), 179, 54),
                 continueButton,
                 continueButton
                 ));
@@ -450,9 +468,9 @@ namespace Roboquatic
             buttons[8].OnLeftButtonClick += this.ContinueButton;
 
             // Add Checkpoints
-            deactivedCheckpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 60));
-            deactivedCheckpoints.Add(new Checkpoint("checkpoint2", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 120));
-            deactivedCheckpoints.Add(new Checkpoint("checkpoint3", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100), 180));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint1", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - (int)(50 * scaleY), 100, 100), 1));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint2", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - (int)(50 * scaleY), 100, 100), 2));
+            deactivedCheckpoints.Add(new Checkpoint("checkpoint3", checkpoint, new Rectangle(viewportWidth, viewportHeight / 2 - (int)(50 * scaleY), 100, 100), 3));
 
             //Loads audiofile
             this.audio = Content.Load<Song>("UnderwaterSounds");
@@ -469,8 +487,10 @@ namespace Roboquatic
         {
             KeyboardState kbState = Keyboard.GetState();
 
-            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            //    Exit();
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                Exit();
+            }
 
             //Update based on the GameState
             switch (currentState)
@@ -542,7 +562,7 @@ namespace Roboquatic
                     IsMouseVisible = false;
 
                     // Press ESC to pause the game
-                    if (SingleKeyPress(Keys.Escape, kbState))
+                    if (SingleKeyPress(Keys.P, kbState))
                     {
                         currentState = GameState.Pause;
                     }
@@ -597,7 +617,7 @@ namespace Roboquatic
                                 {
                                     if (!addedBoss)
                                     {
-                                        enemies.Add(new Boss(bossEnemySprite, new Rectangle(viewportWidth - 128, viewportHeight / 2 - 64, 256, 128), 0, baseEnemyProjectileSprite, -10, -20, 6, 50, rng, 3, 1, laserSprite, new Rectangle(viewportWidth - 128, viewportHeight / 2 - 64, 256, 128)));
+                                        enemies.Add(new Boss(bossEnemySprite, new Rectangle(oldWidth - 128, oldHeight / 2 - 64, 256, 128), 0, baseEnemyProjectileSprite, -10, -20, 6, 50, rng, 3, 1, laserSprite, new Rectangle(oldWidth - 128, oldHeight / 2 - 64, 256, 128)));
                                         addedBoss = true;
                                     }
                                 }
@@ -606,7 +626,7 @@ namespace Roboquatic
                                 {
                                     if ((timer - 1 + 1 * pastCheckpoints) % 3601 == 15)
                                     {
-                                        enemies.AddRange(fileIO.AddFormation(3, rng.Next(0, viewportHeight - 343)));
+                                        enemies.AddRange(fileIO.AddFormation(3, rng.Next(0, oldHeight - 343)));
                                     }
                                     if ((timer - 1 + 1 * pastCheckpoints) % 3601 == 500)
                                     {
@@ -614,7 +634,7 @@ namespace Roboquatic
                                     }
                                     if ((timer - 1 + 1 * pastCheckpoints) % 3601 == 2550)
                                     {
-                                        enemies.AddRange(fileIO.AddFormation(4, rng.Next(0, viewportHeight - 343)));
+                                        enemies.AddRange(fileIO.AddFormation(4, rng.Next(0, oldHeight - 343)));
                                     }
                                     if ((timer - 1 + 1 * pastCheckpoints) % 3601 == 2950)
                                     {
@@ -642,19 +662,19 @@ namespace Roboquatic
                                 {
                                     if (timer % 240 == rng.Next(0, 240))
                                     {
-                                        enemies.AddRange(fileIO.AddFormation(5, rng.Next(0, viewportHeight - 63)));
+                                        enemies.AddRange(fileIO.AddFormation(5, rng.Next(0, oldHeight - 63)));
                                     }
                                     if (timer % 360 == rng.Next(0, 360))
                                     {
-                                        enemies.AddRange(fileIO.AddFormation(2, rng.Next(0, viewportHeight - 63)));
+                                        enemies.AddRange(fileIO.AddFormation(2, rng.Next(0, oldHeight - 63)));
                                     }
                                     if (timer % 480 == rng.Next(0, 480))
                                     {
-                                        enemies.AddRange(fileIO.AddFormation(6, rng.Next(0, viewportHeight - 203)));
+                                        enemies.AddRange(fileIO.AddFormation(6, rng.Next(0, oldHeight - 203)));
                                     }
                                     if (timer % 240 == rng.Next(0, 240))
                                     {
-                                        enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite, new Rectangle(0, 0, 64, 52)));
+                                        enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(oldWidth, rng.Next(0, oldHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite, new Rectangle(0, 0, 64, 52)));
                                     }
 
                                 }
@@ -663,19 +683,19 @@ namespace Roboquatic
                                 {
                                     if (timer % 240 == rng.Next(0, 240))
                                     {
-                                        enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite, new Rectangle(0, 0, 64, 52)));
+                                        enemies.Add(new BaseEnemy(baseEnemySprite, new Rectangle(oldWidth, rng.Next(0, oldHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite, new Rectangle(0, 0, 64, 52)));
                                     }
                                     if (timer % 240 == rng.Next(0, 240))
                                     {
-                                        enemies.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite, new Rectangle(0, 0, 62, 40)));
+                                        enemies.Add(new AimingEnemy(aimedEnemySprite, new Rectangle(oldWidth, rng.Next(0, oldHeight - 63), 64, 64), 2, 120, baseEnemyProjectileSprite, new Rectangle(0, 0, 62, 40)));
                                     }
                                     if (timer % 240 == rng.Next(0, 240))
                                     {
-                                        enemies.Add(new StaticEnemy(staticEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 4, new Rectangle(0, 0, 62, 56)));
+                                        enemies.Add(new StaticEnemy(staticEnemySprite, new Rectangle(oldWidth, rng.Next(0, oldHeight - 63), 64, 64), 4, new Rectangle(0, 0, 62, 56)));
                                     }
                                     if (timer % 240 == rng.Next(0, 240))
                                     {
-                                        enemies.Add(new RangedHomingEnemy(homingEnemySprite, new Rectangle(viewportWidth, rng.Next(0, viewportHeight - 63), 64, 64), 2, 240, baseEnemyProjectileSprite, new Rectangle(0, 0, 62, 36)));
+                                        enemies.Add(new RangedHomingEnemy(homingEnemySprite, new Rectangle(oldWidth, rng.Next(0, oldHeight - 63), 64, 64), 2, 240, baseEnemyProjectileSprite, new Rectangle(0, 0, 62, 36)));
                                     }
                                 }
                             }
@@ -785,7 +805,7 @@ namespace Roboquatic
                     _spriteBatch.Draw(titlePage, new Rectangle(0, 0, viewportWidth, viewportHeight), Color.White);
                     _spriteBatch.Draw(titleBubbles, titleBubblesPos, Color.White);
                     _spriteBatch.Draw(titleBubblesLoop, titleBubblesSwapPos, Color.White);
-                    _spriteBatch.DrawString(font, "Select Your Control Scheme", new Vector2(70, 30), Color.Black);
+                    _spriteBatch.DrawString(font, "Select Your Control Scheme", new Vector2(70 * scaleX, 30 * scaleY), Color.Black, 0, Vector2.Zero, new Vector2(scaleX, scaleY), SpriteEffects.None, 0);
                     buttons[2].Draw(_spriteBatch);
                     buttons[3].Draw(_spriteBatch);
                     buttons[4].Draw(_spriteBatch);
@@ -801,7 +821,7 @@ namespace Roboquatic
                     
 
                     // Draw the HUD
-                    hud.Draw(_spriteBatch, player, viewportHeight, pastCheckpoints, (((timer - 1) % 3601.0) / 3601.0), upgrade);
+                    hud.Draw(_spriteBatch, player, oldHeight, pastCheckpoints, (((timer - 1) % 3601.0) / 3601.0), upgrade);
 
                     // Draw projectiles
                     for (int i = 0; i < projectiles.Count; i++)
@@ -870,7 +890,7 @@ namespace Roboquatic
                     _spriteBatch.Draw(titlePage, new Rectangle(0, 0, viewportWidth, viewportHeight), Color.White);
                     _spriteBatch.Draw(titleBubbles, titleBubblesPos, Color.White);
                     _spriteBatch.Draw(titleBubblesLoop, titleBubblesSwapPos, Color.White);
-                    _spriteBatch.DrawString(font, "GameOver", new Vector2(270, 150), Color.Black);
+                    _spriteBatch.DrawString(font, "GameOver", new Vector2(270 * scaleX, 150 * scaleY), Color.Black, 0, Vector2.Zero, new Vector2(scaleX, scaleY), SpriteEffects.None, 0);
                     buttons[8].Draw(_spriteBatch);
                     break;
             }
@@ -1002,7 +1022,7 @@ namespace Roboquatic
             // Reset the game
             enemies.Clear();
             projectiles.Clear();
-            player.Position = new Rectangle(0, 0, 48, 48);
+            player.Position = GlobalScalars.scaleRect(new Rectangle(0, 0, 48, 48));
             player.MaxHP = 7;
             player.Health = player.MaxHP;
             player.ProjectileDamage = 1;
@@ -1018,7 +1038,7 @@ namespace Roboquatic
             foreach (Checkpoint c in deactivedCheckpoints)
             {
                 c.Contact = false;
-                c.Position = new Rectangle(viewportWidth, viewportHeight / 2 - 50, 100, 100);
+                c.Position = GlobalScalars.scaleRect(new Rectangle(oldWidth, oldHeight / 2 - 50, 100, 100));
             }
         }
 

@@ -31,12 +31,12 @@ namespace Roboquatic
             this.homingProjectileSpeed = homingProjectileSpeed;
             this.health = health;
             this.rng = rng;
-            this.ySpeed = ySpeed;
+            this.ySpeed = (int)(ySpeed * GlobalScalars.y);
             this.contactDamage = contactDamage;
             this.laserSprite = laserSprite;
             timer = 0;
-            shotPattern = 4;
-            screenMiddleY = position.Y + position.Height / 2;
+            shotPattern = 2;
+            screenMiddleY = this.position.Y + this.position.Height / 2;
             laser = null;
         }
 
@@ -113,55 +113,55 @@ namespace Roboquatic
         {
             if (timer % 360 == 0)
             {
-                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY - 16, 32, 32)));
+                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY - (int)(16 * GlobalScalars.y), 32, 32)));
             }
             if (timer % 360 == 20)
             {
-                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY + 16, 32, 32)));
-                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY - 48, 32, 32)));
+                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY + (int)(16 * GlobalScalars.y), 32, 32)));
+                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY - (int)(48 * GlobalScalars.y), 32, 32)));
             }
             if (timer % 360 == 40)
             {
-                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY + 48, 32, 32)));
-                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY - 80, 32, 32)));
+                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY + (int)(48 * GlobalScalars.y), 32, 32)));
+                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY - (int)(80 * GlobalScalars.y), 32, 32)));
             }
             if (timer % 360 == 60)
             {
-                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY + 80, 32, 32)));
-                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY - 112, 32, 32)));
+                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY + (int)(80 * GlobalScalars.y), 32, 32)));
+                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY - (int)(112 * GlobalScalars.y), 32, 32)));
             }
             if (timer % 360 == 80)
             {
-                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY + 112, 32, 32)));
-                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY - 144, 32, 32)));
+                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY + (int)(112 * GlobalScalars.y), 32, 32)));
+                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY - (int)(144 * GlobalScalars.y), 32, 32)));
             }
             if (timer % 360 == 100)
             {
-                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY + 144, 32, 32)));
-                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY - 176, 32, 32)));
+                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY + (int)(144 * GlobalScalars.y), 32, 32)));
+                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY - (int)(176 * GlobalScalars.y), 32, 32)));
             }
             if (timer % 360 == 120)
             {
-                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY + 176, 32, 32)));
-                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY - 208, 32, 32)));
+                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY + (int)(176 * GlobalScalars.y), 32, 32)));
+                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY - (int)(208 * GlobalScalars.y), 32, 32)));
             }
             if (timer % 360 == 140)
             {
-                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY + 208, 32, 32)));
-                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY - 240, 32, 32)));
-                game.Projectiles.Add(new AimedEnemyProjectile(projectileSprite, aimedProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY + 208, 32, 32), game.Player.Position));
-                game.Projectiles.Add(new AimedEnemyProjectile(projectileSprite, aimedProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY - 240, 32, 32), game.Player.Position));
+                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY + (int)(208 * GlobalScalars.y), 32, 32)));
+                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, screenMiddleY - (int)(240 * GlobalScalars.y), 32, 32)));
+                game.Projectiles.Add(new AimedEnemyProjectile(projectileSprite, aimedProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY + (int)(208 * GlobalScalars.y), 32, 32), game.Player.Position));
+                game.Projectiles.Add(new AimedEnemyProjectile(projectileSprite, aimedProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY - (int)(240 * GlobalScalars.y), 32, 32), game.Player.Position));
             }
             if (timer % 360 == 180)
             {
-                game.Projectiles.Add(new AimedEnemyProjectile(projectileSprite, aimedProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY + 208, 32, 32), game.Player.Position));
-                game.Projectiles.Add(new AimedEnemyProjectile(projectileSprite, aimedProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY - 240, 32, 32), game.Player.Position));
-                game.Projectiles.Add(new HomingProjectile(projectileSprite, homingProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY - 16, 32, 32), 180));
+                game.Projectiles.Add(new AimedEnemyProjectile(projectileSprite, aimedProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY + (int)(208 * GlobalScalars.y), 32, 32), game.Player.Position));
+                game.Projectiles.Add(new AimedEnemyProjectile(projectileSprite, aimedProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY - (int)(240 * GlobalScalars.y), 32, 32), game.Player.Position));
+                game.Projectiles.Add(new HomingProjectile(projectileSprite, homingProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY - (int)(16 * GlobalScalars.y), 32, 32), 180));
             }
             if (timer % 360 == 220)
             {
-                game.Projectiles.Add(new AimedEnemyProjectile(projectileSprite, aimedProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY + 208, 32, 32), game.Player.Position));
-                game.Projectiles.Add(new AimedEnemyProjectile(projectileSprite, aimedProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY - 240, 32, 32), game.Player.Position));
+                game.Projectiles.Add(new AimedEnemyProjectile(projectileSprite, aimedProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY + (int)(208 * GlobalScalars.y), 32, 32), game.Player.Position));
+                game.Projectiles.Add(new AimedEnemyProjectile(projectileSprite, aimedProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY - (int)(240 * GlobalScalars.y), 32, 32), game.Player.Position));
             }
 
         }
@@ -171,11 +171,11 @@ namespace Roboquatic
         {
             if (timer % 360 <= 40 && position.X > 0 - position.Width)
             {
-                position.X -= 24;
+                position.X -= (int)(24 * GlobalScalars.x);
             }
             else if (timer % 360 > 40 && position.X < game.GraphicsDevice.Viewport.Width - position.Width / 2)
             {
-                position.X += 3;
+                position.X += (int)(3 * GlobalScalars.x);
             }
         }
 
@@ -185,12 +185,12 @@ namespace Roboquatic
         {
             if (timer % 40 == 39)
             {
-                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, position.Y + position.Height / 2 - 16, 32, 32)));
+                game.Projectiles.Add(new EnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, position.Y + position.Height / 2 - (int)(16 * GlobalScalars.y), 32, 32)));
             }
             if (timer % 360 == 59 || timer % 360 == 119 || timer % 360 == 179)
             {
-                game.Projectiles.Add(new HomingProjectile(projectileSprite, homingProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY - 148, 32, 32), 180));
-                game.Projectiles.Add(new HomingProjectile(projectileSprite, homingProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY + 116, 32, 32), 180));
+                game.Projectiles.Add(new HomingProjectile(projectileSprite, homingProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY - (int)(148 * GlobalScalars.y), 32, 32), 180));
+                game.Projectiles.Add(new HomingProjectile(projectileSprite, homingProjectileSpeed, new Rectangle(position.X - 32, screenMiddleY + (int)(116 * GlobalScalars.y), 32, 32), 180));
             }
         }
 

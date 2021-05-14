@@ -57,7 +57,7 @@ namespace Roboquatic
         //Creates an enemy projectile and returns it
         public AimedEnemyProjectile Shoot(Player player)
         {
-            return new AimedEnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - 32, position.Y + position.Height / 2 - 16, 32, 32), player.Position);
+            return new AimedEnemyProjectile(projectileSprite, projectileSpeed, new Rectangle(position.X - (int)(GlobalScalars.x * 32), position.Y + position.Height / 2 - (int)(GlobalScalars.y * 16), 32, 32), player.Position);
         }
 
         //Updates the enemy
@@ -70,11 +70,11 @@ namespace Roboquatic
             }
             else
             {
-                position.X -= 4;
+                position.X -= (int)(4 * GlobalScalars.x);
             }
-            hitBox.X = position.X + 2;
-            hitBox.Y = position.Y + 8;
-            if (position.X <= game.GraphicsDevice.Viewport.Width * 3 / 4)
+            hitBox.X = position.X + (int)(2 * GlobalScalars.x);
+            hitBox.Y = position.Y + (int)(8 * GlobalScalars.y);
+            if (position.X <= game.ViewportWidth * 3 / 4)
             {
                 speed = 0;
             }

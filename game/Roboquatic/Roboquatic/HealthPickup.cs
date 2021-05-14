@@ -18,7 +18,7 @@ namespace Roboquatic
 
         public HealthPickup(Rectangle position, Game1 game)
         {
-            this.position = position;
+            this.position = new Rectangle((int)(position.X * GlobalScalars.x), (int)(position.Y * GlobalScalars.y), (int)(position.Width * GlobalScalars.x), (int)(position.Height * GlobalScalars.y));
             pickupSprite = game.Content.Load<Texture2D>("UpgradeHealth");
         }
 
@@ -39,7 +39,7 @@ namespace Roboquatic
                 }
                 return true;
             }
-            position.X -= 1;
+            position.X -= (int)(GlobalScalars.x);
             return false;
         }
 

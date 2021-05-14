@@ -56,9 +56,9 @@ namespace Roboquatic
         public Enemy(Texture2D sprite, Rectangle position, int speed, Rectangle hitBox)
         {
             this.sprite = sprite;
-            this.speed = speed;
-            this.position = position;
-            this.hitBox = hitBox;
+            this.speed = (int)(speed * (GlobalScalars.x + GlobalScalars.y) / 2);
+            this.position = GlobalScalars.scaleRect(position);
+            this.hitBox = GlobalScalars.scaleRect(hitBox);
             hit = false;
         }
 
