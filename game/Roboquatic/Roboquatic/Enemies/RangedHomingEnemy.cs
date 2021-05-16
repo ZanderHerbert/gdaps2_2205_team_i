@@ -65,12 +65,14 @@ namespace Roboquatic
             //Moves the enemy, then checks the enemy position to see if it needs to change the speed of the enemy, and moves the hitBox to the position.
             if (position.X <= game.ViewportWidth)
             {
-                position.X -= speed;
+                floatPos.X -= speed;
             }
             else
             {
-                position.X -= (int)(4 * GlobalScalars.x);
+                floatPos.X -= 4 * GlobalScalars.x;
             }
+            position.X = (int)floatPos.X;
+            position.Y = (int)floatPos.Y;
             hitBox.X = position.X + (int)(2 * GlobalScalars.x);
             hitBox.Y = position.Y + (int)(14 * GlobalScalars.y);
             if (position.X <= game.ViewportWidth * 5 / 8)

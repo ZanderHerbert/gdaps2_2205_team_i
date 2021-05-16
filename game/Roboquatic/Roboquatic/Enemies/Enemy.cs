@@ -13,12 +13,13 @@ namespace Roboquatic
         //Fields
         protected Texture2D sprite;
         protected Rectangle position;
-        protected int speed;
+        protected float speed;
         protected int health;
         protected int contactDamage;
         protected bool hit;
         protected int hitTimer;
         protected Rectangle hitBox;
+        protected Vector2 floatPos;
 
         //Properties
 
@@ -56,9 +57,10 @@ namespace Roboquatic
         public Enemy(Texture2D sprite, Rectangle position, int speed, Rectangle hitBox)
         {
             this.sprite = sprite;
-            this.speed = (int)(speed * (GlobalScalars.x + GlobalScalars.y) / 2);
+            this.speed = speed * GlobalScalars.x;
             this.position = GlobalScalars.scaleRect(position);
             this.hitBox = GlobalScalars.scaleRect(hitBox);
+            this.floatPos = new Vector2(this.position.X, this.position.Y);
             hit = false;
         }
 

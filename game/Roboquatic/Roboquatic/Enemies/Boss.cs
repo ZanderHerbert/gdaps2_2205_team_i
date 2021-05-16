@@ -17,7 +17,7 @@ namespace Roboquatic
         private Random rng;
         private bool canMoveUp = false;
         private int screenMiddleY;
-        private int ySpeed;
+        private float ySpeed;
         private LaserBeam laser;
         private Texture2D laserSprite;
 
@@ -31,7 +31,7 @@ namespace Roboquatic
             this.homingProjectileSpeed = homingProjectileSpeed;
             this.health = health;
             this.rng = rng;
-            this.ySpeed = (int)(ySpeed * GlobalScalars.y);
+            this.ySpeed = ySpeed * GlobalScalars.y;
             this.contactDamage = contactDamage;
             this.laserSprite = laserSprite;
             timer = 0;
@@ -61,11 +61,11 @@ namespace Roboquatic
             //Moves the boss up and down
             if (timer % 252 < 126 && canMoveUp)
             {
-                position.Y += ySpeed;
+                floatPos.Y += ySpeed;
             }
             else if (timer % 252 >= 126)
             {
-                position.Y -= ySpeed;
+                floatPos.Y -= ySpeed;
             }
 
             //Lets the boss move up after a little bit so that the Boss is centered around the middle of the screen
@@ -106,6 +106,8 @@ namespace Roboquatic
                     hitTimer = 0;
                 }
             }
+            position.X = (int)floatPos.X;
+            position.Y = (int)floatPos.Y;
         }
 
         //Shot pattern which shoots a V of bullets, followed by 3 sets of 2 aimed bullets, along with one homing bullet with the second set of aimed bullets
@@ -171,11 +173,11 @@ namespace Roboquatic
         {
             if (timer % 360 <= 40 && position.X > 0 - position.Width)
             {
-                position.X -= (int)(24 * GlobalScalars.x);
+                floatPos.X -= (int)(24 * GlobalScalars.x);
             }
             else if (timer % 360 > 40 && position.X < game.GraphicsDevice.Viewport.Width - position.Width / 2)
             {
-                position.X += (int)(3 * GlobalScalars.x);
+                floatPos.X += (int)(3 * GlobalScalars.x);
             }
         }
 

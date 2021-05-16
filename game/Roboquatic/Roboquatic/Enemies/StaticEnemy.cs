@@ -23,7 +23,9 @@ namespace Roboquatic
         public override void Update(GameTime gameTime, Game1 game)
         {
             //Changes position of the enemy
-            position.X -= speed;
+            floatPos.X -= speed;
+            position.X = (int)floatPos.X;
+            position.Y = (int)floatPos.Y;
             //Increments a hit timer if it was hit, so that it becomes invisible for 5 frames to indicate being hit
             if (hit)
             {
