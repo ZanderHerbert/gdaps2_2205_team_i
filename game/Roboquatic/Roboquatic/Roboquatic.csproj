@@ -10,9 +10,16 @@
     <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Content\EnemyFormations.txt" />
     <None Remove="Content\UnderwaterSounds.wav" />
+    <None Remove="EnemyFormations.txt" />
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="EnemyFormations.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Icon.ico" />

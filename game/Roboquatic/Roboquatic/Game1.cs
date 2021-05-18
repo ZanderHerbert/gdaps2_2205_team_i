@@ -383,7 +383,7 @@ namespace Roboquatic
             //Initializes the fileIO class with all the data and assets that it needs
             fileIO = new FileIO(rng, viewportHeight, viewportWidth, baseEnemySprite, baseEnemyProjectileSprite, aimedEnemySprite, staticEnemySprite, homingEnemySprite);
             //Loads in the file
-            fileIO.LoadFormation("../../../EnemyFormations.txt");
+            fileIO.LoadFormation("EnemyFormations.txt");
             
             // Add buttons
             // Menu
