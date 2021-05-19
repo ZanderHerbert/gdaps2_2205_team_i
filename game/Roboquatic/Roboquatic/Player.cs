@@ -11,7 +11,7 @@ namespace Roboquatic
     public class Player
     {
         //Fields
-        private int speed;
+        private float speed;
         private Rectangle position;
         private Texture2D sprite;
         private int projectileDamage;
@@ -24,6 +24,7 @@ namespace Roboquatic
         private Texture2D projectileSprite;
         private bool isAlive;
         private Rectangle hitBox;
+        private Vector2 posF;
 
         //Properties
 
@@ -76,7 +77,7 @@ namespace Roboquatic
         }
 
         //Get and set properties for speed (as speed may change due to upgrades)
-        public int Speed
+        public float Speed
         {
             get { return speed; }
             set { speed = value; }
@@ -123,6 +124,7 @@ namespace Roboquatic
             iFrameTimer = 0;
             shootingTimer = framesToFire;
             this.hitBox = GlobalScalars.scaleRect(hitBox);
+            posF = new Vector2(position.X, position.Y);
         }
 
         //Methods
@@ -133,20 +135,23 @@ namespace Roboquatic
             //Moves the player based on WASD input
             if (kbState.IsKeyDown(Keys.S))
             {
-                position.Y = position.Y + speed * 4;
+                posF.Y = posF.Y + speed * 4;
             }
             if (kbState.IsKeyDown(Keys.W))
             {
-                position.Y = position.Y - speed * 4;
+                posF.Y = posF.Y - speed * 4;
             }
             if (kbState.IsKeyDown(Keys.A))
             {
-                position.X = position.X - speed * 4;
+                posF.X = posF.X - speed * 4;
             }
             if (kbState.IsKeyDown(Keys.D))
             {
-                position.X = position.X + speed * 4;
+                posF.X = posF.X + speed * 4;
             }
+                        position.X = (int)posF.X;
+            position.Y = (int)posF.Y;
+
             // Checks if the player pressed space and if the player can shoot and then adds a new player projectile 
             // to the list of projectiles and resets the shooting timer
             if (kbState.IsKeyDown(Keys.Space))
@@ -184,34 +189,16 @@ namespace Roboquatic
             //      implementing both.
             if(Math.Sqrt((deltaX * deltaX + deltaY * deltaY)) <= speed * 10)
             {
-                position.X = x - position.Width/2;
-                position.Y = y - position.Height/2;
+                posF.X = x - position.Width/2;
+                posF.Y = y - position.Height/2;
             }
             else if ((deltaX) + (deltaY) != 0)
             {
-                position.X -= (int)(((deltaX) * speed * 10) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
-                position.Y -= (int)(((deltaY) * speed * 10) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
+                posF.X -= (float)(((deltaX) * speed * 10) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
+                posF.Y -= (float)(((deltaY) * speed * 10) / ((Math.Abs(deltaX)) + (Math.Abs(deltaY))));
             }
-
-            int viewWidth = game.GraphicsDevice.Viewport.Width;
-            int viewHeight = game.GraphicsDevice.Viewport.Height;
-
-            if (position.X + position.Width > viewWidth)
-            {
-                position.X = viewWidth - position.Width;
-            }
-            if(position.X < 0)
-            {
-                position.X = 0;
-            }
-            if(position.Y + position.Height > viewHeight)
-            {
-                position.Y = viewHeight - position.Height;
-            }
-            if (position.Y < 0)
-            {
-                position.Y = 0;
-            }
+            position.X = (int)posF.X;
+            position.Y = (int)posF.Y;
 
             //Shoots a projectile if the player pressed left mouse button, and if they are able to shoot
             if (mouseState.LeftButton == ButtonState.Pressed)
@@ -240,6 +227,8 @@ namespace Roboquatic
         //Increments both timers related to the player
         public void Update(GameTime gametime, Game1 game)
         {
+            int viewWidth = game.GraphicsDevice.Viewport.Width;
+            int viewHeight = game.GraphicsDevice.Viewport.Height;
             shootingTimer++;
             if (IFrameTimer != 0)
             {
@@ -248,6 +237,22 @@ namespace Roboquatic
             // 18 x 31
             hitBox.X = position.X + (int)(GlobalScalars.x);
             hitBox.Y = position.Y + (int)(9 * GlobalScalars.y);
+            if (position.X + position.Width > viewWidth)
+            {
+                position.X = viewWidth - position.Width;
+            }
+            if (position.X < 0)
+            {
+                position.X = 0;
+            }
+            if (position.Y + position.Height > viewHeight)
+            {
+                position.Y = viewHeight - position.Height;
+            }
+            if (position.Y < 0)
+            {
+                position.Y = 0;
+            }
         }
     }
 }

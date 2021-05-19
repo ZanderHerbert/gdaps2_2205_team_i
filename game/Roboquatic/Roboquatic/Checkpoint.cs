@@ -15,7 +15,7 @@ namespace Roboquatic
         // Game stats fields
         private int health;
         private int damage;
-        private int speed;
+        private float speed;
 
         // Properties
         // Get the checkpoint's name

@@ -196,7 +196,7 @@ namespace Roboquatic
         }
 
         // Get property for player speed
-        public int PlayerSpeed
+        public float PlayerSpeed
         {
             get { return player.Speed; }
         }
