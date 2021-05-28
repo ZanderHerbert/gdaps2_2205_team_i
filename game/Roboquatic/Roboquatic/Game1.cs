@@ -1022,11 +1022,11 @@ namespace Roboquatic
             // Reset the game
             enemies.Clear();
             projectiles.Clear();
-            player.Position = GlobalScalars.scaleRect(new Rectangle(0, 0, 48, 48));
+            player.Position = GlobalScalars.scaleRect(new Rectangle(0, viewportHeight / 2, 48, 48));
             player.MaxHP = 7;
             player.Health = player.MaxHP;
             player.ProjectileDamage = 1;
-            player.Speed = 1;
+            player.Speed = ((GlobalScalars.x + GlobalScalars.y) / 2);
             player.IsAlive = true;
             time = 0;
             timer = 0;

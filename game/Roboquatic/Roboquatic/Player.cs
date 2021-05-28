@@ -94,7 +94,12 @@ namespace Roboquatic
         public Rectangle Position
         {
             get { return position; }
-            set { position = value; }
+            set 
+            { 
+                position = value;
+                posF.X = value.X;
+                posF.Y = value.Y;
+            }
         }
 
         //Get set property for projectileSprite
@@ -113,7 +118,7 @@ namespace Roboquatic
         //Player Constructor
         public Player(int speed, int framesToFire, int projectileSpeed, Rectangle position, int health, int projectileDamage, Texture2D projectileSprite, Rectangle hitBox)
         {
-            this.speed = (float)(speed * (GlobalScalars.x + GlobalScalars.y) / 2);
+            this.speed = ((float)speed) * ((GlobalScalars.x + GlobalScalars.y) / 2);
             this.framesToFire = framesToFire;
             this.projectileSpeed = projectileSpeed;
             this.position = GlobalScalars.scaleRect(position);
@@ -149,7 +154,7 @@ namespace Roboquatic
             {
                 posF.X = posF.X + speed * 4;
             }
-                        position.X = (int)posF.X;
+            position.X = (int)posF.X;
             position.Y = (int)posF.Y;
 
             // Checks if the player pressed space and if the player can shoot and then adds a new player projectile 
@@ -173,8 +178,8 @@ namespace Roboquatic
             int y = mouseState.Y;
 
             //Variables which hold the difference in position between the midpoint of the player and the mouse
-            double deltaX = (position.X + position.Width/2) - x;
-            double deltaY = (position.Y + position.Height/2) - y;
+            double deltaX = (posF.X + position.Width/2) - x;
+            double deltaY = (posF.Y + position.Height/2) - y;
 
             //Moves the player a set distance in the direction of the mouse.
             //
