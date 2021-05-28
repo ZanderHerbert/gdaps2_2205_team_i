@@ -113,7 +113,7 @@ namespace Roboquatic
         //Player Constructor
         public Player(int speed, int framesToFire, int projectileSpeed, Rectangle position, int health, int projectileDamage, Texture2D projectileSprite, Rectangle hitBox)
         {
-            this.speed = (int)(speed * (GlobalScalars.x + GlobalScalars.y) / 2);
+            this.speed = (float)(speed * (GlobalScalars.x + GlobalScalars.y) / 2);
             this.framesToFire = framesToFire;
             this.projectileSpeed = projectileSpeed;
             this.position = GlobalScalars.scaleRect(position);
@@ -239,18 +239,22 @@ namespace Roboquatic
             hitBox.Y = position.Y + (int)(9 * GlobalScalars.y);
             if (position.X + position.Width > viewWidth)
             {
+                posF.X = viewWidth - position.Width;
                 position.X = viewWidth - position.Width;
             }
             if (position.X < 0)
             {
+                posF.X = 0;
                 position.X = 0;
             }
             if (position.Y + position.Height > viewHeight)
             {
+                posF.Y = viewHeight - position.Height;
                 position.Y = viewHeight - position.Height;
             }
             if (position.Y < 0)
             {
+                posF.Y = 0;
                 position.Y = 0;
             }
         }
