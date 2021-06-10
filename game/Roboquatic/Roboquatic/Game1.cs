@@ -286,6 +286,16 @@ namespace Roboquatic
             //viewportHeight = 480;
             scaleX = ((float)viewportWidth) / oldWidth;
             scaleY = ((float)viewportHeight) / oldHeight;
+            if (scaleX < scaleY)
+            {
+                scaleY = scaleX;
+            }
+            else
+            {
+                scaleX = scaleY;
+            }
+            viewportWidth = (int)(scaleX * oldWidth);
+            viewportHeight = (int)(scaleY * oldHeight);
             GlobalScalars.x = scaleX;
             GlobalScalars.y = scaleY;
             keyboardControls = false;
@@ -310,8 +320,8 @@ namespace Roboquatic
             logoVect = new Vector2(400 * scaleX, viewportHeight - 390 * scaleY);
             origin = new Vector2(400, 130);
             scale = new Vector2(.78f * scaleX,.78f * scaleY);
-            _graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
-            _graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+            _graphics.PreferredBackBufferWidth = viewportWidth;
+            _graphics.PreferredBackBufferHeight = viewportHeight;
             _graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
 
