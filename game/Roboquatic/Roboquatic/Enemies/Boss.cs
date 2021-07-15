@@ -173,11 +173,11 @@ namespace Roboquatic
         {
             if (timer % 360 <= 40 && position.X > 0 - position.Width)
             {
-                floatPos.X -= (int)(24 * GlobalScalars.x);
+                floatPos.X -= (24 * GlobalScalars.x);
             }
             else if (timer % 360 > 40 && position.X < game.GraphicsDevice.Viewport.Width - position.Width / 2)
             {
-                floatPos.X += (int)(3 * GlobalScalars.x);
+                floatPos.X += (3 * GlobalScalars.x);
             }
         }
 

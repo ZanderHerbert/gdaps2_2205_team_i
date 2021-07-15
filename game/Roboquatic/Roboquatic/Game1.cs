@@ -1043,6 +1043,7 @@ namespace Roboquatic
             addedBoss = false;
             currentCheckpoint = deactivedCheckpoints[0];
             pastCheckpoints = 0;
+            pickups.Clear();
 
             // reset checkpoints
             foreach (Checkpoint c in deactivedCheckpoints)
